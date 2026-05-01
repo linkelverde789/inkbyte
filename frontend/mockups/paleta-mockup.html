@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mockup — Paleta terrosa (libros)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      /* Paleta base: cálidos + naranjas terrosos (sustituyen verdes fríos) */
+      --peach-fuzz: #ffcab1;
+      --pearl-beige: #ecdcb0;
+      --sand-orange: #e8c9a8;
+      --terracotta: #c76f45;
+      --burnt-clay: #8b4d30;
+      --grey-olive: #968e85;
+
+      /* Ajustes de prototipo */
+      --ink: #3d3a36;
+      --ink-soft: #5a544d;
+      --surface: #faf7f2;
+      --surface-elevated: #fffef9;
+      --border-subtle: color-mix(in srgb, var(--grey-olive) 35%, white);
+      --hero-surface: color-mix(in srgb, var(--peach-fuzz) 42%, var(--pearl-beige));
+
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 22px;
+      --shadow-sm: 0 2px 8px color-mix(in srgb, var(--ink) 8%, transparent);
+      --shadow-md: 0 12px 40px color-mix(in srgb, var(--ink) 12%, transparent);
+      --shadow-hover: 0 18px 40px color-mix(in srgb, var(--terracotta) 28%, transparent);
+
+      --font-sans: "Outfit", system-ui, sans-serif;
+      --font-display: "Instrument Serif", Georgia, serif;
+
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+      --transition: 0.28s var(--ease-out);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font-sans);
+      font-weight: 400;
+      color: var(--ink-soft);
+      background: var(--surface);
+      line-height: 1.55;
+      font-size: 1rem;
+    }
+
+    h1, h2, h3 {
+      font-family: var(--font-display);
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.15;
+    }
+
+    a {
+      color: color-mix(in srgb, var(--terracotta) 58%, var(--ink));
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+      transition: color var(--transition), opacity var(--transition);
+    }
+    a:hover {
+      color: var(--ink);
+    }
+
+    .wrap {
+      width: min(1120px, 92vw);
+      margin-inline: auto;
+    }
+
+    /* —— Banner superior —— */
+    .banner-top {
+      background: var(--grey-olive);
+      color: var(--surface-elevated);
+      text-align: center;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 0.65rem 1rem;
+      letter-spacing: 0.02em;
+    }
+    .banner-top a {
+      color: var(--pearl-beige);
+      text-decoration: none;
+      border-bottom: 1px solid color-mix(in srgb, var(--pearl-beige) 55%, transparent);
+    }
+    .banner-top a:hover {
+      color: white;
+      border-bottom-color: white;
+    }
+
+    /* —— Navegación —— */
+    header.nav {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      backdrop-filter: blur(12px);
+      background: color-mix(in srgb, var(--surface-elevated) 88%, transparent);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.85rem 0;
+    }
+    .brand {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      color: var(--ink);
+      letter-spacing: -0.02em;
+    }
+    .nav-links {
+      display: flex;
+      gap: 0.25rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .nav-links a {
+      display: block;
+      padding: 0.45rem 0.85rem;
+      border-radius: var(--radius-sm);
+      color: var(--ink-soft);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: background var(--transition), color var(--transition);
+    }
+    .nav-links a:hover {
+      background: color-mix(in srgb, var(--sand-orange) 48%, white);
+      color: var(--ink);
+    }
+
+    /* —— Hero —— */
+    .hero {
+      position: relative;
+      padding: clamp(3rem, 8vw, 5.5rem) 0 clamp(3.5rem, 10vw, 6rem);
+    }
+    .hero-card {
+      position: relative;
+      border-radius: var(--radius-lg);
+      padding: clamp(2rem, 5vw, 3.25rem);
+      background: var(--hero-surface);
+      border: 1px solid color-mix(in srgb, var(--terracotta) 22%, var(--border-subtle));
+      box-shadow: var(--shadow-md);
+      color: var(--ink);
+    }
+    .hero-card p.lead {
+      max-width: 36ch;
+      font-size: 1.1rem;
+      margin: 0 0 1.5rem;
+      opacity: 0.92;
+    }
+    .hero-card h1 {
+      font-size: clamp(2.25rem, 5vw, 3.5rem);
+      margin: 0 0 1rem;
+      letter-spacing: -0.03em;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.72rem 1.35rem;
+      border-radius: 999px;
+      font-family: inherit;
+      font-size: 0.92rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: transform var(--transition), box-shadow var(--transition), background var(--transition), color var(--transition), border-color var(--transition);
+    }
+    .btn-primary {
+      background: var(--terracotta);
+      color: var(--surface-elevated);
+      box-shadow: var(--shadow-sm);
+    }
+    .btn-primary:hover {
+      background: var(--burnt-clay);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px color-mix(in srgb, var(--terracotta) 42%, transparent);
+    }
+    .btn-secondary {
+      background: transparent;
+      color: var(--burnt-clay);
+      border: 2px solid var(--terracotta);
+      box-shadow: none;
+    }
+    .btn-secondary:hover {
+      background: color-mix(in srgb, var(--sand-orange) 35%, white);
+      border-color: var(--burnt-clay);
+      color: var(--ink);
+      transform: translateY(-2px);
+    }
+
+    /* —— Banners in-page —— */
+    section.block {
+      padding: 2.5rem 0;
+    }
+    .section-title {
+      margin: 0 0 1.25rem;
+      font-size: clamp(1.5rem, 3vw, 2rem);
+    }
+    .alert {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.85rem;
+      padding: 1rem 1.15rem;
+      border-radius: var(--radius-md);
+      margin-bottom: 0.75rem;
+      border: 1px solid transparent;
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .alert:hover {
+      box-shadow: var(--shadow-sm);
+    }
+    .alert--info {
+      background: color-mix(in srgb, var(--sand-orange) 45%, white);
+      border-color: color-mix(in srgb, var(--terracotta) 38%, white);
+    }
+    .alert--warm {
+      background: color-mix(in srgb, var(--peach-fuzz) 45%, white);
+      border-color: color-mix(in srgb, var(--pearl-beige) 70%, var(--grey-olive));
+    }
+    .alert--muted {
+      background: color-mix(in srgb, var(--grey-olive) 18%, white);
+      border-color: var(--border-subtle);
+    }
+    .alert strong {
+      display: block;
+      font-size: 0.92rem;
+      color: var(--ink);
+      margin-bottom: 0.2rem;
+    }
+    .alert span {
+      font-size: 0.88rem;
+    }
+
+    /* —— Cards —— */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem;
+    }
+    .card {
+      background: var(--surface-elevated);
+      border-radius: var(--radius-md);
+      padding: 1.35rem 1.35rem 1.5rem;
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-sm);
+      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+    }
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-hover);
+      border-color: color-mix(in srgb, var(--terracotta) 48%, white);
+    }
+    .card-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.25rem 0.55rem;
+      border-radius: 6px;
+      margin-bottom: 0.65rem;
+    }
+    .card-tag--peach { background: var(--peach-fuzz); color: var(--ink); }
+    .card-tag--pearl { background: var(--pearl-beige); color: var(--ink); }
+    .card-tag--clay { background: var(--sand-orange); color: var(--ink); }
+    .card h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1.35rem;
+    }
+    .card p {
+      margin: 0;
+      font-size: 0.92rem;
+    }
+    .card-footer {
+      margin-top: 1rem;
+      padding-top: 0.85rem;
+      border-top: 1px dashed var(--border-subtle);
+      font-size: 0.85rem;
+      color: var(--grey-olive);
+    }
+
+    /* —— Table —— */
+    .table-scroll {
+      overflow-x: auto;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-subtle);
+      background: var(--surface-elevated);
+      box-shadow: var(--shadow-sm);
+    }
+    table.data {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      min-width: 520px;
+    }
+    .data th,
+    .data td {
+      padding: 0.85rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .data th {
+      font-weight: 600;
+      color: var(--ink);
+      background: color-mix(in srgb, var(--pearl-beige) 35%, white);
+    }
+    .data tbody tr {
+      transition: background var(--transition);
+    }
+    .data tbody tr:nth-child(even) {
+      background: color-mix(in srgb, var(--sand-orange) 18%, white);
+    }
+    .data tbody tr:hover {
+      background: color-mix(in srgb, var(--peach-fuzz) 28%, white);
+    }
+    .data tbody tr:last-child td {
+      border-bottom: none;
+    }
+    .pill {
+      display: inline-block;
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .pill--ok {
+      background: color-mix(in srgb, var(--sand-orange) 55%, white);
+      color: var(--ink);
+      border: 1px solid color-mix(in srgb, var(--terracotta) 30%, transparent);
+    }
+    .pill--wait {
+      background: color-mix(in srgb, var(--pearl-beige) 70%, white);
+      color: var(--ink);
+    }
+
+    /* —— Lists —— */
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+    .list-panel {
+      background: var(--surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1.35rem 1.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .list-panel h3 {
+      margin: 0 0 1rem;
+      font-size: 1.2rem;
+    }
+    .check-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .check-list li {
+      position: relative;
+      padding-left: 1.65rem;
+      margin-bottom: 0.65rem;
+      font-size: 0.95rem;
+      transition: color var(--transition);
+    }
+    .check-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.35rem;
+      width: 0.65rem;
+      height: 0.65rem;
+      border-radius: 3px;
+      background: var(--terracotta);
+      transition: transform var(--transition), background var(--transition);
+    }
+    .check-list li:hover {
+      color: var(--ink);
+    }
+    .check-list li:hover::before {
+      transform: scale(1.15) rotate(-4deg);
+      background: var(--burnt-clay);
+    }
+    .simple-list {
+      padding-left: 1.15rem;
+      margin: 0;
+    }
+    .simple-list li {
+      margin-bottom: 0.5rem;
+      padding: 0.35rem 0.5rem;
+      margin-left: -0.5rem;
+      border-radius: var(--radius-sm);
+      transition: background var(--transition);
+    }
+    .simple-list li:hover {
+      background: color-mix(in srgb, var(--pearl-beige) 55%, white);
+    }
+
+    /* —— Footer —— */
+    footer.site-footer {
+      margin-top: 3rem;
+      background: color-mix(in srgb, var(--grey-olive) 78%, var(--ink));
+      color: color-mix(in srgb, var(--pearl-beige) 88%, white);
+      padding: 3rem 0 2rem;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.4fr repeat(3, 1fr);
+      gap: 2rem;
+    }
+    @media (max-width: 800px) {
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    @media (max-width: 520px) {
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+      .nav-links {
+        display: none;
+      }
+    }
+    .site-footer h4 {
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--peach-fuzz);
+      margin: 0 0 1rem;
+      opacity: 0.95;
+    }
+    .site-footer p {
+      font-size: 0.9rem;
+      margin: 0 0 0.75rem;
+      max-width: 32ch;
+      opacity: 0.9;
+    }
+    .footer-links {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .footer-links li {
+      margin-bottom: 0.45rem;
+    }
+    .footer-links a {
+      color: inherit;
+      text-decoration: none;
+      font-size: 0.9rem;
+      opacity: 0.88;
+      display: inline-block;
+      transition: opacity var(--transition), transform var(--transition);
+    }
+    .footer-links a:hover {
+      opacity: 1;
+      transform: translateX(4px);
+    }
+    .footer-bottom {
+      margin-top: 2.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid color-mix(in srgb, white 22%, transparent);
+      font-size: 0.8rem;
+      opacity: 0.75;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem 1.5rem;
+      justify-content: space-between;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="banner-top">
+    Envío gratis desde 35 € · <a href="#tabla">Novedades de la semana</a>
+  </div>
+
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <span class="brand">InkByte</span>
+      <ul class="nav-links">
+        <li><a href="#hero">Inicio</a></li>
+        <li><a href="#cards">Colecciones</a></li>
+        <li><a href="#tabla">Catálogo</a></li>
+        <li><a href="#listas">Guías</a></li>
+        <li><a href="buscador-modal-mockup.html">Búsqueda</a></li>
+      </ul>
+      <button type="button" class="btn btn-primary" style="padding: 0.5rem 1.1rem; font-size: 0.85rem;">Cesta (2)</button>
+    </div>
+  </header>
+
+  <section class="hero" id="hero">
+    <div class="wrap">
+      <div class="hero-card">
+        <h1>Lee con calma, elige con mimo</h1>
+        <p class="lead">
+          Un prototipo de UI con melocotón, beige perla y naranjas terrosos:
+          ideal para marcas editoriales o clubs de lectura sin perder calidez.
+        </p>
+        <div class="hero-actions">
+          <button type="button" class="btn btn-primary">Explorar títulos</button>
+          <button type="button" class="btn btn-secondary">Suscripción mensual</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block wrap">
+    <h2 class="section-title">Banners y avisos</h2>
+    <div class="alert alert--info">
+      <span>
+        <strong>Club de lectura</strong>
+        El próximo viernes comentamos nuestra novela del mes. Plazas limitadas.
+      </span>
+    </div>
+    <div class="alert alert--warm">
+      <span>
+        <strong>Oferta relámpago</strong>
+        −15 % en ensayo hasta medianoche. Código: <code style="background: rgba(255,255,255,.45); padding: 0.1rem 0.35rem; border-radius: 4px;">PEACH15</code>
+      </span>
+    </div>
+    <div class="alert alert--muted">
+      <span>
+        <strong>Mantenimiento</strong>
+        El buscador avanzado estará en pausa el domingo de 02:00 a 04:00 (hora local).
+      </span>
+    </div>
+  </section>
+
+  <section class="block wrap" id="cards">
+    <h2 class="section-title">Tarjetas (hover elevado)</h2>
+    <div class="cards">
+      <article class="card">
+        <span class="card-tag card-tag--peach">Ficción</span>
+        <h3>Costa brumosa</h3>
+        <p>Una historia sobre cartas que llegan tarde y decisiones que no esperan.</p>
+        <div class="card-footer">Tapa blanda · 312 páginas</div>
+      </article>
+      <article class="card">
+        <span class="card-tag card-tag--pearl">Naturaleza</span>
+        <h3>Atlas de musgos</h3>
+        <p>Acuarelas en óxido y arena con notas de campo para ventanas largas.</p>
+        <div class="card-footer">Formato cuadrado · Regalo ideal</div>
+      </article>
+      <article class="card">
+        <span class="card-tag card-tag--clay">Ensayo</span>
+        <h3>Silencios útiles</h3>
+        <p>Cómo leer despacio en una temporada ruidosa, sin culpa.</p>
+        <div class="card-footer">Próxima reimpresión · Lista de espera</div>
+      </article>
+    </div>
+  </section>
+
+  <section class="block wrap" id="tabla">
+    <h2 class="section-title">Tabla de inventario</h2>
+    <div class="table-scroll">
+      <table class="data">
+        <thead>
+          <tr>
+            <th>ISBN</th>
+            <th>Título</th>
+            <th>Autor</th>
+            <th>Stock</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>978-84-1234-56-7</td>
+            <td>El patio de las tinajas</td>
+            <td>M. Ortega</td>
+            <td>24</td>
+            <td><span class="pill pill--ok">En tienda</span></td>
+          </tr>
+          <tr>
+            <td>978-84-9876-54-3</td>
+            <td>Manual de jardines pequeños</td>
+            <td>L. Fuentes</td>
+            <td>0</td>
+            <td><span class="pill pill--wait">Reposición</span></td>
+          </tr>
+          <tr>
+            <td>978-84-2222-11-0</td>
+            <td>Cartas a un lector nuevo</td>
+            <td>A. Serra</td>
+            <td>11</td>
+            <td><span class="pill pill--ok">En tienda</span></td>
+          </tr>
+          <tr>
+            <td>978-84-3333-44-5</td>
+            <td>Invierno en salón</td>
+            <td>P. Núñez</td>
+            <td>6</td>
+            <td><span class="pill pill--ok">En tienda</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="block wrap" id="listas">
+    <h2 class="section-title">Listas y beneficios</h2>
+    <div class="two-col">
+      <div class="list-panel">
+        <h3>Incluido en tu abono</h3>
+        <ul class="check-list">
+          <li>Un libro sorpresa al mes, perfilado a tu estantería.</li>
+          <li>Envío en packaging reutilizable con nota manuscrita (prototipo).</li>
+          <li>Sesión trimestral con autora invitada por videollamada.</li>
+          <li>Acceso a la guía «Cómo curar un lomo descosido».</li>
+        </ul>
+      </div>
+      <div class="list-panel">
+        <h3>Lecturas sugeridas (hover suave)</h3>
+        <ol class="simple-list">
+          <li>Para tardes de lluvia fina</li>
+          <li>Para regalar a quien no lee «género»</li>
+          <li>Para leer en voz baja en cocina</li>
+          <li>Para viajar en tren sin auriculares</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="wrap footer-grid">
+      <div>
+        <h4>InkByte</h4>
+        <p>Callejón del Olmo 12, planta baja. Abierto de martes a sábado.</p>
+      </div>
+      <div>
+        <h4>Comprar</h4>
+        <ul class="footer-links">
+          <li><a href="#">Novedades</a></li>
+          <li><a href="#">Agotados</a></li>
+          <li><a href="#">Pack regalo</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Ayuda</h4>
+        <ul class="footer-links">
+          <li><a href="#">Envíos y devoluciones</a></li>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Contacto</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <ul class="footer-links">
+          <li><a href="#">Privacidad</a></li>
+          <li><a href="#">Cookies</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="wrap footer-bottom">
+      <span>© 2026 Mockup de paleta — sin backend.</span>
+      <span>Colores: peach · pearl · sand-orange · terracotta · burnt-clay · grey-olive.</span>
+    </div>
+  </footer>
+
+</body>
+</html>

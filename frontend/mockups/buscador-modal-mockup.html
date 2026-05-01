@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Búsqueda — InkByte (mockup)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --peach-fuzz: #ffcab1;
+      --pearl-beige: #ecdcb0;
+      --sand-orange: #e8c9a8;
+      --terracotta: #c76f45;
+      --burnt-clay: #8b4d30;
+      --grey-olive: #968e85;
+      --ink: #3d3a36;
+      --ink-soft: #5a544d;
+      --surface: #faf7f2;
+      --surface-elevated: #fffef9;
+      --border-subtle: color-mix(in srgb, var(--grey-olive) 35%, white);
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 22px;
+      --shadow-sm: 0 2px 8px color-mix(in srgb, var(--ink) 8%, transparent);
+      --shadow-hover: 0 18px 40px color-mix(in srgb, var(--terracotta) 28%, transparent);
+      --font-sans: "Outfit", system-ui, sans-serif;
+      --font-display: "Instrument Serif", Georgia, serif;
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+      --transition: 0.28s var(--ease-out);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      font-family: var(--font-sans);
+      font-weight: 400;
+      color: var(--ink-soft);
+      background: var(--surface);
+      line-height: 1.55;
+      font-size: 1rem;
+    }
+
+    h1, h2, h3 {
+      font-family: var(--font-display);
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.15;
+    }
+
+    a {
+      color: color-mix(in srgb, var(--terracotta) 58%, var(--ink));
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+      transition: color var(--transition), opacity var(--transition);
+    }
+    a:hover {
+      color: var(--ink);
+    }
+
+    .wrap {
+      width: min(1120px, 92vw);
+      margin-inline: auto;
+    }
+
+    .banner-top {
+      background: var(--grey-olive);
+      color: var(--surface-elevated);
+      text-align: center;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 0.65rem 1rem;
+      letter-spacing: 0.02em;
+    }
+    .banner-top a {
+      color: var(--pearl-beige);
+      text-decoration: none;
+      border-bottom: 1px solid color-mix(in srgb, var(--pearl-beige) 55%, transparent);
+    }
+    .banner-top a:hover {
+      color: white;
+      border-bottom-color: white;
+    }
+
+    header.nav {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      backdrop-filter: blur(12px);
+      background: color-mix(in srgb, var(--surface-elevated) 88%, transparent);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.85rem 0;
+    }
+    .brand {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      color: var(--ink);
+      letter-spacing: -0.02em;
+    }
+    .brand a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      gap: 0.25rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .nav-links a {
+      display: block;
+      padding: 0.45rem 0.85rem;
+      border-radius: var(--radius-sm);
+      color: var(--ink-soft);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: background var(--transition), color var(--transition);
+    }
+    .nav-links a:hover,
+    .nav-links a[aria-current="page"] {
+      background: color-mix(in srgb, var(--sand-orange) 48%, white);
+      color: var(--ink);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.72rem 1.35rem;
+      border-radius: 999px;
+      font-family: inherit;
+      font-size: 0.92rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: transform var(--transition), box-shadow var(--transition), background var(--transition), color var(--transition), border-color var(--transition);
+    }
+    .btn-primary {
+      background: var(--terracotta);
+      color: var(--surface-elevated);
+      box-shadow: var(--shadow-sm);
+    }
+    .btn-primary:hover {
+      background: var(--burnt-clay);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px color-mix(in srgb, var(--terracotta) 42%, transparent);
+    }
+    .btn-secondary {
+      background: transparent;
+      color: var(--burnt-clay);
+      border: 2px solid var(--terracotta);
+      box-shadow: none;
+    }
+    .btn-secondary:hover {
+      background: color-mix(in srgb, var(--sand-orange) 35%, white);
+      border-color: var(--burnt-clay);
+      color: var(--ink);
+      transform: translateY(-2px);
+    }
+
+    /* —— Página búsqueda —— */
+    .search-page {
+      padding: 2rem 0 3rem;
+    }
+    .search-page-intro {
+      margin-bottom: 1.35rem;
+    }
+    .search-page-intro h1 {
+      margin: 0 0 0.35rem;
+      font-size: clamp(1.75rem, 3.5vw, 2.25rem);
+    }
+    .search-page-intro p {
+      margin: 0;
+      font-size: 0.95rem;
+      max-width: 42ch;
+    }
+
+    .search-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-bottom: 1rem;
+    }
+    .search-field {
+      flex: 1;
+      min-width: min(100%, 240px);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.55rem 0.85rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-subtle);
+      background: var(--surface-elevated);
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .search-field:focus-within {
+      border-color: color-mix(in srgb, var(--terracotta) 55%, var(--border-subtle));
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--terracotta) 20%, transparent);
+    }
+    .search-field svg {
+      flex-shrink: 0;
+      opacity: 0.55;
+    }
+    .search-field input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      font: inherit;
+      font-size: 1rem;
+      color: var(--ink);
+      min-width: 0;
+      outline: none;
+    }
+    .search-field input::placeholder {
+      color: var(--grey-olive);
+    }
+
+    .results-meta {
+      font-size: 0.85rem;
+      color: var(--grey-olive);
+      margin-bottom: 1.5rem;
+    }
+    .results-meta strong {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .search-results-variant {
+      margin-bottom: 2.75rem;
+    }
+    .search-results-variant:last-of-type {
+      margin-bottom: 0;
+    }
+    .results-variant-title {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 400;
+      color: var(--ink);
+      margin: 0 0 0.35rem;
+    }
+    .results-variant-hint {
+      font-size: 0.88rem;
+      color: var(--grey-olive);
+      margin: 0 0 0.9rem;
+      max-width: 50ch;
+    }
+
+    .result-cards {
+      display: grid;
+      gap: 1rem;
+    }
+    .result-cards--tall {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .result-cards--tall .book-card-cover {
+      height: clamp(14rem, 34vw, 20rem);
+    }
+    .result-cards--grid4 {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    @media (max-width: 960px) {
+      .result-cards--grid4 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 720px) {
+      .result-cards--tall {
+        grid-template-columns: 1fr;
+      }
+    }
+    @media (max-width: 520px) {
+      .result-cards--grid4 {
+        grid-template-columns: 1fr;
+      }
+      .nav-links {
+        display: none;
+      }
+    }
+
+    .book-card {
+      display: flex;
+      flex-direction: column;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-subtle);
+      background: var(--surface-elevated);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+    }
+    .book-card:hover {
+      transform: translateY(-5px);
+      border-color: color-mix(in srgb, var(--terracotta) 42%, white);
+      box-shadow: var(--shadow-hover);
+    }
+    .book-card-cover {
+      margin: 0;
+      height: clamp(10.5rem, 26vw, 14rem);
+      background: color-mix(in srgb, var(--grey-olive) 10%, var(--surface));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.4rem 0.45rem;
+    }
+    .book-card-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+    }
+    .book-card-body {
+      padding: 0.65rem 0.85rem 0.85rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .book-series {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--terracotta);
+      margin-bottom: 0.2rem;
+    }
+    .book-title {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--ink);
+      margin: 0 0 0.3rem;
+      line-height: 1.2;
+    }
+    .book-title .book-title-suffix {
+      font-size: 0.85em;
+      font-weight: 400;
+      opacity: 0.85;
+    }
+    .book-author {
+      font-size: 0.78rem;
+      color: var(--ink-soft);
+      margin: 0;
+    }
+    .book-meta {
+      margin-top: auto;
+      padding-top: 0.5rem;
+      font-size: 0.7rem;
+      color: var(--grey-olive);
+    }
+
+    main {
+      flex: 1;
+    }
+
+    footer.site-footer {
+      margin-top: auto;
+      background: color-mix(in srgb, var(--grey-olive) 78%, var(--ink));
+      color: color-mix(in srgb, var(--pearl-beige) 88%, white);
+      padding: 3rem 0 2rem;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.4fr repeat(3, 1fr);
+      gap: 2rem;
+    }
+    @media (max-width: 800px) {
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    @media (max-width: 520px) {
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .site-footer h4 {
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--peach-fuzz);
+      margin: 0 0 1rem;
+      opacity: 0.95;
+    }
+    .site-footer p {
+      font-size: 0.9rem;
+      margin: 0 0 0.75rem;
+      max-width: 32ch;
+      opacity: 0.9;
+    }
+    .footer-links {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .footer-links li {
+      margin-bottom: 0.45rem;
+    }
+    .footer-links a {
+      color: inherit;
+      text-decoration: none;
+      font-size: 0.9rem;
+      opacity: 0.88;
+      display: inline-block;
+      transition: opacity var(--transition), transform var(--transition);
+    }
+    .footer-links a:hover {
+      opacity: 1;
+      transform: translateX(4px);
+    }
+    .footer-bottom {
+      margin-top: 2.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid color-mix(in srgb, white 22%, transparent);
+      font-size: 0.8rem;
+      opacity: 0.75;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem 1.5rem;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="banner-top">
+    Envío gratis desde 35 € · <a href="paleta-mockup.html#tabla">Novedades de la semana</a>
+  </div>
+
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <span class="brand"><a href="paleta-mockup.html">InkByte</a></span>
+      <ul class="nav-links">
+        <li><a href="paleta-mockup.html#hero">Inicio</a></li>
+        <li><a href="paleta-mockup.html#cards">Colecciones</a></li>
+        <li><a href="paleta-mockup.html#tabla">Catálogo</a></li>
+        <li><a href="paleta-mockup.html#listas">Guías</a></li>
+        <li><a href="buscador-modal-mockup.html" aria-current="page">Búsqueda</a></li>
+      </ul>
+      <button type="button" class="btn btn-primary" style="padding: 0.5rem 1.1rem; font-size: 0.85rem;">Cesta (2)</button>
+    </div>
+  </header>
+
+  <main id="busqueda">
+    <div class="wrap search-page">
+      <div class="search-page-intro">
+        <h1>Buscar en el catálogo</h1>
+        <p>Título, autor o ISBN. Resultados de ejemplo.</p>
+      </div>
+
+      <div class="search-row">
+        <label class="search-field" for="searchInput">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" />
+            <path d="M20 20l-4-4" />
+          </svg>
+          <input
+            id="searchInput"
+            type="search"
+            value="witcher"
+            autocomplete="off"
+            placeholder="Título, autor, ISBN…"
+          />
+        </label>
+        <button type="button" class="btn btn-primary" style="padding-left: 1.1rem; padding-right: 1.1rem;">Buscar</button>
+      </div>
+
+      <p class="results-meta" id="resultsMeta">
+        <strong>4 resultados</strong> para «witcher» — mismo catálogo en dos rejillas de prototipo.
+      </p>
+
+      <section class="search-results-variant" aria-labelledby="variant-tall-heading">
+        <h2 class="results-variant-title" id="variant-tall-heading">Rejilla de 3 · portada alta</h2>
+        <p class="results-variant-hint">
+          Más altura en el recuadro de la cubierta (<code>clamp(14rem, 34vw, 20rem)</code>); cuatro títulos en dos filas (3+1).
+        </p>
+        <div class="result-cards result-cards--tall">
+          <article class="book-card">
+            <figure class="book-card-cover">
+              <img
+                src="https://is1-ssl.mzstatic.com/image/thumb/Publication221/v4/1d/51/95/1d519576-b7b6-2395-24a0-b77600fd6519/9780316597753.jpg/600x600bb.jpg"
+                alt="Portada: The Witcher — Crossroads of Ravens"
+                width="300"
+                height="450"
+                loading="lazy"
+              />
+            </figure>
+            <div class="book-card-body">
+              <span class="book-series">The Witcher</span>
+              <h3 class="book-title">Crossroads of Ravens</h3>
+              <p class="book-author">Andrzej Sapkowski · Trad. David French</p>
+              <p class="book-meta">Novela · Orbit</p>
+            </div>
+          </article>
+          <article class="book-card">
+            <figure class="book-card-cover">
+              <img
+                src="https://is1-ssl.mzstatic.com/image/thumb/Publication19/v4/4c/86/15/4c8615e4-1f97-ae5f-83bb-acb863b331a6/mzm.gopotzhu.jpg/600x600bb.jpg"
+                alt="Portada: The Witcher cómic n.º 1"
+                width="300"
+                height="450"
+                loading="lazy"
+              />
+            </figure>
+            <div class="book-card-body">
+              <span class="book-series">The Witcher</span>
+              <h3 class="book-title">Cómic n.º 1 <span class="book-title-suffix">(de 5)</span></h3>
+              <p class="book-author">Paul Tobin · Joe Querio · Dark Horse</p>
+              <p class="book-meta">Cómic · CD PROJEKT</p>
+            </div>
+          </article>
+          <article class="book-card">
+            <figure class="book-card-cover">
+              <img
+                src="https://is1-ssl.mzstatic.com/image/thumb/Publication126/v4/6f/95/44/6f9544a4-d234-7097-e2d5-57fabfb1ebc3/9780316055086.jpg/600x600bb.jpg"
+                alt="Portada: The Witcher — The Last Wish"
+                width="300"
+                height="450"
+                loading="lazy"
+              />
+            </figure>
+            <div class="book-card-body">
+              <span class="book-series">The Witcher</span>
+              <h3 class="book-title">The Last Wish</h3>
+              <p class="book-author">Andrzej Sapkowski</p>
+              <p class="book-meta">Relatos · Ed. Netflix tie-in</p>
+            </div>
+          </article>
+          <article class="book-card">
+            <figure class="book-card-cover">
+              <img
+                src="https://is1-ssl.mzstatic.com/image/thumb/Publication114/v4/09/8a/32/098a32cc-e7a0-4698-4cf2-d37e101539bd/3004196.jpg/600x600bb.jpg"
+                alt="Portada: The Witcher — Of Flesh and Flame"
+                width="300"
+                height="450"
+                loading="lazy"
+              />
+            </figure>
+            <div class="book-card-body">
+              <span class="book-series">The Witcher</span>
+              <h3 class="book-title">Of Flesh and Flame <span class="book-title-suffix">(2 de 4)</span></h3>
+              <p class="book-author">Aleksandra Motyka · Marianna Strychowska · Dark Horse</p>
+              <p class="book-meta">Cómic · CD PROJEKT RED</p>
+            </div>
+          </article>
+          <article class="book-card">
+            <figure class="book-card-cover">
+              <img
+                src="https://is1-ssl.mzstatic.com/image/thumb/Publication221/v4/1d/51/95/1d519576-b7b6-2395-24a0-b77600fd6519/9780316597753.jpg/600x600bb.jpg"
+                alt="Portada: The Witcher — Crossroads of Ravens"
+                width="300"
+                height="450"
+                loading="lazy"
+              />
+            </figure>
+            <div class="book-card-body">
+              <span class="book-series">The Witcher</span>
+              <h3 class="book-title">Crossroads of Ravens</h3>
+              <p class="book-author">Andrzej Sapkowski · Trad. David French</p>
+              <p class="book-meta">Novela · Orbit</p>
+            </div>
+          </article>
+          <article class="book-card">
+            <figure class="book-card-cover">
+              <img
+                src="https://is1-ssl.mzstatic.com/image/thumb/Publication19/v4/4c/86/15/4c8615e4-1f97-ae5f-83bb-acb863b331a6/mzm.gopotzhu.jpg/600x600bb.jpg"
+                alt="Portada: The Witcher cómic n.º 1"
+                width="300"
+                height="450"
+                loading="lazy"
+              />
+            </figure>
+            <div class="book-card-body">
+              <span class="book-series">The Witcher</span>
+              <h3 class="book-title">Cómic n.º 1 <span class="book-title-suffix">(de 5)</span></h3>
+              <p class="book-author">Paul Tobin · Joe Querio · Dark Horse</p>
+              <p class="book-meta">Cómic · CD PROJEKT</p>
+            </div>
+          </article>
+          <article class="book-card">
+            <figure class="book-card-cover">
+              <img
+                src="https://is1-ssl.mzstatic.com/image/thumb/Publication126/v4/6f/95/44/6f9544a4-d234-7097-e2d5-57fabfb1ebc3/9780316055086.jpg/600x600bb.jpg"
+                alt="Portada: The Witcher — The Last Wish"
+                width="300"
+                height="450"
+                loading="lazy"
+              />
+            </figure>
+            <div class="book-card-body">
+              <span class="book-series">The Witcher</span>
+              <h3 class="book-title">The Last Wish</h3>
+              <p class="book-author">Andrzej Sapkowski</p>
+              <p class="book-meta">Relatos · Ed. Netflix tie-in</p>
+            </div>
+          </article>
+          <article class="book-card">
+            <figure class="book-card-cover">
+              <img
+                src="https://is1-ssl.mzstatic.com/image/thumb/Publication114/v4/09/8a/32/098a32cc-e7a0-4698-4cf2-d37e101539bd/3004196.jpg/600x600bb.jpg"
+                alt="Portada: The Witcher — Of Flesh and Flame"
+                width="300"
+                height="450"
+                loading="lazy"
+              />
+            </figure>
+            <div class="book-card-body">
+              <span class="book-series">The Witcher</span>
+              <h3 class="book-title">Of Flesh and Flame <span class="book-title-suffix">(2 de 4)</span></h3>
+              <p class="book-author">Aleksandra Motyka · Marianna Strychowska · Dark Horse</p>
+              <p class="book-meta">Cómic · CD PROJEKT RED</p>
+            </div>
+          </article><article class="book-card">
+            <figure class="book-card-cover">
+              <img
+                src="https://is1-ssl.mzstatic.com/image/thumb/Publication221/v4/1d/51/95/1d519576-b7b6-2395-24a0-b77600fd6519/9780316597753.jpg/600x600bb.jpg"
+                alt="Portada: The Witcher — Crossroads of Ravens"
+                width="300"
+                height="450"
+                loading="lazy"
+              />
+            </figure>
+            <div class="book-card-body">
+              <span class="book-series">The Witcher</span>
+              <h3 class="book-title">Crossroads of Ravens</h3>
+              <p class="book-author">Andrzej Sapkowski · Trad. David French</p>
+              <p class="book-meta">Novela · Orbit</p>
+            </div>
+          </article>
+          <article class="book-card">
+            <figure class="book-card-cover">
+              <img
+                src="https://is1-ssl.mzstatic.com/image/thumb/Publication19/v4/4c/86/15/4c8615e4-1f97-ae5f-83bb-acb863b331a6/mzm.gopotzhu.jpg/600x600bb.jpg"
+                alt="Portada: The Witcher cómic n.º 1"
+                width="300"
+                height="450"
+                loading="lazy"
+              />
+            </figure>
+            <div class="book-card-body">
+              <span class="book-series">The Witcher</span>
+              <h3 class="book-title">Cómic n.º 1 <span class="book-title-suffix">(de 5)</span></h3>
+              <p class="book-author">Paul Tobin · Joe Querio · Dark Horse</p>
+              <p class="book-meta">Cómic · CD PROJEKT</p>
+            </div>
+          </article>
+          <article class="book-card">
+            <figure class="book-card-cover">
+              <img
+                src="https://is1-ssl.mzstatic.com/image/thumb/Publication126/v4/6f/95/44/6f9544a4-d234-7097-e2d5-57fabfb1ebc3/9780316055086.jpg/600x600bb.jpg"
+                alt="Portada: The Witcher — The Last Wish"
+                width="300"
+                height="450"
+                loading="lazy"
+              />
+            </figure>
+            <div class="book-card-body">
+              <span class="book-series">The Witcher</span>
+              <h3 class="book-title">The Last Wish</h3>
+              <p class="book-author">Andrzej Sapkowski</p>
+              <p class="book-meta">Relatos · Ed. Netflix tie-in</p>
+            </div>
+          </article>
+          <article class="book-card">
+            <figure class="book-card-cover">
+              <img
+                src="https://is1-ssl.mzstatic.com/image/thumb/Publication114/v4/09/8a/32/098a32cc-e7a0-4698-4cf2-d37e101539bd/3004196.jpg/600x600bb.jpg"
+                alt="Portada: The Witcher — Of Flesh and Flame"
+                width="300"
+                height="450"
+                loading="lazy"
+              />
+            </figure>
+            <div class="book-card-body">
+              <span class="book-series">The Witcher</span>
+              <h3 class="book-title">Of Flesh and Flame <span class="book-title-suffix">(2 de 4)</span></h3>
+              <p class="book-author">Aleksandra Motyka · Marianna Strychowska · Dark Horse</p>
+              <p class="book-meta">Cómic · CD PROJEKT RED</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="search-results-variant" aria-labelledby="variant-grid4-heading">
+        <h2 class="results-variant-title" id="variant-grid4-heading">Rejilla de 4 · estilo actual</h2>
+        <p class="results-variant-hint">
+          Una fila de cuatro en escritorio; portada <code>clamp(10.5rem, 26vw, 14rem)</code> y <code>object-fit: contain</code>.
+        </p>
+        <div class="result-cards result-cards--grid4">
+          <article class="book-card">
+            <figure class="book-card-cover">
+              <img
+                src="https://is1-ssl.mzstatic.com/image/thumb/Publication221/v4/1d/51/95/1d519576-b7b6-2395-24a0-b77600fd6519/9780316597753.jpg/600x600bb.jpg"
+                alt="Portada: The Witcher — Crossroads of Ravens"
+                width="300"
+                height="450"
+                loading="lazy"
+              />
+            </figure>
+            <div class="book-card-body">
+              <span class="book-series">The Witcher</span>
+              <h3 class="book-title">Crossroads of Ravens</h3>
+              <p class="book-author">Andrzej Sapkowski · Trad. David French</p>
+              <p class="book-meta">Novela · Orbit</p>
+            </div>
+          </article>
+          <article class="book-card">
+            <figure class="book-card-cover">
+              <img
+                src="https://is1-ssl.mzstatic.com/image/thumb/Publication19/v4/4c/86/15/4c8615e4-1f97-ae5f-83bb-acb863b331a6/mzm.gopotzhu.jpg/600x600bb.jpg"
+                alt="Portada: The Witcher cómic n.º 1"
+                width="300"
+                height="450"
+                loading="lazy"
+              />
+            </figure>
+            <div class="book-card-body">
+              <span class="book-series">The Witcher</span>
+              <h3 class="book-title">Cómic n.º 1 <span class="book-title-suffix">(de 5)</span></h3>
+              <p class="book-author">Paul Tobin · Joe Querio · Dark Horse</p>
+              <p class="book-meta">Cómic · CD PROJEKT</p>
+            </div>
+          </article>
+          <article class="book-card">
+            <figure class="book-card-cover">
+              <img
+                src="https://is1-ssl.mzstatic.com/image/thumb/Publication126/v4/6f/95/44/6f9544a4-d234-7097-e2d5-57fabfb1ebc3/9780316055086.jpg/600x600bb.jpg"
+                alt="Portada: The Witcher — The Last Wish"
+                width="300"
+                height="450"
+                loading="lazy"
+              />
+            </figure>
+            <div class="book-card-body">
+              <span class="book-series">The Witcher</span>
+              <h3 class="book-title">The Last Wish</h3>
+              <p class="book-author">Andrzej Sapkowski</p>
+              <p class="book-meta">Relatos · Ed. Netflix tie-in</p>
+            </div>
+          </article>
+          <article class="book-card">
+            <figure class="book-card-cover">
+              <img
+                src="https://is1-ssl.mzstatic.com/image/thumb/Publication114/v4/09/8a/32/098a32cc-e7a0-4698-4cf2-d37e101539bd/3004196.jpg/600x600bb.jpg"
+                alt="Portada: The Witcher — Of Flesh and Flame"
+                width="300"
+                height="450"
+                loading="lazy"
+              />
+            </figure>
+            <div class="book-card-body">
+              <span class="book-series">The Witcher</span>
+              <h3 class="book-title">Of Flesh and Flame <span class="book-title-suffix">(2 de 4)</span></h3>
+              <p class="book-author">Aleksandra Motyka · Marianna Strychowska · Dark Horse</p>
+              <p class="book-meta">Cómic · CD PROJEKT RED</p>
+            </div>
+          </article>
+          <article class="book-card">
+            <figure class="book-card-cover">
+              <img
+                src="https://is1-ssl.mzstatic.com/image/thumb/Publication221/v4/1d/51/95/1d519576-b7b6-2395-24a0-b77600fd6519/9780316597753.jpg/600x600bb.jpg"
+                alt="Portada: The Witcher — Crossroads of Ravens"
+                width="300"
+                height="450"
+                loading="lazy"
+              />
+            </figure>
+            <div class="book-card-body">
+              <span class="book-series">The Witcher</span>
+              <h3 class="book-title">Crossroads of Ravens</h3>
+              <p class="book-author">Andrzej Sapkowski · Trad. David French</p>
+              <p class="book-meta">Novela · Orbit</p>
+            </div>
+          </article>
+          <article class="book-card">
+            <figure class="book-card-cover">
+              <img
+                src="https://is1-ssl.mzstatic.com/image/thumb/Publication19/v4/4c/86/15/4c8615e4-1f97-ae5f-83bb-acb863b331a6/mzm.gopotzhu.jpg/600x600bb.jpg"
+                alt="Portada: The Witcher cómic n.º 1"
+                width="300"
+                height="450"
+                loading="lazy"
+              />
+            </figure>
+            <div class="book-card-body">
+              <span class="book-series">The Witcher</span>
+              <h3 class="book-title">Cómic n.º 1 <span class="book-title-suffix">(de 5)</span></h3>
+              <p class="book-author">Paul Tobin · Joe Querio · Dark Horse</p>
+              <p class="book-meta">Cómic · CD PROJEKT</p>
+            </div>
+          </article>
+          <article class="book-card">
+            <figure class="book-card-cover">
+              <img
+                src="https://is1-ssl.mzstatic.com/image/thumb/Publication126/v4/6f/95/44/6f9544a4-d234-7097-e2d5-57fabfb1ebc3/9780316055086.jpg/600x600bb.jpg"
+                alt="Portada: The Witcher — The Last Wish"
+                width="300"
+                height="450"
+                loading="lazy"
+              />
+            </figure>
+            <div class="book-card-body">
+              <span class="book-series">The Witcher</span>
+              <h3 class="book-title">The Last Wish</h3>
+              <p class="book-author">Andrzej Sapkowski</p>
+              <p class="book-meta">Relatos · Ed. Netflix tie-in</p>
+            </div>
+          </article>
+          <article class="book-card">
+            <figure class="book-card-cover">
+              <img
+                src="https://is1-ssl.mzstatic.com/image/thumb/Publication114/v4/09/8a/32/098a32cc-e7a0-4698-4cf2-d37e101539bd/3004196.jpg/600x600bb.jpg"
+                alt="Portada: The Witcher — Of Flesh and Flame"
+                width="300"
+                height="450"
+                loading="lazy"
+              />
+            </figure>
+            <div class="book-card-body">
+              <span class="book-series">The Witcher</span>
+              <h3 class="book-title">Of Flesh and Flame <span class="book-title-suffix">(2 de 4)</span></h3>
+              <p class="book-author">Aleksandra Motyka · Marianna Strychowska · Dark Horse</p>
+              <p class="book-meta">Cómic · CD PROJEKT RED</p>
+            </div>
+          </article><article class="book-card">
+            <figure class="book-card-cover">
+              <img
+                src="https://is1-ssl.mzstatic.com/image/thumb/Publication221/v4/1d/51/95/1d519576-b7b6-2395-24a0-b77600fd6519/9780316597753.jpg/600x600bb.jpg"
+                alt="Portada: The Witcher — Crossroads of Ravens"
+                width="300"
+                height="450"
+                loading="lazy"
+              />
+            </figure>
+            <div class="book-card-body">
+              <span class="book-series">The Witcher</span>
+              <h3 class="book-title">Crossroads of Ravens</h3>
+              <p class="book-author">Andrzej Sapkowski · Trad. David French</p>
+              <p class="book-meta">Novela · Orbit</p>
+            </div>
+          </article>
+          <article class="book-card">
+            <figure class="book-card-cover">
+              <img
+                src="https://is1-ssl.mzstatic.com/image/thumb/Publication19/v4/4c/86/15/4c8615e4-1f97-ae5f-83bb-acb863b331a6/mzm.gopotzhu.jpg/600x600bb.jpg"
+                alt="Portada: The Witcher cómic n.º 1"
+                width="300"
+                height="450"
+                loading="lazy"
+              />
+            </figure>
+            <div class="book-card-body">
+              <span class="book-series">The Witcher</span>
+              <h3 class="book-title">Cómic n.º 1 <span class="book-title-suffix">(de 5)</span></h3>
+              <p class="book-author">Paul Tobin · Joe Querio · Dark Horse</p>
+              <p class="book-meta">Cómic · CD PROJEKT</p>
+            </div>
+          </article>
+          <article class="book-card">
+            <figure class="book-card-cover">
+              <img
+                src="https://is1-ssl.mzstatic.com/image/thumb/Publication126/v4/6f/95/44/6f9544a4-d234-7097-e2d5-57fabfb1ebc3/9780316055086.jpg/600x600bb.jpg"
+                alt="Portada: The Witcher — The Last Wish"
+                width="300"
+                height="450"
+                loading="lazy"
+              />
+            </figure>
+            <div class="book-card-body">
+              <span class="book-series">The Witcher</span>
+              <h3 class="book-title">The Last Wish</h3>
+              <p class="book-author">Andrzej Sapkowski</p>
+              <p class="book-meta">Relatos · Ed. Netflix tie-in</p>
+            </div>
+          </article>
+          <article class="book-card">
+            <figure class="book-card-cover">
+              <img
+                src="https://is1-ssl.mzstatic.com/image/thumb/Publication114/v4/09/8a/32/098a32cc-e7a0-4698-4cf2-d37e101539bd/3004196.jpg/600x600bb.jpg"
+                alt="Portada: The Witcher — Of Flesh and Flame"
+                width="300"
+                height="450"
+                loading="lazy"
+              />
+            </figure>
+            <div class="book-card-body">
+              <span class="book-series">The Witcher</span>
+              <h3 class="book-title">Of Flesh and Flame <span class="book-title-suffix">(2 de 4)</span></h3>
+              <p class="book-author">Aleksandra Motyka · Marianna Strychowska · Dark Horse</p>
+              <p class="book-meta">Cómic · CD PROJEKT RED</p>
+            </div>
+          </article>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-grid">
+      <div>
+        <h4>InkByte</h4>
+        <p>Callejón del Olmo 12, planta baja. Abierto de martes a sábado.</p>
+      </div>
+      <div>
+        <h4>Comprar</h4>
+        <ul class="footer-links">
+          <li><a href="#">Novedades</a></li>
+          <li><a href="#">Agotados</a></li>
+          <li><a href="#">Pack regalo</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Ayuda</h4>
+        <ul class="footer-links">
+          <li><a href="#">Envíos y devoluciones</a></li>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Contacto</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <ul class="footer-links">
+          <li><a href="#">Privacidad</a></li>
+          <li><a href="#">Cookies</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="wrap footer-bottom">
+      <span>© 2026 Mockup de paleta — sin backend.</span>
+      <span><a href="buscador-modal-mockup.html" style="color: inherit;">Página de búsqueda</a></span>
+    </div>
+  </footer>
+
+</body>
+</html>
