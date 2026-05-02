@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Crossroads of Ravens — InkByte (mockup)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --terracotta: #c76f45;
+      --burnt-clay: #8b4d30;
+      --grey-olive: #968e85;
+      --sand-orange: #e8c9a8;
+      --ink: #3d3a36;
+      --ink-soft: #5a544d;
+      --surface: #faf7f2;
+      --surface-elevated: #fffef9;
+      --border-subtle: color-mix(in srgb, var(--grey-olive) 35%, white);
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 22px;
+      --shadow-sm: 0 2px 8px color-mix(in srgb, var(--ink) 8%, transparent);
+      --font-sans: "Outfit", system-ui, sans-serif;
+      --font-display: "Instrument Serif", Georgia, serif;
+      --transition: 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      font-family: var(--font-sans);
+      color: var(--ink-soft);
+      background: var(--surface);
+      line-height: 1.55;
+      font-size: 1rem;
+    }
+    h1, h2, h3 { font-family: var(--font-display); font-weight: 400; color: var(--ink); }
+    a { color: color-mix(in srgb, var(--terracotta) 58%, var(--ink)); transition: color var(--transition); }
+    a:hover { color: var(--ink); }
+    .wrap { width: min(1120px, 92vw); margin-inline: auto; }
+    .banner-top { background: var(--grey-olive); color: var(--surface-elevated); text-align: center; font-size: 0.875rem; padding: 0.65rem 1rem; }
+    .banner-top a { color: #ecdcb0; text-decoration: none; }
+    header.nav {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      backdrop-filter: blur(12px);
+      background: color-mix(in srgb, var(--surface-elevated) 88%, transparent);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; padding: 0.85rem 0; }
+    .brand { font-family: var(--font-display); font-size: 1.35rem; }
+    .brand a { color: var(--burnt-clay); text-decoration: none; }
+    .nav-links { display: flex; flex-wrap: wrap; gap: 0.25rem; list-style: none; margin: 0; padding: 0; }
+    .nav-links a { padding: 0.45rem 0.75rem; border-radius: var(--radius-sm); color: var(--ink-soft); text-decoration: none; font-size: 0.88rem; font-weight: 500; }
+    .nav-links a:hover { background: color-mix(in srgb, var(--sand-orange) 48%, white); color: var(--ink); }
+    main { flex: 1; }
+    .breadcrumb { font-size: 0.88rem; padding: 1.25rem 0 0; color: var(--grey-olive); }
+    .breadcrumb a { text-decoration: none; font-weight: 500; }
+    .book-layout { display: grid; grid-template-columns: min(280px, 40vw) 1fr; gap: 2rem; padding: 1.25rem 0 3rem; align-items: start; }
+    @media (max-width: 800px) { .book-layout { grid-template-columns: 1fr; } }
+    .book-cover-wrap {
+      background: var(--surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .book-cover-wrap img {
+      width: 100%;
+      display: block;
+      border-radius: 6px;
+      aspect-ratio: 2/3;
+      object-fit: contain;
+      background: color-mix(in srgb, var(--grey-olive) 10%, var(--surface));
+    }
+    .book-detail h1 { margin: 0 0 0.35rem; font-size: clamp(1.65rem, 3vw, 2.15rem); }
+    .book-detail .series { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--terracotta); margin-bottom: 0.35rem; }
+    .book-detail .author { margin: 0 0 1rem; font-size: 1.05rem; }
+    .book-detail .blurb { margin: 0 0 1.5rem; max-width: 62ch; }
+    .meta-pills { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-bottom: 1.75rem; }
+    .pill {
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 0.3rem 0.65rem;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--sand-orange) 45%, white);
+      color: var(--ink);
+      border: 1px solid color-mix(in srgb, var(--terracotta) 25%, transparent);
+    }
+    .downloads { margin-top: 0.5rem; }
+    .downloads h2 { font-size: 1.2rem; margin: 0 0 0.75rem; }
+    .downloads > p { margin: 0 0 1rem; font-size: 0.9rem; color: var(--grey-olive); max-width: 55ch; }
+    .file-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.55rem; }
+    .file-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      padding: 0.85rem 1rem;
+      background: var(--surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+    }
+    .file-row__info strong { display: block; color: var(--ink); font-size: 0.92rem; }
+    .file-row__info span { font-size: 0.8rem; color: var(--grey-olive); }
+    .file-row a.download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      background: var(--terracotta);
+      color: var(--surface-elevated);
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-decoration: none;
+      transition: background var(--transition), transform var(--transition);
+    }
+    .file-row a.download-btn:hover { background: var(--burnt-clay); transform: translateY(-1px); color: var(--surface-elevated); }
+    @media (max-width: 520px) { .nav-links { display: none; } }
+    footer.site-footer {
+      margin-top: auto;
+      background: color-mix(in srgb, var(--grey-olive) 78%, var(--ink));
+      color: color-mix(in srgb, #ecdcb0 88%, white);
+      padding: 1.5rem 0;
+      text-align: center;
+      font-size: 0.82rem;
+    }
+    footer.site-footer a { color: inherit; }
+  </style>
+</head>
+<body>
+  <div class="banner-top">
+    Ficha de ejemplo · <a href="buscador-modal-mockup.html">Ir al buscador</a>
+  </div>
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <span class="brand"><a href="paleta-mockup.html">InkByte</a></span>
+      <ul class="nav-links">
+        <li><a href="paleta-mockup.html#hero">Inicio</a></li>
+        <li><a href="buscador-modal-mockup.html">Búsqueda</a></li>
+        <li><a href="cuenta-mockup.html">Mi cuenta</a></li>
+        <li><a href="lista-detalle-mockup.html">Lista origen</a></li>
+      </ul>
+    </div>
+  </header>
+  <main class="wrap">
+    <nav class="breadcrumb" aria-label="Miga de pan">
+      <a href="cuenta-mockup.html">Mi cuenta</a>
+      · <a href="lista-detalle-mockup.html">Vacaciones 2026</a>
+      · <span aria-current="page">Crossroads of Ravens</span>
+    </nav>
+    <article class="book-layout">
+      <div class="book-cover-wrap">
+        <img
+          src="https://is1-ssl.mzstatic.com/image/thumb/Publication221/v4/1d/51/95/1d519576-b7b6-2395-24a0-b77600fd6519/9780316597753.jpg/600x600bb.jpg"
+          alt="Portada: Crossroads of Ravens"
+          width="400"
+          height="600"
+          loading="lazy"
+        />
+      </div>
+      <div class="book-detail">
+        <p class="series">The Witcher · Novela</p>
+        <h1>Crossroads of Ravens</h1>
+        <p class="author">Andrzej Sapkowski · Traducción: David French</p>
+        <div class="meta-pills">
+          <span class="pill">ISBN 978-0-316-59775-3</span>
+          <span class="pill">Orbit · Inglés</span>
+          <span class="pill">EPUB + PDF · Con DRM simulado</span>
+        </div>
+        <p class="blurb">
+          Texto descriptivo de ejemplo para el mockup: Geralt joven, encrucijadas y cuervos en la portada.
+          Aquí iría la sinopsis oficial. Los enlaces de descarga siguientes son ficticios (atributo <code>download</code> + <code>#</code>).
+        </p>
+        <section class="downloads" aria-labelledby="downloads-heading">
+          <h2 id="downloads-heading">Archivos para descargar</h2>
+          <p>Solo se muestran los formatos que tienes licencia para este título. En producción, cada enlace validaría sesión y watermark.</p>
+          <ul class="file-list">
+            <li class="file-row">
+              <div class="file-row__info">
+                <strong>crossroads-of-ravens.epub</strong>
+                <span>EPUB 3 · 2,4 MB · Última versión editorial</span>
+              </div>
+              <a class="download-btn" href="#" download>Descargar EPUB</a>
+            </li>
+            <li class="file-row">
+              <div class="file-row__info">
+                <strong>crossroads-of-ravens.pdf</strong>
+                <span>PDF marcado · 8,1 MB · Para lectura en tableta</span>
+              </div>
+              <a class="download-btn" href="#" download>Descargar PDF</a>
+            </li>
+            <li class="file-row">
+              <div class="file-row__info">
+                <strong>muestra-primeros-capitulos.epub</strong>
+                <span>Muestra gratuita · 480 KB</span>
+              </div>
+              <a class="download-btn" href="#" download>Muestra</a>
+            </li>
+          </ul>
+        </section>
+      </div>
+    </article>
+  </main>
+  <footer class="site-footer">
+    <div class="wrap">Mockup InkByte — <a href="cuenta-mockup.html">Mi cuenta</a></div>
+  </footer>
+</body>
+</html>

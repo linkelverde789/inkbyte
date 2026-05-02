@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Administración · Libros subidos — InkByte (mockup)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --terracotta: #c76f45;
+      --burnt-clay: #8b4d30;
+      --grey-olive: #968e85;
+      --sand-orange: #e8c9a8;
+      --pearl-beige: #ecdcb0;
+      --peach-fuzz: #ffcab1;
+      --ink: #3d3a36;
+      --ink-soft: #5a544d;
+      --surface: #faf7f2;
+      --surface-elevated: #fffef9;
+      --border-subtle: color-mix(in srgb, var(--grey-olive) 35%, white);
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --shadow-sm: 0 2px 8px color-mix(in srgb, var(--ink) 8%, transparent);
+      --font-sans: "Outfit", system-ui, sans-serif;
+      --font-display: "Instrument Serif", Georgia, serif;
+      --transition: 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      font-family: var(--font-sans);
+      color: var(--ink-soft);
+      background: var(--surface);
+      line-height: 1.55;
+      font-size: 1rem;
+    }
+    h1 { font-family: var(--font-display); font-weight: 400; color: var(--ink); }
+    a { color: color-mix(in srgb, var(--terracotta) 58%, var(--ink)); transition: color var(--transition); }
+    a:hover { color: var(--ink); }
+    .wrap { width: min(1120px, 92vw); margin-inline: auto; }
+    .banner-top { background: var(--grey-olive); color: var(--surface-elevated); text-align: center; font-size: 0.875rem; padding: 0.65rem 1rem; }
+    .banner-top a { color: var(--pearl-beige); text-decoration: none; }
+    header.nav {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      backdrop-filter: blur(12px);
+      background: color-mix(in srgb, var(--surface-elevated) 88%, transparent);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; padding: 0.85rem 0; }
+    .brand { font-family: var(--font-display); font-size: 1.35rem; }
+    .brand a { color: var(--burnt-clay); text-decoration: none; }
+    .nav-links { display: flex; flex-wrap: wrap; gap: 0.25rem; list-style: none; margin: 0; padding: 0; }
+    .nav-links a { padding: 0.45rem 0.75rem; border-radius: var(--radius-sm); color: var(--ink-soft); text-decoration: none; font-size: 0.88rem; font-weight: 500; }
+    .nav-links a:hover, .nav-links a[aria-current="page"] {
+      background: color-mix(in srgb, var(--sand-orange) 48%, white);
+      color: var(--ink);
+    }
+    .nav-badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--terracotta);
+      padding: 0.35rem 0.5rem;
+      background: color-mix(in srgb, var(--sand-orange) 40%, white);
+      border-radius: 6px;
+    }
+    main { flex: 1; }
+    .page-head { padding: 2rem 0 1rem; }
+    .page-head h1 { margin: 0 0 0.35rem; }
+    .page-head p { margin: 0; max-width: 60ch; }
+    .table-scroll {
+      overflow-x: auto;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-subtle);
+      background: var(--surface-elevated);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 3rem;
+    }
+    table.data { width: 100%; border-collapse: collapse; font-size: 0.88rem; min-width: 720px; }
+    .data th, .data td { padding: 0.75rem 0.9rem; text-align: left; border-bottom: 1px solid var(--border-subtle); vertical-align: middle; }
+    .data th { font-weight: 600; color: var(--ink); background: color-mix(in srgb, var(--pearl-beige) 35%, white); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .data tbody tr:hover { background: color-mix(in srgb, var(--sand-orange) 15%, white); }
+    .data tbody tr:last-child td { border-bottom: none; }
+    .status {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 0.2rem 0.5rem;
+      border-radius: 999px;
+    }
+    .status--live { background: color-mix(in srgb, var(--sand-orange) 50%, white); color: var(--burnt-clay); }
+    .status--draft { background: color-mix(in srgb, var(--grey-olive) 20%, white); color: var(--ink-soft); }
+    .status--review { background: color-mix(in srgb, var(--peach-fuzz) 55%, white); color: var(--burnt-clay); }
+    .btn-icon {
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 0.65rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-subtle);
+      background: var(--surface);
+      cursor: pointer;
+      font-family: inherit;
+      color: var(--ink-soft);
+      transition: background var(--transition), border-color var(--transition);
+    }
+    .btn-icon:hover { border-color: var(--terracotta); color: var(--burnt-clay); }
+    @media (max-width: 520px) { .nav-links { display: none; } }
+    footer.site-footer {
+      margin-top: auto;
+      background: color-mix(in srgb, var(--grey-olive) 78%, var(--ink));
+      color: color-mix(in srgb, var(--pearl-beige) 88%, white);
+      padding: 1.75rem 0;
+      font-size: 0.82rem;
+    }
+    footer.site-footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.75rem; }
+    footer.site-footer a { color: inherit; }
+  </style>
+</head>
+<body>
+  <div class="banner-top">
+    Moderación de catálogo · <a href="admin-usuarios-mockup.html">Usuarios</a>
+  </div>
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <span class="brand"><a href="paleta-mockup.html">InkByte</a></span>
+      <ul class="nav-links">
+        <li><a href="cuenta-mockup.html">Mi cuenta</a></li>
+        <li><a href="admin-usuarios-mockup.html">Usuarios</a></li>
+        <li><a href="admin-libros-mockup.html" aria-current="page"><span class="nav-badge">Admin</span> Libros subidos</a></li>
+        <li><a href="buscador-modal-mockup.html">Búsqueda</a></li>
+      </ul>
+    </div>
+  </header>
+  <main class="wrap">
+    <div class="page-head">
+      <h1>Libros subidos</h1>
+      <p>Contenido ficticio. «Revisar» no ejecuta ninguna acción en el prototipo.</p>
+    </div>
+    <div class="table-scroll">
+      <table class="data">
+        <thead>
+          <tr>
+            <th>Título</th>
+            <th>Autor</th>
+            <th>ISBN / ref.</th>
+            <th>Estado</th>
+            <th>Fichero</th>
+            <th>Subido por</th>
+            <th>Fecha</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><a href="libro-mockup.html">Crossroads of Ravens</a></td>
+            <td>Andrzej Sapkowski</td>
+            <td>978-0-316-59775-3</td>
+            <td><span class="status status--live">Publicado</span></td>
+            <td>crossroads.epub · 2,4 MB</td>
+            <td>Marco Ibáñez</td>
+            <td>28 abr 2026</td>
+            <td><button type="button" class="btn-icon">Revisar</button></td>
+          </tr>
+          <tr>
+            <td><a href="libro-mockup.html">Of Flesh and Flame</a></td>
+            <td>Motyka · Strychowska</td>
+            <td>Cómic 2/4</td>
+            <td><span class="status status--review">En revisión</span></td>
+            <td>flesh-flame-hd.pdf · 21 MB</td>
+            <td>Admin InkByte</td>
+            <td>27 abr 2026</td>
+            <td><button type="button" class="btn-icon">Revisar</button></td>
+          </tr>
+          <tr>
+            <td><a href="libro-mockup.html">The Last Wish</a></td>
+            <td>Andrzej Sapkowski</td>
+            <td>Ed. Netflix tie-in</td>
+            <td><span class="status status--live">Publicado</span></td>
+            <td>last-wish.epub</td>
+            <td>Marco Ibáñez</td>
+            <td>10 mar 2026</td>
+            <td><button type="button" class="btn-icon">Revisar</button></td>
+          </tr>
+          <tr>
+            <td>Antología locales 2026</td>
+            <td>Varios</td>
+            <td>—</td>
+            <td><span class="status status--draft">Borrador</span></td>
+            <td>—</td>
+            <td>Laura Chen</td>
+            <td>01 may 2026</td>
+            <td><button type="button" class="btn-icon">Revisar</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>© 2026 Mockup administración</span>
+      <span><a href="admin-usuarios-mockup.html">← Usuarios</a></span>
+    </div>
+  </footer>
+</body>
+</html>
