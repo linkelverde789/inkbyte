@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lista: Vacaciones 2026 — InkByte (mockup)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --terracotta: #c76f45;
+      --burnt-clay: #8b4d30;
+      --grey-olive: #968e85;
+      --sand-orange: #e8c9a8;
+      --peach-fuzz: #ffcab1;
+      --pearl-beige: #ecdcb0;
+      --ink: #3d3a36;
+      --ink-soft: #5a544d;
+      --surface: #faf7f2;
+      --surface-elevated: #fffef9;
+      --border-subtle: color-mix(in srgb, var(--grey-olive) 35%, white);
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 22px;
+      --shadow-sm: 0 2px 8px color-mix(in srgb, var(--ink) 8%, transparent);
+      --shadow-hover: 0 18px 40px color-mix(in srgb, var(--terracotta) 28%, transparent);
+      --font-sans: "Outfit", system-ui, sans-serif;
+      --font-display: "Instrument Serif", Georgia, serif;
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+      --transition: 0.28s var(--ease-out);
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      font-family: var(--font-sans);
+      color: var(--ink-soft);
+      background: var(--surface);
+      line-height: 1.55;
+      font-size: 1rem;
+    }
+    h1, h2, h3 { font-family: var(--font-display); font-weight: 400; color: var(--ink); }
+    a { color: color-mix(in srgb, var(--terracotta) 58%, var(--ink)); transition: color var(--transition); }
+    a:hover { color: var(--ink); }
+    .wrap { width: min(1120px, 92vw); margin-inline: auto; }
+    .banner-top {
+      background: var(--grey-olive);
+      color: var(--surface-elevated);
+      text-align: center;
+      font-size: 0.875rem;
+      padding: 0.65rem 1rem;
+    }
+    .banner-top a { color: var(--pearl-beige); text-decoration: none; }
+    header.nav {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      backdrop-filter: blur(12px);
+      background: color-mix(in srgb, var(--surface-elevated) 88%, transparent);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; padding: 0.85rem 0; }
+    .brand { font-family: var(--font-display); font-size: 1.35rem; }
+    .brand a { color: var(--burnt-clay); text-decoration: none; }
+    .nav-links { display: flex; flex-wrap: wrap; gap: 0.25rem; list-style: none; margin: 0; padding: 0; }
+    .nav-links a {
+      padding: 0.45rem 0.75rem;
+      border-radius: var(--radius-sm);
+      color: var(--ink-soft);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+    }
+    .nav-links a:hover, .nav-links a[aria-current="page"] {
+      background: color-mix(in srgb, var(--sand-orange) 48%, white);
+      color: var(--ink);
+    }
+    .nav-badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--terracotta);
+      padding: 0.35rem 0.5rem;
+      background: color-mix(in srgb, var(--sand-orange) 40%, white);
+      border-radius: 6px;
+    }
+    main { flex: 1; }
+    .breadcrumb { font-size: 0.88rem; padding: 1.25rem 0 0; color: var(--grey-olive); }
+    .breadcrumb a { text-decoration: none; font-weight: 500; }
+    .page-head { padding: 0.75rem 0 1.25rem; }
+    .page-head h1 { margin: 0 0 0.4rem; font-size: clamp(1.5rem, 3vw, 2rem); }
+    .page-head p { margin: 0; max-width: 55ch; }
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      align-items: center;
+      margin-bottom: 1.25rem;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.55rem 1rem;
+      border-radius: 999px;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform var(--transition), background var(--transition);
+    }
+    .btn-primary { background: var(--terracotta); color: var(--surface-elevated); box-shadow: var(--shadow-sm); }
+    .btn-primary:hover { background: var(--burnt-clay); transform: translateY(-2px); }
+    .btn-secondary { background: transparent; border: 2px solid var(--terracotta); color: var(--burnt-clay); }
+    .book-rows { display: flex; flex-direction: column; gap: 0.65rem; padding-bottom: 3rem; }
+    .book-row {
+      display: grid;
+      grid-template-columns: 4.25rem 1fr auto;
+      gap: 1rem;
+      align-items: center;
+      background: var(--surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 0.75rem 1rem;
+      text-decoration: none;
+      color: inherit;
+      box-shadow: var(--shadow-sm);
+      transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+    }
+    .book-row:hover {
+      transform: translateY(-2px);
+      border-color: color-mix(in srgb, var(--terracotta) 40%, white);
+      box-shadow: var(--shadow-hover);
+    }
+    .book-row__cover {
+      width: 4.25rem;
+      height: 6.25rem;
+      border-radius: 4px;
+      object-fit: cover;
+      background: color-mix(in srgb, var(--grey-olive) 15%, white);
+    }
+    .book-row__title { font-family: var(--font-display); font-size: 1.1rem; margin: 0 0 0.2rem; }
+    .book-row__author { margin: 0; font-size: 0.85rem; color: var(--ink-soft); }
+    .book-row__meta { font-size: 0.75rem; color: var(--grey-olive); margin-top: 0.25rem; }
+    .book-row__action { font-size: 0.8rem; font-weight: 600; color: var(--terracotta); white-space: nowrap; }
+    @media (max-width: 600px) {
+      .book-row { grid-template-columns: 3.5rem 1fr; }
+      .book-row__action { grid-column: 1 / -1; justify-self: end; }
+      .book-row__cover { width: 3.5rem; height: 5.25rem; }
+    }
+    @media (max-width: 520px) { .nav-links { display: none; } }
+    footer.site-footer {
+      margin-top: auto;
+      background: color-mix(in srgb, var(--grey-olive) 78%, var(--ink));
+      color: color-mix(in srgb, var(--pearl-beige) 88%, white);
+      padding: 2rem 0 1.5rem;
+    }
+    .footer-bottom {
+      width: min(1120px, 92vw);
+      margin: 0 auto;
+      padding-top: 1rem;
+      border-top: 1px solid color-mix(in srgb, white 22%, transparent);
+      font-size: 0.78rem;
+      opacity: 0.75;
+    }
+  </style>
+</head>
+<body>
+  <div class="banner-top">
+    Lista de ejemplo · <a href="cuenta-mockup.html">Volver a tus listas</a>
+  </div>
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <span class="brand"><a href="paleta-mockup.html">InkByte</a></span>
+      <ul class="nav-links">
+        <li><a href="paleta-mockup.html#hero">Inicio</a></li>
+        <li><a href="buscador-modal-mockup.html">Búsqueda</a></li>
+        <li><a href="cuenta-mockup.html" aria-current="page">Mi cuenta</a></li>
+        <li><a href="admin-usuarios-mockup.html"><span class="nav-badge">Admin</span> Usuarios</a></li>
+        <li><a href="admin-libros-mockup.html">Libros (admin)</a></li>
+      </ul>
+      <a href="login-mockup.html" class="btn btn-secondary" style="padding:0.45rem 0.85rem;font-size:0.8rem;">Salir</a>
+    </div>
+  </header>
+  <main class="wrap">
+    <nav class="breadcrumb" aria-label="Miga de pan">
+      <a href="cuenta-mockup.html">Mi cuenta</a>
+      · <span aria-current="page">Vacaciones 2026</span>
+    </nav>
+    <div class="page-head">
+      <h1>Vacaciones 2026</h1>
+      <p>12 libros en esta lista. Pulsa una fila para abrir la ficha del libro y descargar archivos (mockup).</p>
+    </div>
+    <div class="toolbar">
+      <button type="button" class="btn btn-primary">Compartir lista</button>
+      <button type="button" class="btn btn-secondary">Ordenar</button>
+      <span style="font-size:0.82rem;color:var(--grey-olive);">Orden actual: añadidos recientes primero.</span>
+    </div>
+    <div class="book-rows">
+      <a class="book-row" href="libro-mockup.html">
+        <img class="book-row__cover" src="https://is1-ssl.mzstatic.com/image/thumb/Publication221/v4/1d/51/95/1d519576-b7b6-2395-24a0-b77600fd6519/9780316597753.jpg/600x600bb.jpg" alt="" width="68" height="100" loading="lazy" />
+        <div>
+          <p class="book-row__title">Crossroads of Ravens</p>
+          <p class="book-row__author">Andrzej Sapkowski · Trad. David French</p>
+          <p class="book-row__meta">Añadido el 28 abr 2026 · Nota: «Para el tren»</p>
+        </div>
+        <span class="book-row__action">Ver ficha →</span>
+      </a>
+      <a class="book-row" href="libro-mockup.html">
+        <img class="book-row__cover" src="https://is1-ssl.mzstatic.com/image/thumb/Publication126/v4/6f/95/44/6f9544a4-d234-7097-e2d5-57fabfb1ebc3/9780316055086.jpg/600x600bb.jpg" alt="" width="68" height="100" loading="lazy" />
+        <div>
+          <p class="book-row__title">The Last Wish</p>
+          <p class="book-row__author">Andrzej Sapkowski</p>
+          <p class="book-row__meta">Añadido el 26 abr 2026</p>
+        </div>
+        <span class="book-row__action">Ver ficha →</span>
+      </a>
+      <a class="book-row" href="libro-mockup.html">
+        <img class="book-row__cover" src="https://is1-ssl.mzstatic.com/image/thumb/Publication114/v4/09/8a/32/098a32cc-e7a0-4698-4cf2-d37e101539bd/3004196.jpg/600x600bb.jpg" alt="" width="68" height="100" loading="lazy" />
+        <div>
+          <p class="book-row__title">Of Flesh and Flame (2 de 4)</p>
+          <p class="book-row__author">Motyka · Strychowska</p>
+          <p class="book-row__meta">Añadido el 22 abr 2026</p>
+        </div>
+        <span class="book-row__action">Ver ficha →</span>
+      </a>
+      <a class="book-row" href="libro-mockup.html">
+        <img class="book-row__cover" src="https://is1-ssl.mzstatic.com/image/thumb/Publication19/v4/4c/86/15/4c8615e4-1f97-ae5f-83bb-acb863b331a6/mzm.gopotzhu.jpg/600x600bb.jpg" alt="" width="68" height="100" loading="lazy" />
+        <div>
+          <p class="book-row__title">The Witcher · Cómic n.º 1</p>
+          <p class="book-row__author">Tobin · Querio</p>
+          <p class="book-row__meta">Añadido el 18 abr 2026</p>
+        </div>
+        <span class="book-row__action">Ver ficha →</span>
+      </a>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-bottom">© 2026 Mockup InkByte — ficha de libro: <a href="libro-mockup.html" style="color:inherit;">libro-mockup.html</a></div>
+  </footer>
+</body>
+</html>
