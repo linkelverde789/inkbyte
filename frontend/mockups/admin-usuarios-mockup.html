@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Administración · Usuarios — InkByte (mockup)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --terracotta: #c76f45;
+      --burnt-clay: #8b4d30;
+      --grey-olive: #968e85;
+      --sand-orange: #e8c9a8;
+      --pearl-beige: #ecdcb0;
+      --peach-fuzz: #ffcab1;
+      --ink: #3d3a36;
+      --ink-soft: #5a544d;
+      --surface: #faf7f2;
+      --surface-elevated: #fffef9;
+      --border-subtle: color-mix(in srgb, var(--grey-olive) 35%, white);
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --shadow-sm: 0 2px 8px color-mix(in srgb, var(--ink) 8%, transparent);
+      --font-sans: "Outfit", system-ui, sans-serif;
+      --font-display: "Instrument Serif", Georgia, serif;
+      --transition: 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      font-family: var(--font-sans);
+      color: var(--ink-soft);
+      background: var(--surface);
+      line-height: 1.55;
+      font-size: 1rem;
+    }
+    h1, h2 { font-family: var(--font-display); font-weight: 400; color: var(--ink); }
+    a { color: color-mix(in srgb, var(--terracotta) 58%, var(--ink)); transition: color var(--transition); }
+    a:hover { color: var(--ink); }
+    .wrap { width: min(1120px, 92vw); margin-inline: auto; }
+    .banner-top { background: var(--grey-olive); color: var(--surface-elevated); text-align: center; font-size: 0.875rem; padding: 0.65rem 1rem; }
+    .banner-top a { color: var(--pearl-beige); text-decoration: none; }
+    header.nav {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      backdrop-filter: blur(12px);
+      background: color-mix(in srgb, var(--surface-elevated) 88%, transparent);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; padding: 0.85rem 0; }
+    .brand { font-family: var(--font-display); font-size: 1.35rem; }
+    .brand a { color: var(--burnt-clay); text-decoration: none; }
+    .nav-links { display: flex; flex-wrap: wrap; gap: 0.25rem; list-style: none; margin: 0; padding: 0; }
+    .nav-links a { padding: 0.45rem 0.75rem; border-radius: var(--radius-sm); color: var(--ink-soft); text-decoration: none; font-size: 0.88rem; font-weight: 500; }
+    .nav-links a:hover, .nav-links a[aria-current="page"] {
+      background: color-mix(in srgb, var(--sand-orange) 48%, white);
+      color: var(--ink);
+    }
+    .nav-badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--terracotta);
+      padding: 0.35rem 0.5rem;
+      background: color-mix(in srgb, var(--sand-orange) 40%, white);
+      border-radius: 6px;
+    }
+    main { flex: 1; }
+    .page-head { padding: 2rem 0 1rem; }
+    .page-head h1 { margin: 0 0 0.35rem; }
+    .page-head p { margin: 0; max-width: 60ch; }
+    .table-scroll {
+      overflow-x: auto;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-subtle);
+      background: var(--surface-elevated);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 3rem;
+    }
+    table.data { width: 100%; border-collapse: collapse; font-size: 0.88rem; min-width: 720px; }
+    .data th, .data td { padding: 0.75rem 0.9rem; text-align: left; border-bottom: 1px solid var(--border-subtle); vertical-align: middle; }
+    .data th { font-weight: 600; color: var(--ink); background: color-mix(in srgb, var(--pearl-beige) 35%, white); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .data tbody tr:hover { background: color-mix(in srgb, var(--sand-orange) 15%, white); }
+    .data tbody tr:last-child td { border-bottom: none; }
+    .role-pill {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.2rem 0.5rem;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .role-pill--admin { background: color-mix(in srgb, var(--burnt-clay) 20%, white); color: var(--burnt-clay); }
+    .role-pill--editor { background: color-mix(in srgb, var(--terracotta) 22%, white); color: var(--burnt-clay); }
+    .role-pill--lector { background: color-mix(in srgb, var(--grey-olive) 15%, white); color: var(--ink-soft); }
+    .btn-icon {
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 0.65rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-subtle);
+      background: var(--surface);
+      cursor: pointer;
+      font-family: inherit;
+      color: var(--ink-soft);
+      transition: background var(--transition), border-color var(--transition);
+    }
+    .btn-icon:hover { border-color: var(--terracotta); color: var(--burnt-clay); }
+    @media (max-width: 520px) { .nav-links { display: none; } }
+    footer.site-footer {
+      margin-top: auto;
+      background: color-mix(in srgb, var(--grey-olive) 78%, var(--ink));
+      color: color-mix(in srgb, var(--pearl-beige) 88%, white);
+      padding: 1.75rem 0;
+      font-size: 0.82rem;
+    }
+    footer.site-footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.75rem; }
+    footer.site-footer a { color: inherit; }
+  </style>
+</head>
+<body>
+  <div class="banner-top">
+    Zona de administración · <a href="paleta-mockup.html">Sitio público</a>
+  </div>
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <span class="brand"><a href="paleta-mockup.html">InkByte</a></span>
+      <ul class="nav-links">
+        <li><a href="cuenta-mockup.html">Mi cuenta</a></li>
+        <li><a href="admin-usuarios-mockup.html" aria-current="page"><span class="nav-badge">Admin</span> Usuarios</a></li>
+        <li><a href="admin-libros-mockup.html">Libros subidos</a></li>
+        <li><a href="buscador-modal-mockup.html">Búsqueda</a></li>
+      </ul>
+    </div>
+  </header>
+  <main class="wrap">
+    <div class="page-head">
+      <h1>Usuarios</h1>
+      <p>Listado de cuentas registradas (datos inventados). Acciones «Editar» y «Suspender» no hacen nada en el prototipo.</p>
+    </div>
+    <div class="table-scroll">
+      <table class="data">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Rol</th>
+            <th>Alta</th>
+            <th>Última sesión</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Elena Martín</td>
+            <td>elena.martin@ejemplo.es</td>
+            <td><span class="role-pill role-pill--lector">Lector</span></td>
+            <td>12 mar 2025</td>
+            <td>Hoy, 09:14</td>
+            <td><button type="button" class="btn-icon">Editar</button> <button type="button" class="btn-icon">Suspender</button></td>
+          </tr>
+          <tr>
+            <td>Marco Ibáñez</td>
+            <td>marco.i@ejemplo.org</td>
+            <td><span class="role-pill role-pill--editor">Editor</span></td>
+            <td>02 ene 2025</td>
+            <td>30 abr 2026</td>
+            <td><button type="button" class="btn-icon">Editar</button> <button type="button" class="btn-icon">Suspender</button></td>
+          </tr>
+          <tr>
+            <td>Admin InkByte</td>
+            <td>admin@inkbyte.mock</td>
+            <td><span class="role-pill role-pill--admin">Admin</span></td>
+            <td>15 nov 2024</td>
+            <td>Hoy, 11:02</td>
+            <td><button type="button" class="btn-icon">Editar</button> <button type="button" class="btn-icon">Suspender</button></td>
+          </tr>
+          <tr>
+            <td>Laura Chen</td>
+            <td>l.chen@ejemplo.net</td>
+            <td><span class="role-pill role-pill--lector">Lector</span></td>
+            <td>20 abr 2026</td>
+            <td>—</td>
+            <td><button type="button" class="btn-icon">Editar</button> <button type="button" class="btn-icon">Suspender</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>© 2026 Mockup administración</span>
+      <span><a href="admin-libros-mockup.html">Ver libros subidos →</a></span>
+    </div>
+  </footer>
+</body>
+</html>

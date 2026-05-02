@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Iniciar sesión — InkByte (mockup)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --peach-fuzz: #ffcab1;
+      --pearl-beige: #ecdcb0;
+      --sand-orange: #e8c9a8;
+      --terracotta: #c76f45;
+      --burnt-clay: #8b4d30;
+      --grey-olive: #968e85;
+      --ink: #3d3a36;
+      --ink-soft: #5a544d;
+      --surface: #faf7f2;
+      --surface-elevated: #fffef9;
+      --border-subtle: color-mix(in srgb, var(--grey-olive) 35%, white);
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 22px;
+      --shadow-sm: 0 2px 8px color-mix(in srgb, var(--ink) 8%, transparent);
+      --shadow-md: 0 12px 40px color-mix(in srgb, var(--ink) 12%, transparent);
+      --font-sans: "Outfit", system-ui, sans-serif;
+      --font-display: "Instrument Serif", Georgia, serif;
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+      --transition: 0.28s var(--ease-out);
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      font-family: var(--font-sans);
+      color: var(--ink-soft);
+      background: var(--surface);
+      line-height: 1.55;
+      font-size: 1rem;
+    }
+    h1 { font-family: var(--font-display); font-weight: 400; color: var(--ink); margin: 0 0 0.5rem; font-size: 1.65rem; }
+    a { color: color-mix(in srgb, var(--terracotta) 58%, var(--ink)); transition: color var(--transition); }
+    a:hover { color: var(--ink); }
+    .wrap { width: min(1120px, 92vw); margin-inline: auto; }
+    .banner-top {
+      background: var(--grey-olive);
+      color: var(--surface-elevated);
+      text-align: center;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 0.65rem 1rem;
+    }
+    .banner-top a { color: var(--pearl-beige); text-decoration: none; border-bottom: 1px solid color-mix(in srgb, var(--pearl-beige) 55%, transparent); }
+    header.nav {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      backdrop-filter: blur(12px);
+      background: color-mix(in srgb, var(--surface-elevated) 88%, transparent);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.85rem 0;
+    }
+    .brand {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      letter-spacing: -0.02em;
+    }
+    .brand a { color: var(--burnt-clay); text-decoration: none; }
+    .nav-aux { display: flex; gap: 0.75rem; align-items: center; font-size: 0.9rem; }
+    .nav-aux a { text-decoration: none; font-weight: 500; color: var(--ink-soft); }
+    .nav-aux a:hover { color: var(--burnt-clay); }
+    main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 2.5rem 1rem 3rem; }
+    .login-card {
+      width: 100%;
+      max-width: 420px;
+      background: var(--surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 2rem 1.75rem 2.25rem;
+      box-shadow: var(--shadow-md);
+    }
+    .login-card > p { margin: 0 0 1.35rem; font-size: 0.95rem; }
+    .field { margin-bottom: 1rem; }
+    .field label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--ink); margin-bottom: 0.35rem; }
+    .field input {
+      width: 100%;
+      padding: 0.65rem 0.85rem;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      font: inherit;
+      background: var(--surface);
+      color: var(--ink);
+    }
+    .field input:focus {
+      outline: none;
+      border-color: color-mix(in srgb, var(--terracotta) 55%, var(--border-subtle));
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--terracotta) 18%, transparent);
+    }
+    .row-check { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.25rem; font-size: 0.88rem; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 0.75rem 1.25rem;
+      border-radius: 999px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform var(--transition), background var(--transition), box-shadow var(--transition);
+    }
+    .btn-primary {
+      background: var(--terracotta);
+      color: var(--surface-elevated);
+      box-shadow: var(--shadow-sm);
+    }
+    .btn-primary:hover { background: var(--burnt-clay); transform: translateY(-2px); }
+    .login-foot { margin-top: 1.25rem; text-align: center; font-size: 0.88rem; color: var(--grey-olive); }
+    @media (max-width: 520px) {
+      .nav-aux span { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="banner-top">
+    ¿Nuevo en InkByte? <a href="paleta-mockup.html">Ver cómo funciona</a>
+  </div>
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <span class="brand"><a href="paleta-mockup.html">InkByte</a></span>
+      <div class="nav-aux">
+        <a href="buscador-modal-mockup.html">Búsqueda</a>
+        <span>·</span>
+        <a href="cuenta-mockup.html">Mi cuenta</a>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="login-card">
+      <h1>Iniciar sesión</h1>
+      <p>Accede con tu correo para ver tus listas y descargas.</p>
+      <form action="cuenta-mockup.html" method="get">
+        <div class="field">
+          <label for="email">Correo</label>
+          <input id="email" name="email" type="email" autocomplete="username" placeholder="tu@correo.es" value="elena.martin@ejemplo.es" />
+        </div>
+        <div class="field">
+          <label for="password">Contraseña</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" placeholder="••••••••" />
+        </div>
+        <div class="row-check">
+          <input id="remember" type="checkbox" checked />
+          <label for="remember">Mantener la sesión en este dispositivo</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Entrar</button>
+      </form>
+      <p class="login-foot"><a href="#">¿Has olvidado la contraseña?</a> · Prototipo sin backend.</p>
+    </div>
+  </main>
+</body>
+</html>
