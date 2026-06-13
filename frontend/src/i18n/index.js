@@ -1,6 +1,6 @@
 import { MSG } from './messages'
 
-export const LOCALE = 'en'
+export const LOCALE = 'es'
 
 /**
  * @param {keyof typeof MSG} key

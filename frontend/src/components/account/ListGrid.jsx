@@ -4,6 +4,7 @@ import ListCard from './ListCard'
 const PLACEHOLDER_LISTS = [
   {
     id: 1,
+    href: '#vacaciones-2026',
     metaKey: MSG.LIST_PUBLIC_SHAREABLE,
     titleKey: MSG.LIST_VACATION_TITLE,
     descKey: MSG.LIST_VACATION_DESC,
@@ -12,6 +13,7 @@ const PLACEHOLDER_LISTS = [
   },
   {
     id: 2,
+    href: '#club',
     metaKey: MSG.LIST_PRIVATE,
     titleKey: MSG.LIST_CLUB_TITLE,
     descKey: MSG.LIST_CLUB_DESC,
@@ -20,6 +22,7 @@ const PLACEHOLDER_LISTS = [
   },
   {
     id: 3,
+    href: '#regalos',
     metaKey: MSG.LIST_PRIVATE,
     titleKey: MSG.LIST_GIFTS_TITLE,
     descKey: MSG.LIST_GIFTS_DESC,
@@ -34,6 +37,7 @@ export default function ListGrid() {
       {PLACEHOLDER_LISTS.map((list) => (
         <ListCard
           key={list.id}
+          href={list.href}
           meta={t(list.metaKey)}
           title={t(list.titleKey)}
           description={t(list.descKey)}
