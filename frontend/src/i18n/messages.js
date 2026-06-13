@@ -50,7 +50,7 @@ export const MSG = {
   AUTH_FIELD_EMAIL_PLACEHOLDER: 'you@example.com',
   AUTH_FIELD_PASSWORD_PLACEHOLDER: '••••••••',
   AUTH_FIELD_PASSWORD_MIN_PLACEHOLDER: 'At least 8 characters',
-  AUTH_FIELD_FIRST_NAME_PLACEHOLDER: 'Elena',
+  AUTH_FIELD_FIRST_NAME_PLACEHOLDER: 'First name',
   AUTH_REMEMBER_ME: 'Keep me signed in on this device',
 
   // Account

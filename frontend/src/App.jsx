@@ -15,8 +15,6 @@ function App() {
             <Route path={ROUTES.LOGIN} element={<LoginPage />} />
             <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
             <Route path={ROUTES.ACCOUNT} element={<AccountPage />} />
-            <Route path={ROUTES.REGISTER} element={<Navigate to={ROUTES.REGISTER} replace />} />
-            <Route path={ROUTES.ACCOUNT} element={<Navigate to={ROUTES.ACCOUNT} replace />} />
             <Route path="*" element={<Navigate to={ROUTES.HOME} replace />} />
           </Route>
         </Routes>
