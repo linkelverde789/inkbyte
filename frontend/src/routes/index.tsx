@@ -1,0 +1,159 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useMemo, useState } from "react";
+import { BookOpen, Download, Heart, Menu, Search, UserRound } from "lucide-react";
+
+import bookCovers from "@/assets/book-covers.jpg";
+import heroImage from "@/assets/inkbyte-hero.jpg";
+import readingNook from "@/assets/reading-nook.jpg";
+import { Button } from "@/components/ui/button";
+
+export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "InkByte — Descarga libros en EPUB y PDF" },
+      { name: "description", content: "Explora una biblioteca digital cuidada y descarga libros en EPUB y PDF de forma sencilla." },
+      { property: "og:title", content: "InkByte — Descarga libros en EPUB y PDF" },
+      { property: "og:description", content: "Miles de historias, una biblioteca digital tranquila y fácil de explorar." },
+    ],
+  }),
+  component: Index,
+});
+
+const books = [
+  { title: "La paciente silenciosa", author: "Alex Michaelides", category: "Misterio", format: "EPUB · PDF", downloads: "18,4 mil", cover: "left" },
+  { title: "Circe", author: "Madeline Miller", category: "Fantasía", format: "EPUB", downloads: "12,8 mil", cover: "center" },
+  { title: "Yellowface", author: "R. F. Kuang", category: "Ficción", format: "EPUB · PDF", downloads: "9,6 mil", cover: "right" },
+];
+
+function Index() {
+  const [activeCategory, setActiveCategory] = useState("Todos");
+  const [saved, setSaved] = useState<string[]>([]);
+
+  const visibleBooks = useMemo(() => books.filter((book) => activeCategory === "Todos" || book.category === activeCategory), [activeCategory]);
+
+  const toggleSaved = (title: string) => {
+    setSaved((current) => current.includes(title) ? current.filter((item) => item !== title) : [...current, title]);
+  };
+
+  return (
+    <div className="min-h-screen overflow-hidden bg-background text-foreground">
+      <div className="bg-foreground px-4 py-2 text-center text-[10px] font-bold uppercase tracking-[0.18em] text-background sm:text-xs">
+        Más de 48.000 títulos disponibles · Nuevas lecturas cada viernes
+      </div>
+
+      <nav className="border-b border-border bg-background" aria-label="Navegación principal">
+        <div className="mx-auto grid h-20 max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-5 sm:flex sm:justify-between sm:px-8">
+          <a href="#inicio" className="min-w-0 font-display text-2xl font-bold tracking-tight">Ink<span className="text-primary">Byte</span></a>
+          <div className="hidden items-center gap-9 text-xs font-bold uppercase tracking-[0.15em] md:flex">
+            <Link to="/buscar" className="transition-colors hover:text-primary">Buscar</Link>
+            <a href="#categorias" className="transition-colors hover:text-primary">Categorías</a>
+            <a href="#comunidad" className="transition-colors hover:text-primary">Comunidad</a>
+          </div>
+          <div className="flex shrink-0 items-center gap-1">
+            <Button variant="ghost" size="icon" aria-label="Mis libros"><Heart /></Button>
+            <Button variant="ghost" size="icon" aria-label="Mi cuenta" asChild><Link to="/perfil"><UserRound /></Link></Button>
+            <Button variant="ghost" size="icon" className="md:hidden" aria-label="Abrir menú"><Menu /></Button>
+          </div>
+        </div>
+      </nav>
+
+      <main id="inicio">
+        <header className="page-in relative mx-auto grid max-w-7xl grid-cols-12 gap-8 px-5 pb-20 pt-14 sm:px-8 md:pb-28 md:pt-20">
+          <div className="z-10 col-span-12 md:col-span-7">
+            <span className="mb-5 block text-xs font-bold uppercase tracking-[0.2em] text-primary">Tu próxima historia está aquí</span>
+            <h1 className="mb-7 text-5xl leading-[0.94] tracking-[-0.035em] sm:text-6xl md:text-7xl lg:text-8xl">
+              Miles de <span className="italic">historias</span><br />para leer a<br /><span className="text-primary">tu ritmo.</span>
+            </h1>
+            <p className="mb-8 max-w-lg text-base leading-relaxed text-muted-foreground sm:text-lg">
+              Una biblioteca digital hecha para descubrir sin prisa. Explora miles de títulos y descarga tu próxima lectura en segundos.
+            </p>
+            <Button variant="editorial" size="editorial" asChild><Link to="/buscar"><Search /> Buscar en la biblioteca</Link></Button>
+            <p className="mt-4 text-xs text-muted-foreground">Popular: novela histórica · poesía · ciencia ficción</p>
+          </div>
+
+          <div className="relative col-span-12 mt-4 md:col-span-5 md:mt-0">
+            <div className="absolute -left-7 -top-8 z-10 hidden size-28 rotate-[-7deg] items-center justify-center rounded-full bg-secondary p-4 text-center text-[10px] font-bold uppercase leading-tight tracking-wider md:flex">Selección<br />de la semana</div>
+            <img src={heroImage} width={960} height={1280} alt="Libros y lector electrónico junto a una taza de café" className="aspect-[4/5] w-full rotate-[1.5deg] object-cover shadow-[16px_18px_0_var(--color-secondary)]" />
+            <div className="absolute -bottom-5 right-3 bg-card px-5 py-3 text-xs font-bold uppercase tracking-widest shadow-lg">EPUB · PDF · MOBI</div>
+          </div>
+        </header>
+
+        <section id="biblioteca" className="mx-auto max-w-7xl px-5 py-20 sm:px-8 md:py-28">
+          <div className="mb-10 grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4 border-b border-border pb-5">
+            <div className="min-w-0">
+              <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-primary">Descubrir</p>
+              <h2 className="text-3xl sm:text-4xl">Los más leídos esta semana</h2>
+            </div>
+            <Link to="/buscar" className="shrink-0 text-xs font-bold uppercase tracking-wider underline decoration-primary underline-offset-4">Ver catálogo</Link>
+          </div>
+
+          <div id="categorias" className="mb-12 flex gap-2 overflow-x-auto pb-2">
+            {["Todos", "Ficción", "Misterio", "Fantasía"].map((category) => (
+              <Button key={category} variant={activeCategory === category ? "default" : "outline"} size="sm" onClick={() => setActiveCategory(category)} className="shrink-0 rounded-full shadow-none">{category}</Button>
+            ))}
+          </div>
+
+          {visibleBooks.length > 0 ? (
+            <div className="grid grid-cols-1 gap-x-9 gap-y-16 md:grid-cols-3">
+              {visibleBooks.map((book, index) => (
+                <article key={book.title} className={`group ${index === 1 ? "md:mt-20" : ""}`}>
+                  <div className="relative mb-6 aspect-[3/4] overflow-hidden bg-muted">
+                    <img src={bookCovers} width={1536} height={1024} loading="lazy" alt={`Portada de ${book.title}`} className={`h-full w-[300%] max-w-none object-cover transition-transform duration-500 group-hover:scale-[1.02] ${book.cover === "center" ? "-translate-x-1/3" : book.cover === "right" ? "-translate-x-2/3" : ""}`} />
+                    <Button variant="secondary" size="icon" onClick={() => toggleSaved(book.title)} aria-label={`${saved.includes(book.title) ? "Quitar" : "Guardar"} ${book.title}`} className="absolute right-3 top-3 rounded-full shadow-md">
+                      <Heart className={saved.includes(book.title) ? "fill-current" : ""} />
+                    </Button>
+                  </div>
+                  <div className="mb-3 flex items-center justify-between gap-3 text-[10px] font-bold uppercase tracking-[0.15em] text-primary">
+                    <span>{book.category}</span><span>{book.format}</span>
+                  </div>
+                  <h3 className="mb-1 text-2xl transition-colors group-hover:text-primary">{book.title}</h3>
+                  <p className="mb-5 text-sm italic text-muted-foreground">{book.author}</p>
+                  <div className="flex items-center justify-between border-t border-border pt-4">
+                    <span className="text-xs text-muted-foreground">{book.downloads} descargas</span>
+                    <Button variant="link" size="sm" className="px-0 font-bold"><Download />Descargar</Button>
+                  </div>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <div className="border-y border-border py-20 text-center">
+              <BookOpen className="mx-auto mb-4 size-9 text-primary" />
+              <h3 className="mb-2 text-2xl">Todavía no encontramos ese libro</h3>
+              <p className="text-sm text-muted-foreground">Prueba con otro título, autor o categoría.</p>
+            </div>
+          )}
+        </section>
+
+        <section id="comunidad" className="bg-primary text-primary-foreground">
+          <div className="mx-auto grid max-w-7xl grid-cols-12">
+            <div className="col-span-12 flex flex-col justify-center p-8 sm:p-12 md:col-span-6 md:p-20">
+              <p className="mb-5 text-xs font-bold uppercase tracking-[0.2em] text-secondary">Una biblioteca más tuya</p>
+              <h2 className="mb-7 text-4xl leading-tight sm:text-5xl">Guarda, organiza y vuelve a tus lecturas.</h2>
+              <p className="mb-9 max-w-lg text-base leading-relaxed text-primary-foreground/80">Crea tus estanterías, conserva el historial de descargas y recibe recomendaciones basadas en lo que de verdad te gusta leer.</p>
+              <div className="flex flex-wrap items-center gap-5">
+                <Button variant="editorialLight" size="editorial" asChild><Link to="/crear-cuenta">Crear cuenta gratis</Link></Button>
+                <span className="text-xs font-bold uppercase tracking-widest">Sin suscripción</span>
+              </div>
+            </div>
+            <img src={readingNook} width={1024} height={1024} loading="lazy" alt="Rincón de lectura cálido con libro y lector electrónico" className="col-span-12 h-full min-h-80 w-full object-cover md:col-span-6" />
+          </div>
+        </section>
+      </main>
+
+      <footer className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-5 pb-16 pt-24 sm:px-8 md:grid-cols-3">
+        <div>
+          <p className="mb-4 font-display text-2xl font-bold">Ink<span className="text-primary">Byte</span></p>
+          <p className="max-w-xs text-sm text-muted-foreground">Una biblioteca digital tranquila para lectores curiosos.</p>
+        </div>
+        <div>
+          <h2 className="mb-4 font-sans text-xs font-bold uppercase tracking-widest text-primary">Explora</h2>
+          <div className="flex flex-col gap-2 text-sm"><a href="#biblioteca">Más descargados</a><Link to="/buscar">Buscar libros</Link><a href="#comunidad">Tu biblioteca</a></div>
+        </div>
+        <div className="md:text-right">
+          <p className="text-xs font-bold uppercase tracking-widest">© 2026 InkByte</p>
+          <p className="mt-3 text-xs text-muted-foreground">Lee más. Busca menos.</p>
+        </div>
+      </footer>
+    </div>
+  );
+}
