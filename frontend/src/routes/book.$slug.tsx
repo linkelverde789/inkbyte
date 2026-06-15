@@ -4,6 +4,7 @@ import { ArrowLeft, Download, Heart, Star } from "lucide-react";
 import bookCovers from "@/assets/book-covers.jpg";
 import { Button } from "@/components/ui/button";
 import { books } from "@/lib/books";
+import { t } from "@/i18n";
 
 export const Route = createFileRoute("/book/$slug")({
   beforeLoad: ({ params }) => {
@@ -36,7 +37,7 @@ function BookPage() {
             Ink<span className="text-primary">Byte</span>
           </Link>
           <Button asChild variant="ghost">
-            <Link to="/profile">Mi perfil</Link>
+            <Link to="/profile">{t("My profile")}</Link>
           </Button>
         </div>
       </nav>
@@ -45,7 +46,7 @@ function BookPage() {
           to="/search"
           className="mb-10 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground"
         >
-          <ArrowLeft className="size-4" /> Volver a resultados
+          <ArrowLeft className="size-4" /> {t("Go back to results")}
         </Link>
         <div className="grid gap-12 md:grid-cols-[minmax(280px,420px)_1fr] md:gap-16">
           <div className="relative aspect-[3/4] overflow-hidden bg-muted shadow-[14px_16px_0_var(--color-secondary)]">
@@ -61,7 +62,7 @@ function BookPage() {
             </p>
             <h1 className="text-5xl leading-tight sm:text-6xl">{book.title}</h1>
             <p className="mt-3 text-lg italic text-muted-foreground">
-              por {book.author}
+              {t("by")} {book.author}
             </p>
             <div className="my-7 flex gap-1 text-secondary">
               {[1, 2, 3, 4, 5].map((star) => (
@@ -78,16 +79,16 @@ function BookPage() {
             </p>
             <div className="mt-10 border-y border-border py-6">
               <p className="text-xs font-bold uppercase tracking-widest text-primary">
-                Formatos disponibles
+                {t("Available formats")}
               </p>
               <p className="mt-2 text-lg">{book.format}</p>
             </div>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button variant="editorial" size="editorial">
-                <Download /> Descargar libro
+                <Download /> {t("Download book")}
               </Button>
               <Button variant="outline" size="editorial">
-                <Heart /> Guardar
+                <Heart /> {t("Save")}
               </Button>
             </div>
           </article>

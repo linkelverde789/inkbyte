@@ -9,15 +9,20 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as PruebaRouteImport } from './routes/prueba'
-import { Route as CreateAccountRouteImport } from './routes/create-account'
-import { Route as AuthRouteImport } from './routes/auth'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BookSlugRouteImport } from './routes/book.$slug'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated.profile'
 
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
   path: '/search',
@@ -28,14 +33,9 @@ const PruebaRoute = PruebaRouteImport.update({
   path: '/prueba',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CreateAccountRoute = CreateAccountRouteImport.update({
-  id: '/create-account',
-  path: '/create-account',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
@@ -60,19 +60,19 @@ const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
-  '/create-account': typeof CreateAccountRoute
+  '/login': typeof LoginRoute
   '/prueba': typeof PruebaRoute
   '/search': typeof SearchRoute
+  '/signup': typeof SignupRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/book/$slug': typeof BookSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
-  '/create-account': typeof CreateAccountRoute
+  '/login': typeof LoginRoute
   '/prueba': typeof PruebaRoute
   '/search': typeof SearchRoute
+  '/signup': typeof SignupRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/book/$slug': typeof BookSlugRoute
 }
@@ -80,10 +80,10 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
-  '/auth': typeof AuthRoute
-  '/create-account': typeof CreateAccountRoute
+  '/login': typeof LoginRoute
   '/prueba': typeof PruebaRoute
   '/search': typeof SearchRoute
+  '/signup': typeof SignupRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/book/$slug': typeof BookSlugRoute
 }
@@ -91,29 +91,29 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/auth'
-    | '/create-account'
+    | '/login'
     | '/prueba'
     | '/search'
+    | '/signup'
     | '/profile'
     | '/book/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/auth'
-    | '/create-account'
+    | '/login'
     | '/prueba'
     | '/search'
+    | '/signup'
     | '/profile'
     | '/book/$slug'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
-    | '/auth'
-    | '/create-account'
+    | '/login'
     | '/prueba'
     | '/search'
+    | '/signup'
     | '/_authenticated/profile'
     | '/book/$slug'
   fileRoutesById: FileRoutesById
@@ -121,15 +121,22 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
-  AuthRoute: typeof AuthRoute
-  CreateAccountRoute: typeof CreateAccountRoute
+  LoginRoute: typeof LoginRoute
   PruebaRoute: typeof PruebaRoute
   SearchRoute: typeof SearchRoute
+  SignupRoute: typeof SignupRoute
   BookSlugRoute: typeof BookSlugRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/search': {
       id: '/search'
       path: '/search'
@@ -144,18 +151,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PruebaRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/create-account': {
-      id: '/create-account'
-      path: '/create-account'
-      fullPath: '/create-account'
-      preLoaderRoute: typeof CreateAccountRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -203,10 +203,10 @@ const AuthenticatedRouteRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
-  AuthRoute: AuthRoute,
-  CreateAccountRoute: CreateAccountRoute,
+  LoginRoute: LoginRoute,
   PruebaRoute: PruebaRoute,
   SearchRoute: SearchRoute,
+  SignupRoute: SignupRoute,
   BookSlugRoute: BookSlugRoute,
 }
 export const routeTree = rootRouteImport

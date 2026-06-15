@@ -36,20 +36,20 @@ import { api } from "@/api";
 import { API_ENDPOINTS } from "@/api/endpoints";
 
 import type { Book, BookListResponse } from "@/types/book";
+import { t } from "@/i18n";
 export const Route = createFileRoute("/search")({
   head: () => ({
     meta: [
-      { title: "Buscar libros — InkByte" },
+      { title: `${t("Search books")} - InkByte` },
       {
         name: "description",
         content:
-          "Busca y filtra libros, novelas y cómics para descargar en EPUB y PDF.",
+          "Search and filter books, novels and comics to download in EPUB and PDF.",
       },
-      { property: "og:title", content: "Buscar libros — InkByte" },
+      { property: "og:title", content: `${t("Search books")} - InkByte` },
       {
         property: "og:description",
-        content:
-          "Encuentra tu próxima lectura por género, tipo, autor o formato.",
+        content: `${t("Find your next reading by genre, type, author or format.")}`,
       },
     ],
   }),
@@ -58,9 +58,9 @@ export const Route = createFileRoute("/search")({
 
 function SearchPage() {
   const [query, setQuery] = useState("");
-  const [genre, setGenre] = useState("Todos");
-  const [type, setType] = useState("Todos");
-  const [format, setFormat] = useState("Todos");
+  const [genre, setGenre] = useState("All");
+  const [type, setType] = useState("All");
+  const [format, setFormat] = useState("All");
   const [author, setAuthor] = useState("");
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const [saved, setSaved] = useState<string[]>([]);
@@ -99,9 +99,9 @@ function SearchPage() {
   const pageCount = Math.max(1, Math.ceil(totalBooks / pageSize));
 
   const clearFilters = () => {
-    setGenre("Todos");
-    setType("Todos");
-    setFormat("Todos");
+    setGenre("All");
+    setType("All");
+    setFormat("All");
     setAuthor("");
     setPage(1);
   };
@@ -121,22 +121,22 @@ function SearchPage() {
           </Link>
           <div className="hidden items-center gap-9 text-xs font-bold uppercase tracking-[0.15em] md:flex">
             <Link to="/" className="transition-colors hover:text-primary">
-              Inicio
+              {t("Home")}
             </Link>
-            <span className="text-primary">Buscar</span>
+            <span className="text-primary">{t("Search")}</span>
             <Link
               to="/"
               hash="comunidad"
               className="transition-colors hover:text-primary"
             >
-              Comunidad
+              {t("Community")}
             </Link>
           </div>
           <div className="flex items-center gap-1">
-            <Button variant="ghost" size="icon" aria-label="Mis libros">
+            <Button variant="ghost" size="icon" aria-label="My books">
               <Heart />
             </Button>
-            <Button variant="ghost" size="icon" aria-label="Mi cuenta" asChild>
+            <Button variant="ghost" size="icon" aria-label="My account" asChild>
               <Link to="/profile">
                 <UserRound />
               </Link>
@@ -145,7 +145,7 @@ function SearchPage() {
               variant="ghost"
               size="icon"
               className="md:hidden"
-              aria-label="Abrir menú"
+              aria-label="Open menu"
             >
               <Menu />
             </Button>
@@ -160,13 +160,13 @@ function SearchPage() {
               to="/"
               className="mb-8 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-muted-foreground transition-colors hover:text-primary"
             >
-              <ArrowLeft className="size-4" /> Volver a inicio
+              <ArrowLeft className="size-4" /> {t("Back to home")}
             </Link>
             <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-primary">
-              Explora la biblioteca
+              {t("Explore the library")}
             </p>
             <h1 className="mb-8 text-4xl leading-tight sm:text-5xl">
-              ¿Qué quieres leer hoy?
+              {t("What do you want to read today?")}
             </h1>
             <form
               className="flex max-w-4xl border-2 border-foreground bg-card p-1.5 shadow-[7px_7px_0_var(--color-secondary)]"
@@ -178,14 +178,14 @@ function SearchPage() {
                 aria-hidden="true"
               />
               <label htmlFor="library-search" className="sr-only">
-                Buscar libros
+                {t("Search books")}
               </label>
               <input
                 id="library-search"
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 className="min-w-0 flex-1 bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground"
-                placeholder="Título, autor o ISBN…"
+                placeholder={t("Title, author or ISBN…")}
               />
               <Button
                 variant="editorial"
@@ -193,7 +193,7 @@ function SearchPage() {
                 type="submit"
                 className="hidden sm:inline-flex"
               >
-                Buscar
+                {t("Search")}
               </Button>
             </form>
           </div>
@@ -207,7 +207,7 @@ function SearchPage() {
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_auto_auto]">
               <Select value={genre} onValueChange={setGenre}>
                 <SelectTrigger className="h-12 rounded-none bg-background px-4 shadow-none">
-                  <SelectValue placeholder="Género" />
+                  <SelectValue placeholder={t("Genre")} />
                 </SelectTrigger>
                 <SelectContent>
                   {["Todos", "Ficción", "Misterio", "Fantasía"].map((item) => (
@@ -219,7 +219,7 @@ function SearchPage() {
               </Select>
               <Select value={type} onValueChange={setType}>
                 <SelectTrigger className="h-12 rounded-none bg-background px-4 shadow-none">
-                  <SelectValue placeholder="Tipo" />
+                  <SelectValue placeholder={t("Type")} />
                 </SelectTrigger>
                 <SelectContent>
                   {["Todos", "Libro", "Novela", "Cómic", "Ensayo"].map(
@@ -238,7 +238,7 @@ function SearchPage() {
                 onClick={() => setAdvancedOpen((open) => !open)}
                 aria-expanded={advancedOpen}
               >
-                <SlidersHorizontal /> Búsqueda avanzada{" "}
+                <SlidersHorizontal /> {t("Advanced search")}
                 <ChevronDown
                   className={
                     advancedOpen
@@ -248,7 +248,7 @@ function SearchPage() {
                 />
               </Button>
               <Button variant="ghost" size="editorial" onClick={clearFilters}>
-                <X /> Limpiar
+                <X /> {t("Clear")}
               </Button>
             </div>
 
@@ -259,19 +259,19 @@ function SearchPage() {
                     htmlFor="author-filter"
                     className="mb-2 block text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
                   >
-                    Autor
+                    {t("Author")}
                   </label>
                   <input
                     id="author-filter"
                     value={author}
                     onChange={(event) => setAuthor(event.target.value)}
                     className="h-11 w-full border border-input bg-transparent px-3 text-sm outline-none focus:border-primary"
-                    placeholder="Nombre del autor"
+                    placeholder={t("Author's name")}
                   />
                 </div>
                 <div>
                   <label className="mb-2 block text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-                    Formato
+                    {t("Format")}
                   </label>
                   <Select value={format} onValueChange={setFormat}>
                     <SelectTrigger className="h-11 rounded-none shadow-none">
@@ -280,7 +280,7 @@ function SearchPage() {
                     <SelectContent>
                       {["Todos", "EPUB", "PDF"].map((item) => (
                         <SelectItem key={item} value={item}>
-                          {item === "Todos" ? "Cualquier formato" : item}
+                          {item === "Todos" ? t("Any format") : item}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -293,19 +293,19 @@ function SearchPage() {
           <div className="mb-7 flex items-end justify-between gap-4">
             <div>
               <p className="mb-1 text-xs font-bold uppercase tracking-[0.18em] text-primary">
-                Resultados
+                {t("Results")}
               </p>
               <h2 className="text-2xl sm:text-3xl">
-                {totalBooks} libros encontrados
+                {totalBooks} {t("books found")}
               </h2>
             </div>
             <span className="hidden text-xs text-muted-foreground sm:block">
-              Ordenados por relevancia
+              {t("Sorted by relevance")}
             </span>
           </div>
 
           {loading ? (
-            <div className="py-20 text-center">Cargando libros...</div>
+            <div className="py-20 text-center">{t("Loading books...")}</div>
           ) : results.length ? (
             <>
               <div className="grid grid-cols-2 gap-4 sm:gap-7 lg:grid-cols-2">
@@ -348,7 +348,7 @@ function SearchPage() {
                             </Link>
                           </h3>
                           <p className="mt-1 text-sm italic text-muted-foreground">
-                            por {book.author}
+                            {t("by")} {book.author}
                           </p>
                         </div>
                         <Button
@@ -363,7 +363,7 @@ function SearchPage() {
                                 : [...current, book.title],
                             )
                           }
-                          aria-label={`${saved.includes(book.title) ? "Quitar" : "Guardar"} ${book.title}`}
+                          aria-label={`${saved.includes(book.title) ? t("Remove") : t("Save")} ${book.title}`}
                         >
                           <Heart
                             className={
@@ -376,7 +376,7 @@ function SearchPage() {
                       </div>
                       <div
                         className="mb-5 flex gap-1 text-secondary"
-                        aria-label={`${book.rating} de 5 estrellas`}
+                        aria-label={`${book.rating} ${t("out of 5 stars")}`}
                       >
                         {[1, 2, 3, 4, 5].map((star) => (
                           <Star
@@ -398,7 +398,7 @@ function SearchPage() {
                           className="rounded-none"
                         >
                           <Download />{" "}
-                          <span className="hidden sm:inline">Descargar</span>
+                          <span className="hidden sm:inline">{t("Download")}</span>
                         </Button>
                       </div>
                     </div>
@@ -419,7 +419,7 @@ function SearchPage() {
                         page === 1 ? "pointer-events-none opacity-40" : ""
                       }
                     >
-                      Anterior
+                      {t("Previous")}
                     </PaginationPrevious>
                   </PaginationItem>
                   {Array.from(
@@ -453,7 +453,7 @@ function SearchPage() {
                           : ""
                       }
                     >
-                      Siguiente
+                      {t("Next")}
                     </PaginationNext>
                   </PaginationItem>
                 </PaginationContent>
@@ -462,9 +462,9 @@ function SearchPage() {
           ) : (
             <div className="border-y border-border bg-background py-20 text-center">
               <BookOpen className="mx-auto mb-4 size-9 text-primary" />
-              <h2 className="mb-2 text-2xl">No encontramos esa lectura</h2>
+              <h2 className="mb-2 text-2xl">{t("We couldn't find that reading")}</h2>
               <p className="text-sm text-muted-foreground">
-                Prueba a cambiar el término o limpiar los filtros.
+                {t("Try changing the term or clearing the filters.")}
               </p>
             </div>
           )}
