@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowLeft, BookOpen } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -12,26 +12,33 @@ export const Route = createFileRoute("/login")({
 });
 
 function LoginPage() {
-  const { login } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const { login, user } = useAuth();
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     setError("");
     setLoading(true);
+  
     try {
       await login({ email, password, remember_me: true });
-      await navigate({ to: "/profile" });
     } catch {
       setError(t("Invalid email or password"));
     } finally {
       setLoading(false);
     }
   }
+
+
+  useEffect(() => {
+    if (user) {
+      navigate({ to: "/profile" });
+    }
+  }, [user]);
 
   return (
     <main className="grid min-h-screen bg-background lg:grid-cols-2">
