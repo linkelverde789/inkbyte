@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/auth/AuthContext";
 
-export const Route = createFileRoute("/crear-cuenta")({
+export const Route = createFileRoute("/create-account")({
   component: SignupPage,
 });
 
@@ -47,7 +47,7 @@ function SignupPage() {
         last_name: form.lastName.trim(),
         remember_me: true,
       });
-      await navigate({ to: "/perfil" });
+      await navigate({ to: "/profile" });
     } catch {
       setError("No pudimos crear la cuenta. Revisa los datos e inténtalo de nuevo.");
     } finally {

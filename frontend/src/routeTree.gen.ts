@@ -9,22 +9,28 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as CrearCuentaRouteImport } from './routes/crear-cuenta'
-import { Route as BuscarRouteImport } from './routes/buscar'
+import { Route as SearchRouteImport } from './routes/search'
+import { Route as PruebaRouteImport } from './routes/prueba'
+import { Route as CreateAccountRouteImport } from './routes/create-account'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as LibroSlugRouteImport } from './routes/libro.$slug'
-import { Route as AuthenticatedPerfilRouteImport } from './routes/_authenticated.perfil'
+import { Route as BookSlugRouteImport } from './routes/book.$slug'
+import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated.profile'
 
-const CrearCuentaRoute = CrearCuentaRouteImport.update({
-  id: '/crear-cuenta',
-  path: '/crear-cuenta',
+const SearchRoute = SearchRouteImport.update({
+  id: '/search',
+  path: '/search',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BuscarRoute = BuscarRouteImport.update({
-  id: '/buscar',
-  path: '/buscar',
+const PruebaRoute = PruebaRouteImport.update({
+  id: '/prueba',
+  path: '/prueba',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CreateAccountRoute = CreateAccountRouteImport.update({
+  id: '/create-account',
+  path: '/create-account',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -41,88 +47,108 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LibroSlugRoute = LibroSlugRouteImport.update({
-  id: '/libro/$slug',
-  path: '/libro/$slug',
+const BookSlugRoute = BookSlugRouteImport.update({
+  id: '/book/$slug',
+  path: '/book/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedPerfilRoute = AuthenticatedPerfilRouteImport.update({
-  id: '/perfil',
-  path: '/perfil',
+const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
-  '/buscar': typeof BuscarRoute
-  '/crear-cuenta': typeof CrearCuentaRoute
-  '/perfil': typeof AuthenticatedPerfilRoute
-  '/libro/$slug': typeof LibroSlugRoute
+  '/create-account': typeof CreateAccountRoute
+  '/prueba': typeof PruebaRoute
+  '/search': typeof SearchRoute
+  '/profile': typeof AuthenticatedProfileRoute
+  '/book/$slug': typeof BookSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
-  '/buscar': typeof BuscarRoute
-  '/crear-cuenta': typeof CrearCuentaRoute
-  '/perfil': typeof AuthenticatedPerfilRoute
-  '/libro/$slug': typeof LibroSlugRoute
+  '/create-account': typeof CreateAccountRoute
+  '/prueba': typeof PruebaRoute
+  '/search': typeof SearchRoute
+  '/profile': typeof AuthenticatedProfileRoute
+  '/book/$slug': typeof BookSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
-  '/buscar': typeof BuscarRoute
-  '/crear-cuenta': typeof CrearCuentaRoute
-  '/_authenticated/perfil': typeof AuthenticatedPerfilRoute
-  '/libro/$slug': typeof LibroSlugRoute
+  '/create-account': typeof CreateAccountRoute
+  '/prueba': typeof PruebaRoute
+  '/search': typeof SearchRoute
+  '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/book/$slug': typeof BookSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/auth'
-    | '/buscar'
-    | '/crear-cuenta'
-    | '/perfil'
-    | '/libro/$slug'
+    | '/create-account'
+    | '/prueba'
+    | '/search'
+    | '/profile'
+    | '/book/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/buscar' | '/crear-cuenta' | '/perfil' | '/libro/$slug'
+  to:
+    | '/'
+    | '/auth'
+    | '/create-account'
+    | '/prueba'
+    | '/search'
+    | '/profile'
+    | '/book/$slug'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
-    | '/buscar'
-    | '/crear-cuenta'
-    | '/_authenticated/perfil'
-    | '/libro/$slug'
+    | '/create-account'
+    | '/prueba'
+    | '/search'
+    | '/_authenticated/profile'
+    | '/book/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
-  BuscarRoute: typeof BuscarRoute
-  CrearCuentaRoute: typeof CrearCuentaRoute
-  LibroSlugRoute: typeof LibroSlugRoute
+  CreateAccountRoute: typeof CreateAccountRoute
+  PruebaRoute: typeof PruebaRoute
+  SearchRoute: typeof SearchRoute
+  BookSlugRoute: typeof BookSlugRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/crear-cuenta': {
-      id: '/crear-cuenta'
-      path: '/crear-cuenta'
-      fullPath: '/crear-cuenta'
-      preLoaderRoute: typeof CrearCuentaRouteImport
+    '/search': {
+      id: '/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/buscar': {
-      id: '/buscar'
-      path: '/buscar'
-      fullPath: '/buscar'
-      preLoaderRoute: typeof BuscarRouteImport
+    '/prueba': {
+      id: '/prueba'
+      path: '/prueba'
+      fullPath: '/prueba'
+      preLoaderRoute: typeof PruebaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/create-account': {
+      id: '/create-account'
+      path: '/create-account'
+      fullPath: '/create-account'
+      preLoaderRoute: typeof CreateAccountRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -146,29 +172,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/libro/$slug': {
-      id: '/libro/$slug'
-      path: '/libro/$slug'
-      fullPath: '/libro/$slug'
-      preLoaderRoute: typeof LibroSlugRouteImport
+    '/book/$slug': {
+      id: '/book/$slug'
+      path: '/book/$slug'
+      fullPath: '/book/$slug'
+      preLoaderRoute: typeof BookSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/perfil': {
-      id: '/_authenticated/perfil'
-      path: '/perfil'
-      fullPath: '/perfil'
-      preLoaderRoute: typeof AuthenticatedPerfilRouteImport
+    '/_authenticated/profile': {
+      id: '/_authenticated/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthenticatedProfileRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
-  AuthenticatedPerfilRoute: typeof AuthenticatedPerfilRoute
+  AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedPerfilRoute: AuthenticatedPerfilRoute,
+  AuthenticatedProfileRoute: AuthenticatedProfileRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -178,9 +204,10 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
-  BuscarRoute: BuscarRoute,
-  CrearCuentaRoute: CrearCuentaRoute,
-  LibroSlugRoute: LibroSlugRoute,
+  CreateAccountRoute: CreateAccountRoute,
+  PruebaRoute: PruebaRoute,
+  SearchRoute: SearchRoute,
+  BookSlugRoute: BookSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

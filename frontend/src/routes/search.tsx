@@ -33,7 +33,7 @@ import {
 } from "@/components/ui/pagination";
 import { books as library } from "@/lib/books";
 
-export const Route = createFileRoute("/buscar")({
+export const Route = createFileRoute("/search")({
   head: () => ({
     meta: [
       { title: "Buscar libros — InkByte" },
@@ -78,9 +78,6 @@ function SearchPage() {
 
   return (
     <div className="min-h-screen bg-muted/40 text-foreground">
-      <div className="bg-foreground px-4 py-2 text-center text-[10px] font-bold uppercase tracking-[0.18em] text-background sm:text-xs">
-        Más de 48.000 títulos disponibles · Nuevas lecturas cada viernes
-      </div>
 
       <nav className="border-b border-border bg-background" aria-label="Navegación principal">
         <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-5 sm:px-8">
@@ -92,7 +89,7 @@ function SearchPage() {
           </div>
           <div className="flex items-center gap-1">
             <Button variant="ghost" size="icon" aria-label="Mis libros"><Heart /></Button>
-            <Button variant="ghost" size="icon" aria-label="Mi cuenta" asChild><Link to="/perfil"><UserRound /></Link></Button>
+            <Button variant="ghost" size="icon" aria-label="Mi cuenta" asChild><Link to="/profile"><UserRound /></Link></Button>
             <Button variant="ghost" size="icon" className="md:hidden" aria-label="Abrir menú"><Menu /></Button>
           </div>
         </div>
@@ -159,14 +156,14 @@ function SearchPage() {
             <div className="grid grid-cols-2 gap-4 sm:gap-7 lg:grid-cols-2">
               {visibleResults.map((book) => (
                 <article key={book.title} className="group relative flex min-w-0 flex-col bg-card shadow-[4px_5px_0_var(--color-secondary)] sm:shadow-[6px_7px_0_var(--color-secondary)]">
-                  <Link to="/libro/$slug" params={{ slug: book.slug }} className="relative aspect-[3/4] overflow-hidden bg-muted">
+                  <Link to="/book/$slug" params={{ slug: book.slug }} className="relative aspect-[3/4] overflow-hidden bg-muted">
                     <img src={bookCovers} width={1536} height={1024} loading="lazy" alt={`Portada de ${book.title}`} className={`h-full w-[300%] max-w-none object-cover transition-transform duration-500 group-hover:scale-[1.015] ${book.cover === "center" ? "-translate-x-1/3" : book.cover === "right" ? "-translate-x-2/3" : ""}`} />
                   </Link>
                   <div className="flex min-w-0 flex-1 flex-col p-3 sm:p-6">
                     <div className="mb-4 flex items-start justify-between gap-4">
                       <div>
                         <div className="mb-3 flex flex-wrap gap-2 text-[10px] font-bold uppercase tracking-[0.15em] text-primary"><span>{book.genre}</span><span>·</span><span>{book.type}</span><span>·</span><span>{book.year}</span></div>
-                        <h3 className="text-lg leading-tight sm:text-2xl"><Link to="/libro/$slug" params={{ slug: book.slug }} className="hover:text-primary">{book.title}</Link></h3>
+                        <h3 className="text-lg leading-tight sm:text-2xl"><Link to="/book/$slug" params={{ slug: book.slug }} className="hover:text-primary">{book.title}</Link></h3>
                         <p className="mt-1 text-sm italic text-muted-foreground">por {book.author}</p>
                       </div>
                       <Button variant="ghost" size="icon" onClick={() => setSaved((current) => current.includes(book.title) ? current.filter((title) => title !== book.title) : [...current, book.title])} aria-label={`${saved.includes(book.title) ? "Quitar" : "Guardar"} ${book.title}`}>

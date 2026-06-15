@@ -5,21 +5,28 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/auth/AuthContext";
 
-export const Route = createFileRoute("/_authenticated/perfil")({
+export const Route = createFileRoute("/_authenticated/profile")({
   component: ProfilePage,
 });
 
 function ProfilePage() {
-  const { user } = Route.useRouteContext();
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
+
+  if (!user) {
+    return <div>Cargando usuario...</div>;
+  }
 
   async function signOut() {
     await logout();
-    await navigate({ to: "/auth", replace: true });
+    await navigate({
+      to: "/auth",
+      replace: true,
+    });
   }
 
-  const initials = `${user.first_name[0] ?? ""}${user.last_name[0] ?? ""}` || "IB";
+  const initials =
+    `${user.first_name?.[0] ?? ""}${user.last_name?.[0] ?? ""}` || "IB";
 
   return (
     <main className="min-h-screen bg-muted/40">
@@ -28,41 +35,69 @@ function ProfilePage() {
           <Link to="/" className="font-display text-2xl font-bold">
             Ink<span className="text-primary">Byte</span>
           </Link>
+
           <Button variant="ghost" onClick={signOut}>
-            <LogOut /> Salir
+            <LogOut />
+            Salir
           </Button>
         </div>
       </nav>
+
       <div className="mx-auto max-w-6xl px-5 py-12 sm:px-8 md:py-20">
-        <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">Área de lector</p>
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">
+          Área de lector
+        </p>
+
         <h1 className="mt-2 text-5xl">Mi perfil</h1>
+
         <section className="mt-10 grid gap-10 bg-card p-7 shadow-[9px_10px_0_var(--color-secondary)] sm:p-10 md:grid-cols-[220px_1fr]">
           <div>
             <Avatar className="size-44 rounded-none bg-muted">
-              {user.profile_picture && <AvatarImage src={user.profile_picture} className="object-cover" />}
-              <AvatarFallback className="rounded-none font-display text-4xl">{initials}</AvatarFallback>
+              {user.profile_picture && (
+                <AvatarImage
+                  src={user.profile_picture}
+                  className="object-cover"
+                />
+              )}
+
+              <AvatarFallback className="rounded-none font-display text-4xl">
+                {initials}
+              </AvatarFallback>
             </Avatar>
           </div>
+
           <div className="grid content-start gap-6 sm:grid-cols-2">
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-primary">Nombre</p>
+              <p className="text-xs font-bold uppercase tracking-wider text-primary">
+                Nombre
+              </p>
               <p className="mt-2 text-lg">{user.first_name || "—"}</p>
             </div>
+
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-primary">Apellidos</p>
+              <p className="text-xs font-bold uppercase tracking-wider text-primary">
+                Apellidos
+              </p>
               <p className="mt-2 text-lg">{user.last_name || "—"}</p>
             </div>
+
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-primary">Usuario</p>
+              <p className="text-xs font-bold uppercase tracking-wider text-primary">
+                Usuario
+              </p>
               <p className="mt-2 text-lg">@{user.username}</p>
             </div>
+
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-primary">Correo</p>
+              <p className="text-xs font-bold uppercase tracking-wider text-primary">
+                Correo
+              </p>
               <p className="mt-2 break-all text-lg">{user.email}</p>
             </div>
+
             <div className="border-t border-border pt-6 sm:col-span-2">
               <Button asChild variant="editorial" size="editorial">
-                <Link to="/buscar">Explorar libros</Link>
+                <Link to="/search">Explorar libros</Link>
               </Button>
             </div>
           </div>
