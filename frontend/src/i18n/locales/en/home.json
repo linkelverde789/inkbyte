@@ -1,0 +1,51 @@
+{
+    "HOME_SEO_TITLE": "InkByte — Download EPUB and PDF Books",
+    "HOME_SEO_DESCRIPTION": "Explore a curated digital library and download EPUB and PDF books with ease.",
+    "HOME_OG_DESCRIPTION": "Thousands of stories in a calm and easy-to-browse digital library.",
+  
+    "NAV_PRIMARY": "Main navigation",
+    "NAV_SEARCH": "Search",
+    "NAV_CATEGORIES": "Categories",
+    "NAV_COMMUNITY": "Community",
+  
+    "MY_BOOKS": "My books",
+    "MY_ACCOUNT": "My account",
+    "OPEN_MENU": "Open menu",
+  
+    "HOME_HERO_BADGE": "Your next story is here",
+    "HOME_HERO_DESCRIPTION": "A digital library built for unhurried discovery. Explore thousands of titles and download your next read in seconds.",
+    "HOME_SEARCH_LIBRARY": "Search the library",
+    "HOME_POPULAR_GENRES": "Popular: historical fiction · poetry · science fiction",
+    "HOME_WEEK_SELECTION": "Week's selection",
+  
+    "HOME_DISCOVER": "Discover",
+    "HOME_MOST_READ": "Most read this week",
+    "HOME_VIEW_CATALOG": "View catalog",
+  
+    "CATEGORY_ALL": "All",
+    "CATEGORY_FICTION": "Fiction",
+    "CATEGORY_MYSTERY": "Mystery",
+    "CATEGORY_FANTASY": "Fantasy",
+  
+    "SAVE": "Save",
+    "REMOVE": "Remove",
+  
+    "DOWNLOADS": "downloads",
+    "DOWNLOAD": "Download",
+  
+    "BOOK_NOT_FOUND_TITLE": "We couldn't find that book yet",
+    "BOOK_NOT_FOUND_DESCRIPTION": "Try another title, author or category.",
+  
+    "COMMUNITY_BADGE": "A library that feels more yours",
+    "COMMUNITY_TITLE": "Save, organize and return to your readings.",
+    "COMMUNITY_DESCRIPTION": "Create shelves, keep your download history and receive recommendations based on what you truly enjoy reading.",
+    "CREATE_FREE_ACCOUNT": "Create free account",
+    "NO_SUBSCRIPTION": "No subscription",
+  
+    "FOOTER_DESCRIPTION": "A calm digital library for curious readers.",
+    "FOOTER_EXPLORE": "Explore",
+    "FOOTER_MOST_DOWNLOADED": "Most downloaded",
+    "FOOTER_SEARCH_BOOKS": "Search books",
+    "FOOTER_YOUR_LIBRARY": "Your library",
+    "FOOTER_SLOGAN": "Read more. Search less."
+  }

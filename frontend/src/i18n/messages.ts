@@ -1,15 +1,19 @@
-/** @type {const} */
-export const MSG = {
-  ERROR_GENERIC: "Something went wrong.",
-  ERROR_SESSION_EXPIRED: "Your session has expired. Please sign in again.",
-  ERROR_NETWORK: "Network error. Please try again.",
-  AUTH_CONTEXT_OUTSIDE_PROVIDER: "useAuth must be used within AuthProvider",
-} as const;
+// frontend/src/i18n/messages.ts
 
-export type MessageKey = (typeof MSG)[keyof typeof MSG];
+import es from "./locales/es/home.json";
+import en from "./locales/en/home.json";
 
 export const LOCALE = "es";
 
-export function t(message: MessageKey): string {
-  return message;
+const translations = {
+  es,
+  en,
+} as const;
+
+export const MSG = translations[LOCALE];
+
+export type MessageKey = keyof typeof es;
+
+export function t(key: MessageKey): string {
+  return translations[LOCALE][key];
 }
