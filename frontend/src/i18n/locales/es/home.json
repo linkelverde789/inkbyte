@@ -1,0 +1,51 @@
+{
+    "HOME_SEO_TITLE": "InkByte — Descarga libros en EPUB y PDF",
+    "HOME_SEO_DESCRIPTION": "Explora una biblioteca digital cuidada y descarga libros en EPUB y PDF de forma sencilla.",
+    "HOME_OG_DESCRIPTION": "Miles de historias, una biblioteca digital tranquila y fácil de explorar.",
+  
+    "NAV_PRIMARY": "Navegación principal",
+    "NAV_SEARCH": "Buscar",
+    "NAV_CATEGORIES": "Categorías",
+    "NAV_COMMUNITY": "Comunidad",
+  
+    "MY_BOOKS": "Mis libros",
+    "MY_ACCOUNT": "Mi cuenta",
+    "OPEN_MENU": "Abrir menú",
+  
+    "HOME_HERO_BADGE": "Tu próxima historia está aquí",
+    "HOME_HERO_DESCRIPTION": "Una biblioteca digital hecha para descubrir sin prisa. Explora miles de títulos y descarga tu próxima lectura en segundos.",
+    "HOME_SEARCH_LIBRARY": "Buscar en la biblioteca",
+    "HOME_POPULAR_GENRES": "Popular: novela histórica · poesía · ciencia ficción",
+    "HOME_WEEK_SELECTION": "Selección de la semana",
+  
+    "HOME_DISCOVER": "Descubrir",
+    "HOME_MOST_READ": "Los más leídos esta semana",
+    "HOME_VIEW_CATALOG": "Ver catálogo",
+  
+    "CATEGORY_ALL": "Todos",
+    "CATEGORY_FICTION": "Ficción",
+    "CATEGORY_MYSTERY": "Misterio",
+    "CATEGORY_FANTASY": "Fantasía",
+  
+    "SAVE": "Guardar",
+    "REMOVE": "Quitar",
+  
+    "DOWNLOADS": "descargas",
+    "DOWNLOAD": "Descargar",
+  
+    "BOOK_NOT_FOUND_TITLE": "Todavía no encontramos ese libro",
+    "BOOK_NOT_FOUND_DESCRIPTION": "Prueba con otro título, autor o categoría.",
+  
+    "COMMUNITY_BADGE": "Una biblioteca más tuya",
+    "COMMUNITY_TITLE": "Guarda, organiza y vuelve a tus lecturas.",
+    "COMMUNITY_DESCRIPTION": "Crea tus estanterías, conserva el historial de descargas y recibe recomendaciones basadas en lo que de verdad te gusta leer.",
+    "CREATE_FREE_ACCOUNT": "Crear cuenta gratis",
+    "NO_SUBSCRIPTION": "Sin suscripción",
+  
+    "FOOTER_DESCRIPTION": "Una biblioteca digital tranquila para lectores curiosos.",
+    "FOOTER_EXPLORE": "Explora",
+    "FOOTER_MOST_DOWNLOADED": "Más descargados",
+    "FOOTER_SEARCH_BOOKS": "Buscar libros",
+    "FOOTER_YOUR_LIBRARY": "Tu biblioteca",
+    "FOOTER_SLOGAN": "Lee más. Busca menos."
+  }
