@@ -5,6 +5,7 @@ from dataclasses import dataclass
 class RegisterInput:
     email: str
     password: str
+    username: str
     first_name: str = ""
     last_name: str = ""
     remember_me: bool = False
