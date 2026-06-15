@@ -15,7 +15,12 @@ function ProfilePage() {
   const navigate = useNavigate();
 
   if (!user) {
-    return <div>{t("Loading user...")}</div>;
+    return navigate(
+      {
+        to: "/login",
+        replace: true
+      }
+    );
   }
 
   async function signOut() {
