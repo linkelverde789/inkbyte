@@ -41,7 +41,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const loadSession = useCallback(async () => {
     try {
       const data = await authApi.fetchMe();
-      console.log("data", data)
       setUser(data?.user ?? null);
     } catch {
       setUser(null);
@@ -94,8 +93,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 export function useAuth() {
   const ctx = useContext(AuthContext);
   if (!ctx) {
-    throw new Error(t(MSG.AUTH_CONTEXT_OUTSIDE_PROVIDER));
+    throw new Error("Auth context outside provider");
   }
-  console.log("ctx", ctx)
   return ctx;
 }
