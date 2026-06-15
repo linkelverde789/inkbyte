@@ -65,7 +65,7 @@
                 {t("HOME_HERO_DESCRIPTION")}
               </p>
               <Button variant="editorial" size="editorial" asChild><Link to="/search"><Search /> {t("HOME_SEARCH_LIBRARY")}</Link></Button>
-              <p className="mt-4 text-xs text-muted-foreground">{t("HOME_POPULAR_GENRES")}</p>
+              {/* <p className="mt-4 text-xs text-muted-foreground">{t("HOME_POPULAR_GENRES")}</p> */}
             </div>
 
             <div className="relative col-span-12 mt-4 md:col-span-5 md:mt-0">
