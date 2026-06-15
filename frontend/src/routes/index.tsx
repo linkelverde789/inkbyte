@@ -36,22 +36,19 @@ function Index() {
   };
 
   return (
-    <div className="min-h-screen overflow-hidden bg-background text-foreground">
-      <div className="bg-foreground px-4 py-2 text-center text-[10px] font-bold uppercase tracking-[0.18em] text-background sm:text-xs">
-        Más de 48.000 títulos disponibles · Nuevas lecturas cada viernes
-      </div>
+    <div className="min-h-screen overflow-hidden bg-background text-foreground bgcolor-white">
 
       <nav className="border-b border-border bg-background" aria-label="Navegación principal">
         <div className="mx-auto grid h-20 max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-5 sm:flex sm:justify-between sm:px-8">
           <a href="#inicio" className="min-w-0 font-display text-2xl font-bold tracking-tight">Ink<span className="text-primary">Byte</span></a>
           <div className="hidden items-center gap-9 text-xs font-bold uppercase tracking-[0.15em] md:flex">
-            <Link to="/buscar" className="transition-colors hover:text-primary">Buscar</Link>
+            <Link to="/search" className="transition-colors hover:text-primary">Buscar</Link>
             <a href="#categorias" className="transition-colors hover:text-primary">Categorías</a>
             <a href="#comunidad" className="transition-colors hover:text-primary">Comunidad</a>
           </div>
           <div className="flex shrink-0 items-center gap-1">
             <Button variant="ghost" size="icon" aria-label="Mis libros"><Heart /></Button>
-            <Button variant="ghost" size="icon" aria-label="Mi cuenta" asChild><Link to="/perfil"><UserRound /></Link></Button>
+            <Button variant="ghost" size="icon" aria-label="Mi cuenta" asChild><Link to="/profile"><UserRound /></Link></Button>
             <Button variant="ghost" size="icon" className="md:hidden" aria-label="Abrir menú"><Menu /></Button>
           </div>
         </div>
@@ -67,7 +64,7 @@ function Index() {
             <p className="mb-8 max-w-lg text-base leading-relaxed text-muted-foreground sm:text-lg">
               Una biblioteca digital hecha para descubrir sin prisa. Explora miles de títulos y descarga tu próxima lectura en segundos.
             </p>
-            <Button variant="editorial" size="editorial" asChild><Link to="/buscar"><Search /> Buscar en la biblioteca</Link></Button>
+            <Button variant="editorial" size="editorial" asChild><Link to="/search"><Search /> Buscar en la biblioteca</Link></Button>
             <p className="mt-4 text-xs text-muted-foreground">Popular: novela histórica · poesía · ciencia ficción</p>
           </div>
 
@@ -84,7 +81,7 @@ function Index() {
               <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-primary">Descubrir</p>
               <h2 className="text-3xl sm:text-4xl">Los más leídos esta semana</h2>
             </div>
-            <Link to="/buscar" className="shrink-0 text-xs font-bold uppercase tracking-wider underline decoration-primary underline-offset-4">Ver catálogo</Link>
+            <Link to="/search" className="shrink-0 text-xs font-bold uppercase tracking-wider underline decoration-primary underline-offset-4">Ver catálogo</Link>
           </div>
 
           <div id="categorias" className="mb-12 flex gap-2 overflow-x-auto pb-2">
@@ -131,7 +128,7 @@ function Index() {
               <h2 className="mb-7 text-4xl leading-tight sm:text-5xl">Guarda, organiza y vuelve a tus lecturas.</h2>
               <p className="mb-9 max-w-lg text-base leading-relaxed text-primary-foreground/80">Crea tus estanterías, conserva el historial de descargas y recibe recomendaciones basadas en lo que de verdad te gusta leer.</p>
               <div className="flex flex-wrap items-center gap-5">
-                <Button variant="editorialLight" size="editorial" asChild><Link to="/crear-cuenta">Crear cuenta gratis</Link></Button>
+                <Button variant="editorialLight" size="editorial" asChild><Link to="/create-account">Crear cuenta gratis</Link></Button>
                 <span className="text-xs font-bold uppercase tracking-widest">Sin suscripción</span>
               </div>
             </div>
@@ -147,7 +144,7 @@ function Index() {
         </div>
         <div>
           <h2 className="mb-4 font-sans text-xs font-bold uppercase tracking-widest text-primary">Explora</h2>
-          <div className="flex flex-col gap-2 text-sm"><a href="#biblioteca">Más descargados</a><Link to="/buscar">Buscar libros</Link><a href="#comunidad">Tu biblioteca</a></div>
+          <div className="flex flex-col gap-2 text-sm"><a href="#biblioteca">Más descargados</a><Link to="/search">Buscar libros</Link><a href="#comunidad">Tu biblioteca</a></div>
         </div>
         <div className="md:text-right">
           <p className="text-xs font-bold uppercase tracking-widest">© 2026 InkByte</p>

@@ -24,7 +24,7 @@ function LoginPage() {
     setLoading(true);
     try {
       await login({ email, password, remember_me: true });
-      await navigate({ to: "/perfil" });
+      await navigate({ to: "/profile" });
     } catch {
       setError("El correo o la contraseña no son correctos.");
     } finally {
@@ -93,7 +93,7 @@ function LoginPage() {
           </form>
           <p className="mt-8 text-center text-sm text-muted-foreground">
             ¿Todavía no tienes cuenta?{" "}
-            <Link to="/crear-cuenta" className="font-bold text-primary underline underline-offset-4">
+            <Link to="/create-account" className="font-bold text-primary underline underline-offset-4">
               Crear cuenta
             </Link>
           </p>
