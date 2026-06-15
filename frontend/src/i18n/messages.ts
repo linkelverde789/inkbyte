@@ -1,9 +1,9 @@
 // frontend/src/i18n/messages.ts
 
-import es from "./locales/es/home.json";
-import en from "./locales/en/home.json";
+import es from "./locales/es/es.json";
+import en from "./locales/en/en.json";
 
-export const LOCALE = "es";
+export const LOCALE = "en";
 
 const translations = {
   es,

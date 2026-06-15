@@ -5,6 +5,7 @@ from users.dto.auth import RegisterInput
 User = get_user_model()
 
 
+#TODO remove this unused function
 def _unique_username(email: str) -> str:
     base = email.replace("@", "_at_").replace(".", "_")
     candidate = base[:150]
@@ -21,7 +22,7 @@ def _unique_username(email: str) -> str:
 
 def create_user(data: RegisterInput) -> User:
     return User.objects.create_user(
-        username=_unique_username(data.email),
+        username=data.username,
         email=data.email,
         password=data.password,
         first_name=data.first_name,

@@ -4,6 +4,7 @@ import { LogOut } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/auth/AuthContext";
+import { t } from "@/i18n";
 
 export const Route = createFileRoute("/_authenticated/profile")({
   component: ProfilePage,
@@ -14,13 +15,13 @@ function ProfilePage() {
   const navigate = useNavigate();
 
   if (!user) {
-    return <div>Cargando usuario...</div>;
+    return <div>{t("Loading user...")}</div>;
   }
 
   async function signOut() {
     await logout();
     await navigate({
-      to: "/auth",
+      to: "/login",
       replace: true,
     });
   }
@@ -38,17 +39,17 @@ function ProfilePage() {
 
           <Button variant="ghost" onClick={signOut}>
             <LogOut />
-            Salir
+            {t("Logout")}
           </Button>
         </div>
       </nav>
 
       <div className="mx-auto max-w-6xl px-5 py-12 sm:px-8 md:py-20">
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">
-          Área de lector
+          {t("Reader's area")}
         </p>
 
-        <h1 className="mt-2 text-5xl">Mi perfil</h1>
+        <h1 className="mt-2 text-5xl">{t("My profile")}</h1>
 
         <section className="mt-10 grid gap-10 bg-card p-7 shadow-[9px_10px_0_var(--color-secondary)] sm:p-10 md:grid-cols-[220px_1fr]">
           <div>
@@ -69,35 +70,35 @@ function ProfilePage() {
           <div className="grid content-start gap-6 sm:grid-cols-2">
             <div>
               <p className="text-xs font-bold uppercase tracking-wider text-primary">
-                Nombre
+                {t("Name")}
               </p>
               <p className="mt-2 text-lg">{user.first_name || "—"}</p>
             </div>
 
             <div>
               <p className="text-xs font-bold uppercase tracking-wider text-primary">
-                Apellidos
+                {t("Last name")}
               </p>
               <p className="mt-2 text-lg">{user.last_name || "—"}</p>
             </div>
 
             <div>
               <p className="text-xs font-bold uppercase tracking-wider text-primary">
-                Usuario
+                {t("Username")}
               </p>
               <p className="mt-2 text-lg">@{user.username}</p>
             </div>
 
             <div>
               <p className="text-xs font-bold uppercase tracking-wider text-primary">
-                Correo
+                {t("Email")}
               </p>
               <p className="mt-2 break-all text-lg">{user.email}</p>
             </div>
 
             <div className="border-t border-border pt-6 sm:col-span-2">
               <Button asChild variant="editorial" size="editorial">
-                <Link to="/search">Explorar libros</Link>
+                <Link to="/search">{t("Explore the library")}</Link>
               </Button>
             </div>
           </div>
