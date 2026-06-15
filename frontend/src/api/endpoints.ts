@@ -4,6 +4,9 @@ export const API_ENDPOINTS = {
   AUTH_LOGOUT: "/auth/logout/",
   AUTH_ME: "/auth/me/",
   AUTH_TOKEN_REFRESH: "/auth/token/refresh/",
+
+  BOOKS_LIST: "/books/",
+  BOOKS_DETAIL: "/books/<int:book_id>/",
 } as const;
 
 export const API_BASE = "/api";

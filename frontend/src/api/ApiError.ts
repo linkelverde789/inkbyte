@@ -12,11 +12,11 @@ export class ApiError extends Error {
   }
 
   static fromResponse(data: { detail?: string; code?: string } | null, status: number) {
-    const message = data?.detail || t(MSG.ERROR_GENERIC);
+    const message = data?.detail || "An error occurred";
     return new ApiError(message, { code: data?.code, status });
   }
 
   static sessionExpired() {
-    return new ApiError(t(MSG.ERROR_SESSION_EXPIRED), { status: 401 });
+    return new ApiError("Expired session", { status: 401 });
   }
 }
