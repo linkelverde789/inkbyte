@@ -59,20 +59,6 @@ class BookListCreateView(PublicReadPrivateWriteMixin, APIView):
 
         items, total = ListBooksUseCase().execute(page=page, page_size=page_size)
 
-        serializer = BookResponseSerializer(
-            items, many=True, context={"request": request}
-        )
-
-        print("valir items: %s", items[0])
-        print("valir serializer BookResponseSerializer: %s", serializer.data[0])
-
-        payload = {
-            "count": total,
-            "page": page,
-            "page_size": page_size,
-            "results": serializer.data,
-        }
-
         return Response(
             {
                 "count": total,

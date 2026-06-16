@@ -80,7 +80,6 @@ def main():
         cover_src = os.path.join(LIBRARY, path, "cover.jpg")
 
         if not os.path.exists(cover_src):
-            print(f"Missing cover for book {book_id}: {cover_src}")
             continue
 
         with open(cover_src, "rb") as f:
@@ -99,7 +98,6 @@ def main():
 
             serializer.is_valid(raise_exception=True)
 
-            print("siempre arriba con un flow espacial %s", serializer.validated_data)
 
             CreateBookUseCase().execute(**serializer.validated_data)
         

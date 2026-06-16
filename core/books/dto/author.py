@@ -17,7 +17,6 @@ class CreateAuthorInput:
     image: object | None = None
 
     def validate(self) -> "CreateAuthorInput":
-        print("self %s", self)
         self.name = self.name.strip()
 
         if self.description is not None:

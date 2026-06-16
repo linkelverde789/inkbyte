@@ -20,7 +20,6 @@ class AuthorSelector:
         return Author.objects.order_by("name")
 
     def author_to_output(author: Author) -> AuthorOutput:
-        print("que: %s", author.image)
         return AuthorOutput(
             id=author.id,
             name=author.name,
