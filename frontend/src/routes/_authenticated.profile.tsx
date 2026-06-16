@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/auth/AuthContext";
 import { t } from "@/i18n";
+import { useEffect } from "react";
 
 export const Route = createFileRoute("/_authenticated/profile")({
   component: ProfilePage,
@@ -14,13 +15,19 @@ function ProfilePage() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
-  if (!user) {
-    return navigate(
-      {
+
+  console.log("usuario login: ", user)
+  useEffect(() => {
+    if (!user) {
+      navigate({
         to: "/login",
-        replace: true
-      }
-    );
+        replace: true,
+      });
+    }
+  }, [user, navigate]);
+
+  if (!user) {
+    return null;
   }
 
   async function signOut() {
