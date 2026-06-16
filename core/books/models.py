@@ -1,56 +1,124 @@
 from django.db import models
 
-# Create your models here.
 
-# Author model
+
+# =========================
+# Author
+# =========================
 class Author(models.Model):
     name = models.CharField(max_length=200)
-    description = models.TextField()
-    image = models.ImageField(upload_to='authors/')
+    description = models.TextField(blank=True)
+    image = models.ImageField(upload_to='authors/', null=True, blank=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-# Book series model
-class BookSeries(models.Model):
-    name = models.CharField(max_length=200)
-    description = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    class Meta:
+        ordering = ["name"]
 
-# Book type model
-class BookType(models.Model):
-    name = models.CharField(max_length=200)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return self.name
 
-# Genre model
+
+# =========================
+# Genre
+# =========================
 class Genre(models.Model):
     name = models.CharField(max_length=200)
-    description = models.TextField()
+    description = models.TextField(blank=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-# Book model
+    class Meta:
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
+
+
+# =========================
+# Book Series
+# =========================
+class BookSeries(models.Model):
+    name = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
+
+
+# =========================
+# Book Type (choices)
+# =========================
+class BookType(models.TextChoices):
+    EBOOK = "ebook", "Ebook"
+    HARDCOVER = "hardcover", "Hardcover"
+    PAPERBACK = "paperback", "Paperback"
+
+
+# =========================
+# Book
+# =========================
 class Book(models.Model):
     title = models.CharField(max_length=200)
-    description = models.TextField()
-    image = models.ImageField(upload_to='books/')
-    series = models.ForeignKey(BookSeries, on_delete=models.CASCADE, null=True, blank=True)
-    type = models.ForeignKey(BookType, on_delete=models.CASCADE, null=True)
+    description = models.TextField(blank=True)
+    image = models.ImageField(upload_to='books/', null=True, blank=True)
+
+    series = models.ForeignKey(
+        BookSeries,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="books"
+    )
+
+    type = models.CharField(
+        max_length=20,
+        choices=BookType.choices
+    )
+
+    authors = models.ManyToManyField(
+        Author,
+        related_name="books",
+        blank=True
+    )
+
+    genres = models.ManyToManyField(
+        Genre,
+        related_name="books",
+        blank=True
+    )
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        ordering = ["-created_at"]
 
-### ## Many to many relationships ## ###
-class BookGenre(models.Model):
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    genre = models.ForeignKey(Genre, on_delete=models.CASCADE)
+    def __str__(self):
+        return self.title
 
-class BookAuthor(models.Model):
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
 
+# =========================
+# Book File
+# =========================
 class BookFile(models.Model):
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    book = models.ForeignKey(
+        Book,
+        on_delete=models.CASCADE,
+        related_name="files"
+    )
+
     file = models.FileField(upload_to='books/files/')
+
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
