@@ -69,7 +69,7 @@ function SearchPage() {
   const [results, setResults] = useState<Book[]>([]);
   const [totalBooks, setTotalBooks] = useState(0);
   const [loading, setLoading] = useState(false);
-  const pageSize = 12;
+  const pageSize = 10;
 
   useEffect(() => {
     const loadBooks = async () => {
@@ -395,7 +395,7 @@ function SearchPage() {
                       </div>
 
                       <p className="mb-4 text-sm leading-6 text-muted-foreground">
-                        {book.description ? book.description.slice(0,250)+"..." : ""}
+                        {book.description ? book.description.length > 250 ? book.description.slice(0,250)+"..." : book.description : ""}
                       </p>
 
                       <div className="mt-auto flex flex-wrap items-center justify-between gap-4 border-t border-border pt-4">
