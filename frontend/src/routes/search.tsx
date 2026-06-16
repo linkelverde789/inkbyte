@@ -4,6 +4,7 @@ import {
   BookOpen,
   ChevronDown,
   Download,
+  Ellipsis,
   Heart,
   Menu,
   Search,
@@ -343,7 +344,7 @@ function SearchPage() {
                       className="relative aspect-[3/4] w-full shrink-0 overflow-hidden bg-muted sm:w-32 md:w-40"
                     >
                       <img
-                        src={bookCovers}
+                        src={book.image}
                         width={1536}
                         height={1024}
                         loading="lazy"
@@ -355,7 +356,7 @@ function SearchPage() {
                     <div className="flex min-w-0 flex-1 flex-col">
                       <div className="mb-1 flex flex-wrap gap-2 text-[10px] font-bold uppercase tracking-[0.15em] text-primary">
                         <span>
-                          {book.genre.map((item) => {
+                          {book.genre?.map((item) => {
                             return <span>{item.name}</span>
                           })}
                         </span>
@@ -394,7 +395,7 @@ function SearchPage() {
                       </div>
 
                       <p className="mb-4 text-sm leading-6 text-muted-foreground">
-                        {book.description}
+                        {book.description ? book.description.slice(0,250)+"..." : ""}
                       </p>
 
                       <div className="mt-auto flex flex-wrap items-center justify-between gap-4 border-t border-border pt-4">
