@@ -1,33 +1,34 @@
 
 from dataclasses import dataclass
+from typing import Optional
 
 from books.exceptions import BookError
 
 
-@dataclass(frozen=True)
+@dataclass()
 class BookTypeOutput:
     id: int
     name: str
 
-@dataclass(frozen=True)
+@dataclass()
 class GenreOutput:
     id: int
     name: str
 
-@dataclass(frozen=True)
+@dataclass()
 class BookOutput:
     id: int
     title: str
     image: str | None
     description: str | None
     type: BookTypeOutput | None
-    genres: tuple[GenreOutput, ...]
+    genres: tuple[GenreOutput, ...] | None
 
-@dataclass(frozen=True)
+@dataclass()
 class CreateBookInput:
     title: str
     description: str
-    image=None
+    image: Optional[object] = None
     type_id: int | None = None
     genre_ids: tuple[int, ...] = ()
 
@@ -44,7 +45,7 @@ class CreateBookInput:
         return self
 
 
-@dataclass(frozen=True)
+@dataclass()
 class UpdateBookInput:
     title: str | None = None
     description: str | None = None

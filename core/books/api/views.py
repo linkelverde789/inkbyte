@@ -46,7 +46,7 @@ class BookListCreateView(BookReadPermissionMixin, APIView):
             "page_size": page_size,
             "results": [asdict(item) for item in items],
         }
-        return Response(BookListResponseSerializer(payload).data)
+        return Response(BookListResponseSerializer(payload, context={"request": request}).data)
 
     def post(self, request):
         serializer = CreateBookSerializer(data=request.data)

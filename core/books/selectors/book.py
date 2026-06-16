@@ -9,10 +9,11 @@ class BookSelector():
         return Book.objects.order_by("title")
 
     def book_to_output(book: Book)->BookOutput:
-        image_url = book.image_url if book.image else None
         return BookOutput(
             id=book.id,
             title=book.title,
             description=book.description,
-            image=image_url
+            image=book.image if book.image else None,
+            genres=None,
+            type=None,
         )
