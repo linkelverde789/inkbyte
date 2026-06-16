@@ -1,10 +1,10 @@
 from books.dto.book import *
 from books.services.book import create_book
-from books.selectors.book import BookSelector
+from books.models import Book
 
 
 class UpdateBookUseCase:
-    def execute(self, **raw) -> BookOutput:
+    def execute(self, **raw) -> Book:
         book_dto = UpdateBookInput(**raw).validate()
         book = create_book(book_dto)
-        return BookSelector.book_to_output(book)
+        return book

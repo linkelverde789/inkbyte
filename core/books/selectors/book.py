@@ -1,4 +1,3 @@
-from books.dto.book import BookOutput
 from books.models import Book
 
 class BookSelector():
@@ -6,14 +5,4 @@ class BookSelector():
         return Book.objects.filter(pk=book_id).first()
 
     def list_books():
-        return Book.objects.order_by("title")
-
-    def book_to_output(book: Book)->BookOutput:
-        return BookOutput(
-            id=book.id,
-            title=book.title,
-            description=book.description,
-            image=book.image if book.image else None,
-            genres=None,
-            type=None,
-        )
+        return Book.objects.order_by("-description")

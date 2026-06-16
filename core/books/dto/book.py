@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from typing import Optional
+from books.exceptions import BookError
 
 
 @dataclass
@@ -18,23 +19,6 @@ class GenreOutput:
 class AuthorOutput:
     id: int
     name: str
-
-
-@dataclass
-class BookOutput:
-    id: int
-    title: str
-    image: Optional[str]
-    description: Optional[str]
-
-    type: Optional[BookTypeOutput]
-
-    genres: list[GenreOutput]
-    authors: list[AuthorOutput]
-
-
-from books.exceptions import BookError
-
 
 @dataclass
 class CreateBookInput:
