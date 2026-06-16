@@ -8,6 +8,7 @@ class AuthorOutput:
     id: int
     name: str
     description: Optional[str]
+    image: object | None = None
 
 @dataclass
 class CreateAuthorInput:
@@ -16,8 +17,11 @@ class CreateAuthorInput:
     image: object | None = None
 
     def validate(self) -> "CreateAuthorInput":
+        print("self %s", self)
         self.name = self.name.strip()
-        self.description = self.name.strip()
+
+        if self.description is not None:
+            self.description = self.description.strip()
 
         if not self.name:
             raise AuthorError("The name is required", "name_required")

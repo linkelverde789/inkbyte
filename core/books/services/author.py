@@ -3,6 +3,10 @@ from books.models import Author
 
 
 def create_author(data: CreateAuthorInput) -> Author:
+    print("name: %s", data.name)
+    print("description: %s", data.description)
+    print("image: %s", data.image)
+
     return Author.objects.create(
         name=data.name, description=data.description, image=data.image
     )

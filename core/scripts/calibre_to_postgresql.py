@@ -4,6 +4,7 @@ import sys
 from pathlib import Path
 import os
 import sqlite3
+from typing import List
 from django.core.files import File
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -15,10 +16,12 @@ import django
 
 django.setup()
 
-from books.api.serializers import CreateBookSerializer
-from books.use_cases.create_book import CreateBookUseCase
 from settings.settings import MEDIA_ROOT
-
+from books.api.serializers import CreateBookSerializer
+from books.models import Author
+from books.selectors.author import AuthorSelector
+from books.use_cases.author.create_author import CreateAuthorUseCase
+from books.use_cases.book.create_book import CreateBookUseCase
 
 LIBRARY = "/home/sergio/Música/Biblioteca de calibre"
 DB = os.path.join(LIBRARY, "metadata.db")
@@ -31,6 +34,24 @@ from bs4 import BeautifulSoup
 
 def clean_html(html: str) -> str:
     return BeautifulSoup(html or "", "html.parser").get_text()
+
+def process_author(author_names: str) -> List[int]:
+    result: List[int] = []
+
+    for author_name in author_names.split(","):
+        name = author_name.strip()
+
+        author = AuthorSelector.get_author_by_name(name)
+        if author is None:
+            author = CreateAuthorUseCase().execute(
+                name=name,
+                description=None,
+                image=None
+            )
+
+        result.append(author.id)
+
+    return result
 
 
 def main():
@@ -53,7 +74,8 @@ def main():
     """
     )
 
-    for book_id, title, path, text, authors in cur.fetchall():
+    for book_id, title, path, text, author_names in cur.fetchall():
+        author = process_author(author_names)
 
         cover_src = os.path.join(LIBRARY, path, "cover.jpg")
 
@@ -71,13 +93,16 @@ def main():
                     "title": title,
                     "description": description,
                     "image": image,
+                    "author_ids": author
                 }
             )
 
             serializer.is_valid(raise_exception=True)
 
-            CreateBookUseCase().execute(**serializer.validated_data)
+            print("siempre arriba con un flow espacial %s", serializer.validated_data)
 
+            CreateBookUseCase().execute(**serializer.validated_data)
+        
     conn.close()
 
 
