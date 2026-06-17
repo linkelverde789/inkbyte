@@ -4,6 +4,7 @@ import {
   BookOpen,
   ChevronDown,
   Download,
+  Ellipsis,
   Heart,
   Menu,
   Search,
@@ -68,7 +69,7 @@ function SearchPage() {
   const [results, setResults] = useState<Book[]>([]);
   const [totalBooks, setTotalBooks] = useState(0);
   const [loading, setLoading] = useState(false);
-  const pageSize = 12;
+  const pageSize = 10;
 
   useEffect(() => {
     const loadBooks = async () => {
@@ -104,6 +105,29 @@ function SearchPage() {
     setFormat("All");
     setAuthor("");
     setPage(1);
+  };
+
+  const getVisiblePages = (current: number, total: number) => {
+    const delta = 1;
+
+    const range = [];
+
+    const start = Math.max(2, current - delta);
+    const end = Math.min(total - 1, current + delta);
+
+    range.push(1);
+
+    if (start > 2) range.push("...");
+
+    for (let i = start; i <= end; i++) {
+      range.push(i);
+    }
+
+    if (end < total - 1) range.push("...");
+
+    if (total > 1) range.push(total);
+
+    return range;
   };
 
   return (
@@ -308,98 +332,119 @@ function SearchPage() {
             <div className="py-20 text-center">{t("Loading books...")}</div>
           ) : results.length ? (
             <>
-              <div className="grid grid-cols-2 gap-4 sm:gap-7 lg:grid-cols-2">
+              <div className="flex flex-col gap-4">
                 {results.map((book) => (
                   <article
                     key={book.title}
-                    className="group relative flex min-w-0 flex-col bg-card shadow-[4px_5px_0_var(--color-secondary)] sm:shadow-[6px_7px_0_var(--color-secondary)]"
+                    className="group flex flex-col gap-4 bg-card p-4 shadow-[4px_5px_0_var(--color-secondary)] sm:flex-row sm:items-start sm:gap-6 sm:p-6"
                   >
                     <Link
-                      to="/book/$slug"
-                      params={{ slug: book.slug }}
-                      className="relative aspect-[3/4] overflow-hidden bg-muted"
+                      to="/book/$id"
+                      params={{ id: book.id.toString() }}
+                      className="relative aspect-[3/4] w-full shrink-0 overflow-hidden bg-muted sm:w-32 md:w-40"
                     >
                       <img
-                        src={bookCovers}
+                        src={book.image}
                         width={1536}
                         height={1024}
                         loading="lazy"
                         alt={`Portada de ${book.title}`}
-                        className={`h-full w-[300%] max-w-none object-cover transition-transform duration-500 group-hover:scale-[1.015] ${book.cover === "center" ? "-translate-x-1/3" : book.cover === "right" ? "-translate-x-2/3" : ""}`}
+                        className="h-full w-full max-w-none object-cover transition-transform duration-500 group-hover:scale-[1.015]"
                       />
                     </Link>
-                    <div className="flex min-w-0 flex-1 flex-col p-3 sm:p-6">
-                      <div className="mb-4 flex items-start justify-between gap-4">
-                        <div>
-                          <div className="mb-3 flex flex-wrap gap-2 text-[10px] font-bold uppercase tracking-[0.15em] text-primary">
-                            <span>{book.genre}</span>
-                            <span>·</span>
-                            <span>{book.type}</span>
-                            <span>·</span>
-                            <span>{book.year}</span>
-                          </div>
-                          <h3 className="text-lg leading-tight sm:text-2xl">
-                            <Link
-                              to="/book/$slug"
-                              params={{ slug: book.slug }}
-                              className="hover:text-primary"
-                            >
-                              {book.title}
-                            </Link>
-                          </h3>
-                          <p className="mt-1 text-sm italic text-muted-foreground">
-                            {t("by")} {book.author}
-                          </p>
-                        </div>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() =>
-                            setSaved((current) =>
-                              current.includes(book.title)
-                                ? current.filter(
-                                    (title) => title !== book.title,
-                                  )
-                                : [...current, book.title],
-                            )
-                          }
-                          aria-label={`${saved.includes(book.title) ? t("Remove") : t("Save")} ${book.title}`}
-                        >
-                          <Heart
-                            className={
-                              saved.includes(book.title)
-                                ? "fill-current text-primary"
-                                : ""
-                            }
-                          />
-                        </Button>
+
+                    <div className="flex min-w-0 flex-1 flex-col">
+                      <div className="mb-1 flex flex-wrap gap-2 text-[10px] font-bold uppercase tracking-[0.15em] text-primary">
+                        <span>
+                          {book.genre?.map((item) => {
+                            return <span>{item.name}</span>;
+                          })}
+                        </span>
+                        <span>·</span>
+                        <span>{book.type}</span>
                       </div>
+
+                      <h3 className="mb-1 text-lg leading-tight sm:text-xl">
+                        <Link
+                          to="/book/$id"
+                          params={{ id: book.id.toString() }}
+                          className="hover:text-primary"
+                        >
+                          {book.title}
+                        </Link>
+                      </h3>
+
+                      <p className="mb-2 text-sm italic text-muted-foreground">
+                        {t("by")}{" "}
+                        {book.authors.map((item) => item.name).join(", ")}
+                      </p>
+
                       <div
-                        className="mb-5 flex gap-1 text-secondary"
-                        aria-label={`${book.rating} ${t("out of 5 stars")}`}
+                        className="mb-3 flex gap-1 text-secondary"
+                        aria-label={`${book.rating} de 5 estrellas`}
                       >
                         {[1, 2, 3, 4, 5].map((star) => (
                           <Star
                             key={star}
-                            className={`size-4 ${star <= book.rating ? "fill-current" : "text-border"}`}
+                            className={`size-3.5 ${
+                              star <= book.rating
+                                ? "fill-current"
+                                : "text-border"
+                            }`}
                           />
                         ))}
                       </div>
-                      <p className="mb-5 hidden text-sm leading-6 text-muted-foreground sm:line-clamp-3 sm:block">
-                        {book.description}
+
+                      <p className="mb-4 text-sm leading-6 text-muted-foreground">
+                        {book.description
+                          ? book.description.length > 250
+                            ? book.description.slice(0, 250) + "..."
+                            : book.description
+                          : ""}
                       </p>
-                      <div className="mt-auto flex flex-wrap items-center justify-between gap-4 border-t border-border pt-5">
+
+                      <div className="mt-auto flex flex-wrap items-center justify-between gap-4 border-t border-border pt-4">
                         <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-primary">
                           {book.format}
                         </span>
-                        <Button
-                          variant="editorial"
-                          size="sm"
-                          className="rounded-none"
-                        >
-                          <Download />{" "}
-                          <span className="hidden sm:inline">{t("Download")}</span>
-                        </Button>
+
+                        <div className="flex items-center gap-2">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="size-8"
+                            onClick={() =>
+                              setSaved((current) =>
+                                current.includes(book.title)
+                                  ? current.filter(
+                                      (title) => title !== book.title,
+                                    )
+                                  : [...current, book.title],
+                              )
+                            }
+                            aria-label={`${
+                              saved.includes(book.title)
+                                ? t("Remove")
+                                : t("Save")
+                            } ${book.title}`}
+                          >
+                            <Heart
+                              className={`size-4 ${
+                                saved.includes(book.title)
+                                  ? "fill-current text-primary"
+                                  : ""
+                              }`}
+                            />
+                          </Button>
+
+                          <Button
+                            variant="editorial"
+                            size="sm"
+                            className="rounded-none"
+                          >
+                            <Download /> {t("Download")}
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </article>
@@ -422,21 +467,24 @@ function SearchPage() {
                       {t("Previous")}
                     </PaginationPrevious>
                   </PaginationItem>
-                  {Array.from(
-                    { length: pageCount },
-                    (_, index) => index + 1,
-                  ).map((number) => (
-                    <PaginationItem key={number}>
-                      <PaginationLink
-                        href="#"
-                        isActive={page === number}
-                        onClick={(event) => {
-                          event.preventDefault();
-                          setPage(number);
-                        }}
-                      >
-                        {number}
-                      </PaginationLink>
+                  {getVisiblePages(page, pageCount).map((item, index) => (
+                    <PaginationItem key={`${item}-${index}`}>
+                      {item === "..." ? (
+                        <span className="px-2 text-muted-foreground">...</span>
+                      ) : (
+                        <PaginationLink
+                          href="#"
+                          isActive={page === item}
+                          onClick={(event) => {
+                            event.preventDefault();
+                            if (typeof item === "number") {
+                              setPage(item);
+                            }
+                          }}
+                        >
+                          {item}
+                        </PaginationLink>
+                      )}
                     </PaginationItem>
                   ))}
                   <PaginationItem>
@@ -462,7 +510,9 @@ function SearchPage() {
           ) : (
             <div className="border-y border-border bg-background py-20 text-center">
               <BookOpen className="mx-auto mb-4 size-9 text-primary" />
-              <h2 className="mb-2 text-2xl">{t("We couldn't find that reading")}</h2>
+              <h2 className="mb-2 text-2xl">
+                {t("We couldn't find that reading")}
+              </h2>
               <p className="text-sm text-muted-foreground">
                 {t("Try changing the term or clearing the filters.")}
               </p>
