@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import argparse
 import os
 import sys
 import sqlite3
@@ -8,28 +9,34 @@ from pathlib import Path
 from bs4 import BeautifulSoup
 from django.core.files import File
 
-
-BASE_DIR = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(BASE_DIR))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings.settings")
 
 import django
 
 django.setup()
-
-from settings.settings import MEDIA_ROOT
 from books.api.serializers import CreateBookSerializer
+from books.models import Book
 from books.selectors.author import AuthorSelector
+from books.selectors.series import SeriesSelector
 from books.use_cases.author.create_author import CreateAuthorUseCase
 from books.use_cases.book.create_book import CreateBookUseCase
-from books.models import Book
-from books.selectors.series import SeriesSelector
-from books.use_cases.series.add_book_to_series import AddBookToSeries
+from books.use_cases.book.add_book_to_series import AddBookToSeriesUseCase
 from books.use_cases.series.create_series import CreateSeriesUseCase
 
-LIBRARY = "/home/sergio/Música/Biblioteca de calibre"
-DB = os.path.join(LIBRARY, "metadata.db")
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="metadata: path to the calibre metadata database"
+    )
+    parser.add_argument(
+        "--metadata",
+        type=str,
+        help="Path to the Calibre metadata database",
+        required=True,
+    )
+    return parser.parse_args()
 
 
 def clean_html(html: str) -> str:
@@ -58,8 +65,8 @@ def process_author(author_names: str) -> list[int]:
     return authors_ids
 
 
-def process_image(path: str) -> File | None:
-    cover_path = os.path.join(LIBRARY, path, "cover.jpg")
+def process_image(path: str, metadata: str) -> File | None:
+    cover_path = os.path.join(metadata, path, "cover.jpg")
 
     if not os.path.exists(cover_path):
         return None
@@ -93,14 +100,16 @@ def process_series(book: Book, series_name: str, series_index):
 
     if series is None:
         series = CreateSeriesUseCase().execute(name=series_name)
-    
+
     print(f"Series: {series.name} created")
 
-    AddBookToSeries().execute(book_id=book.id, series_id=series.id, index=series_index)
+    AddBookToSeriesUseCase().execute(
+        book_id=book.id, series_id=series.id, index=series_index
+    )
 
 
-def main() -> None:
-    conn = sqlite3.connect(DB)
+def main(metadata: str) -> None:
+    conn = sqlite3.connect(metadata)
     cur = conn.cursor()
 
     cur.execute(
@@ -128,7 +137,7 @@ GROUP BY
         title, path, text, author_names, series_name, series_index = row
 
         author_ids = process_author(author_names or "")
-        image = process_image(path)
+        image = process_image(path, metadata)
         description = clean_html(text) if text else None
 
         book = process_book(
@@ -145,4 +154,5 @@ GROUP BY
 
 
 if __name__ == "__main__":
-    main()
+    args = parse_args()
+    main(args.metadata)
