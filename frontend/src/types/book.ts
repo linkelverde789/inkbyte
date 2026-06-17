@@ -3,14 +3,21 @@ export interface BookGenre {
   name: string;
 }
 
+export interface Author {
+  id: number;
+  name: string;
+  description?: string;
+}
+
 export interface Book {
   id: number;
   title: string;
-  description: string;
+  description?: string;
   image: string;
   genre: BookGenre[];
   type: string;
-  author: string;
+  authors: Author[];
+  rating: number;
 }
 
 export interface BookListResponse {
