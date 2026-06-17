@@ -1,5 +1,5 @@
-from core.books.selectors.genre import GenreSelector
-from core.query_pipeline import QuerySetPipeline
+from books.selectors.genre import GenreSelector
+from query_pipeline import QuerySetPipeline
 
 
 class ListGenreUseCase:

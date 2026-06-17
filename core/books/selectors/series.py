@@ -1,5 +1,5 @@
-from core.books.models import Series, SeriesMembership
-from core.query_pipeline import QuerySetPipeline
+from books.models import Series, SeriesMembership
+from query_pipeline import QuerySetPipeline
 
 
 class SeriesSelector:

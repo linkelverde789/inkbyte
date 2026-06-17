@@ -91,11 +91,7 @@ class BookDetailView(PublicReadPrivateWriteMixin, APIView):
             return _book_error_response(exc)
 
         return Response(
-            {
-                BookResponseSerializer(
-                    book_output, many=False, context={"request": request}
-                ).data
-            }
+            BookResponseSerializer(book_output, context={"request": request}).data
         )
 
     def patch(self, request, book_id: int):
@@ -111,7 +107,7 @@ class BookDetailView(PublicReadPrivateWriteMixin, APIView):
             return _book_error_response(exc)
 
         return Response(
-            _serialize_books(book_output, request), status=status.HTTP_200_OK
+            BookResponseSerializer(book_output, context={"request": request}).data
         )
 
     def delete(self, request, book_id: int):

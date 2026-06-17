@@ -6,7 +6,7 @@ class BookSelector:
 
     @staticmethod
     def get_book_by_id(book_id: int) -> Book | None:
-        return QuerySetPipeline(Book.objects.filter(pk=book_id))
+        return Book.objects.filter(pk=book_id).first()
 
     @staticmethod
     def search_by_text(text: str):

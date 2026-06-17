@@ -1,7 +1,7 @@
 from books.dto.book import *
 from books.services.book import update_book
 from books.models import Book
-from core.books.selectors.book import BookSelector
+from books.selectors.book import BookSelector
 
 
 class UpdateBookUseCase:
