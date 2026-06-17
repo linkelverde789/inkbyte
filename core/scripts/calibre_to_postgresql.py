@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 
-import sys
-from pathlib import Path
 import os
+import sys
 import sqlite3
-from typing import List
+from pathlib import Path
+
+from bs4 import BeautifulSoup
 from django.core.files import File
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(BASE_DIR))
@@ -18,89 +20,127 @@ django.setup()
 
 from settings.settings import MEDIA_ROOT
 from books.api.serializers import CreateBookSerializer
-from books.models import Author
 from books.selectors.author import AuthorSelector
 from books.use_cases.author.create_author import CreateAuthorUseCase
 from books.use_cases.book.create_book import CreateBookUseCase
+from books.models import Book
+from books.selectors.series import SeriesSelector
+from books.use_cases.series.add_book_to_series import AddBookToSeries
+from books.use_cases.series.create_series import CreateSeriesUseCase
 
 LIBRARY = "/home/sergio/Música/Biblioteca de calibre"
 DB = os.path.join(LIBRARY, "metadata.db")
-
-MEDIA_ROOT = Path(MEDIA_ROOT)
-COVERS_DIR = MEDIA_ROOT / "books"
-COVERS_DIR.mkdir(parents=True, exist_ok=True)
-from bs4 import BeautifulSoup
 
 
 def clean_html(html: str) -> str:
     return BeautifulSoup(html or "", "html.parser").get_text()
 
-def process_author(author_names: str) -> List[int]:
-    result: List[int] = []
 
-    for author_name in author_names.split(","):
-        name = author_name.strip()
+def process_author(author_names: str) -> list[int]:
+    authors_ids: list[int] = []
+
+    for name in author_names.split(","):
+        name = name.strip()
+        if not name:
+            continue
 
         author = AuthorSelector.get_author_by_name(name)
+
         if author is None:
             author = CreateAuthorUseCase().execute(
                 name=name,
                 description=None,
-                image=None
+                image=None,
             )
 
-        result.append(author.id)
+        authors_ids.append(author.id)
 
-    return result
+    return authors_ids
 
 
-def main():
+def process_image(path: str) -> File | None:
+    cover_path = os.path.join(LIBRARY, path, "cover.jpg")
+
+    if not os.path.exists(cover_path):
+        return None
+
+    file = open(cover_path, "rb")
+    return File(file, name=os.path.basename(cover_path))
+
+
+def process_book(
+    title: str,
+    description: str | None,
+    image: File | None,
+    author_ids: list[int],
+) -> Book:
+    serializer = CreateBookSerializer(
+        data={
+            "title": title,
+            "description": description if description is not None else "",
+            "image": image,
+            "author_ids": author_ids,
+        }
+    )
+
+    serializer.is_valid(raise_exception=True)
+
+    return CreateBookUseCase().execute(**serializer.validated_data)
+
+
+def process_series(book: Book, series_name: str, series_index):
+    series = SeriesSelector.get_one_series_by_name(series_name)
+
+    if series is None:
+        series = CreateSeriesUseCase().execute(name=series_name)
+    
+    print(f"Series: {series.name} created")
+
+    AddBookToSeries().execute(book_id=book.id, series_id=series.id, index=series_index)
+
+
+def main() -> None:
     conn = sqlite3.connect(DB)
     cur = conn.cursor()
 
     cur.execute(
         """
         SELECT
-            books.id,
-            books.title,
-            books.path,
-            comments.text,
-            GROUP_CONCAT(authors.name, ', ') AS authors
-        FROM books
-        LEFT JOIN books_authors_link ON books.id = books_authors_link.book
-        LEFT JOIN authors ON authors.id = books_authors_link.author
-        LEFT JOIN comments ON comments.book = books.id
-        GROUP BY books.id
-    """
+  books.title,
+  books.path,
+  comments.text,
+  GROUP_CONCAT(authors.name, ', ') AS authors,
+  series.name,
+  books.series_index
+FROM
+  books
+  LEFT JOIN books_authors_link ON books.id = books_authors_link.book
+  LEFT JOIN authors ON authors.id = books_authors_link.author
+  LEFT JOIN comments ON comments.book = books.id
+  LEFT JOIN books_series_link ON books.id = books_series_link.book
+  LEFT JOIN series ON series.id = books_series_link.series
+GROUP BY
+  books.id
+        """
     )
 
-    for book_id, title, path, text, author_names in cur.fetchall():
-        author = process_author(author_names)
+    for row in cur.fetchall():
+        title, path, text, author_names, series_name, series_index = row
 
-        cover_src = os.path.join(LIBRARY, path, "cover.jpg")
+        author_ids = process_author(author_names or "")
+        image = process_image(path)
+        description = clean_html(text) if text else None
 
-        if not os.path.exists(cover_src):
-            continue
+        book = process_book(
+            title=title,
+            description=description,
+            image=image,
+            author_ids=author_ids,
+        )
+        print(f"Book {book.title} created")
+        if series_name is not None:
+            process_series(book, series_name, series_index)
 
-        with open(cover_src, "rb") as f:
-            image = File(f, name=os.path.basename(cover_src))
-
-            description = clean_html(text) if text is not None else ""
-
-            serializer = CreateBookSerializer(
-                data={
-                    "title": title,
-                    "description": description,
-                    "image": image,
-                    "author_ids": author
-                }
-            )
-
-            serializer.is_valid(raise_exception=True)
-
-
-            CreateBookUseCase().execute(**serializer.validated_data)
-        
     conn.close()
 
 
