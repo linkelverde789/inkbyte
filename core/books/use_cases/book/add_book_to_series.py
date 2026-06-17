@@ -1,6 +1,6 @@
 from books.selectors.book import BookSelector
 from books.selectors.series import SeriesSelector
-from books.services.series import add_book_to_series
+from books.services.book import add_book_to_series
 
 
 class AddBookToSeriesUseCase:

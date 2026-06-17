@@ -11,10 +11,6 @@ def create_series(data: CreateSeriesInput) -> Series:
     )
 
 
-def add_book_to_series(book: Book, series: Series, index: int):
-    SeriesMembership.objects.create(book=book, series=series, index=index)
-
-
 def update_series(series: Series, data: UpdateSeriesInput) -> Series:
     if data.name is not None:
         series.name = data.name
