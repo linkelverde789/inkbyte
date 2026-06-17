@@ -1,4 +1,4 @@
-from core.books.selectors.series import SeriesSelector
+from books.selectors.series import SeriesSelector
 
 
 class ListSeriesUseCase:

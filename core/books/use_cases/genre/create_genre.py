@@ -1,6 +1,6 @@
-from core.books.dto.genre import CreateGenreInput
-from core.books.models import Genre
-from core.books.services.genre import create_genre
+from books.dto.genre import CreateGenreInput
+from books.models import Genre
+from books.services.genre import create_genre
 
 
 class CreateGenreUseCase:

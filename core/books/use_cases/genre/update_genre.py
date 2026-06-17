@@ -1,7 +1,7 @@
-from core.books.dto.genre import UpdateGenreInput
-from core.books.models import Genre
-from core.books.selectors.genre import GenreSelector
-from core.books.services.genre import update_genre
+from books.dto.genre import UpdateGenreInput
+from books.models import Genre
+from books.selectors.genre import GenreSelector
+from books.services.genre import update_genre
 
 
 class UpdateGenreUseClase:

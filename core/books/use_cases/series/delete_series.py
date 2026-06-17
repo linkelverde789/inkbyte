@@ -1,6 +1,6 @@
-from core.books.models import Series, SeriesMembership
-from core.books.selectors.series import SeriesSelector
-from core.books.services.series import delete_series
+from books.models import Series, SeriesMembership
+from books.selectors.series import SeriesSelector
+from books.services.series import delete_series
 
 
 class DeleteSeriesUseCase:

@@ -1,7 +1,7 @@
 from books.dto.author import UpdateAuthorInput
 from books.services.author import update_author
 from books.models import Author
-from core.books.selectors.author import AuthorSelector
+from books.selectors.author import AuthorSelector
 
 
 class UpdateAuthorUseCase:

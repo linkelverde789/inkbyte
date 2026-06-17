@@ -1,6 +1,6 @@
-from core.books.exceptions import GenreError
-from core.books.models import Genre
-from core.books.selectors.genre import GenreSelector
+from books.exceptions import GenreError
+from books.models import Genre
+from books.selectors.genre import GenreSelector
 
 
 class GetGenreUseCAse:

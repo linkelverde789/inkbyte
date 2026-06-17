@@ -1,5 +1,5 @@
-from core.books.dto.series import UpdateSeriesInput
-from core.books.selectors.series import SeriesSelector
+from books.dto.series import UpdateSeriesInput
+from books.selectors.series import SeriesSelector
 
 
 class UpdateSeriesUseCase:

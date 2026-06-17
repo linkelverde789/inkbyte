@@ -1,6 +1,6 @@
 from books.exceptions import SeriesError
 from books.models import BookSeries
-from core.books.selectors.series import SeriesSelector
+from books.selectors.series import SeriesSelector
 
 
 class GetSeriesUseCase:

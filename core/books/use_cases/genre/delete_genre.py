@@ -1,4 +1,4 @@
-from core.books.services.genre import delete_genre
+from books.services.genre import delete_genre
 
 
 class DeleteGenreUseCase:
