@@ -3,7 +3,7 @@ from books.selectors.series import SeriesSelector
 from books.services.series import add_book_to_series
 
 
-class AddBookToSeries:
+class AddBookToSeriesUseCase:
     def execute(self, book_id: int, series_id: int, index: int | None) -> None:
         book = BookSelector.get_book_by_id(book_id)
         series = SeriesSelector.get_series_by_id(series_id)
