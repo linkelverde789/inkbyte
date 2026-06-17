@@ -1,14 +1,13 @@
 from django.db import models
 
 
-
 # =========================
 # Author
 # =========================
 class Author(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
-    image = models.ImageField(upload_to='authors/', null=True, blank=True)
+    image = models.ImageField(upload_to="authors/", null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -67,31 +66,17 @@ class Type(models.TextChoices):
 class Book(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
-    image = models.ImageField(upload_to='books/', null=True, blank=True)
+    image = models.ImageField(upload_to="books/", null=True, blank=True)
 
     series = models.ManyToManyField(
-        Series,
-        through="SeriesMembership",
-        related_name="books",
-        blank=True
+        Series, through="SeriesMembership", related_name="books", blank=True
     )
 
-    type = models.CharField(
-        max_length=20,
-        choices=Type.choices
-    )
+    type = models.CharField(max_length=20, choices=Type.choices)
 
-    authors = models.ManyToManyField(
-        Author,
-        related_name="books",
-        blank=True
-    )
+    authors = models.ManyToManyField(Author, related_name="books", blank=True)
 
-    genres = models.ManyToManyField(
-        Genre,
-        related_name="books",
-        blank=True
-    )
+    genres = models.ManyToManyField(Genre, related_name="books", blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -105,15 +90,11 @@ class Book(models.Model):
 
 class SeriesMembership(models.Model):
     book = models.ForeignKey(
-        Book,
-        on_delete=models.CASCADE,
-        related_name="series_memberships"
+        Book, on_delete=models.CASCADE, related_name="series_memberships"
     )
 
     series = models.ForeignKey(
-        Series,
-        on_delete=models.CASCADE,
-        related_name="book_memberships"
+        Series, on_delete=models.CASCADE, related_name="book_memberships"
     )
 
     index = models.PositiveIntegerField()
@@ -131,13 +112,9 @@ class SeriesMembership(models.Model):
 # Book File
 # =========================
 class File(models.Model):
-    book = models.ForeignKey(
-        Book,
-        on_delete=models.CASCADE,
-        related_name="files"
-    )
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="files")
 
-    file = models.FileField(upload_to='books/files/')
+    file = models.FileField(upload_to="books/files/")
 
     created_at = models.DateTimeField(auto_now_add=True)
 

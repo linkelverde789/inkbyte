@@ -24,6 +24,7 @@ class GenreError(AppError):
     def __init__(self, message: str):
         super().__init__(message, "genre_error")
 
+
 class FileError(AppError):
     def __init__(self, message: str):
         super().__init__(message, "file_error")
