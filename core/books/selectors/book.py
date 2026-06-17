@@ -10,12 +10,8 @@ class BookSelector:
 
     @staticmethod
     def search_by_text(text: str):
-        return QuerySetPipeline(
-            Book.objects.filter(title__icontains=text)
-        )
+        return QuerySetPipeline(Book.objects.filter(title__icontains=text))
 
     @staticmethod
     def list_books():
-        return QuerySetPipeline(
-            Book.objects.all().order_by("-description")
-        )
+        return QuerySetPipeline(Book.objects.all().order_by("-description"))

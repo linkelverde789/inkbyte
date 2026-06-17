@@ -9,6 +9,6 @@ class AddBookToSeriesUseCase:
         series = SeriesSelector.get_series_by_id(series_id)
         if index is None:
             index = SeriesSelector.get_last_index_from_series(series)
-            index = 1 if index is None else index+1
+            index = 1 if index is None else index + 1
         add_book_to_series(book, series, index)
         return
