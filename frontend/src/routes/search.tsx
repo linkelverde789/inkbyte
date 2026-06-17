@@ -357,7 +357,7 @@ function SearchPage() {
                       <div className="mb-1 flex flex-wrap gap-2 text-[10px] font-bold uppercase tracking-[0.15em] text-primary">
                         <span>
                           {book.genre?.map((item) => {
-                            return <span>{item.name}</span>
+                            return <span>{item.name}</span>;
                           })}
                         </span>
                         <span>·</span>
@@ -375,7 +375,8 @@ function SearchPage() {
                       </h3>
 
                       <p className="mb-2 text-sm italic text-muted-foreground">
-                        {t("by")} {book.author}
+                        {t("by")}{" "}
+                        {book.authors.map((item) => item.name).join(", ")}
                       </p>
 
                       <div
@@ -395,7 +396,11 @@ function SearchPage() {
                       </div>
 
                       <p className="mb-4 text-sm leading-6 text-muted-foreground">
-                        {book.description ? book.description.length > 250 ? book.description.slice(0,250)+"..." : book.description : ""}
+                        {book.description
+                          ? book.description.length > 250
+                            ? book.description.slice(0, 250) + "..."
+                            : book.description
+                          : ""}
                       </p>
 
                       <div className="mt-auto flex flex-wrap items-center justify-between gap-4 border-t border-border pt-4">
