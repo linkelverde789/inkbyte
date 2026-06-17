@@ -5,10 +5,10 @@ from rest_framework.views import APIView
 from books.api.serializers import (
     AuthorListResponseSerializer,
     AuthorResponseSerializer,
-    BookListResponseSerializer,
     BookResponseSerializer,
     CreateAuthorSerializer,
     CreateBookSerializer,
+    UpdateBookSerializer,
 )
 from books.exceptions import AuthorError, BookError
 from books.api.permissions import PublicReadPrivateWriteMixin
@@ -100,11 +100,11 @@ class BookDetailView(PublicReadPrivateWriteMixin, APIView):
 
     def patch(self, request, book_id: int):
         try:
-            serializer = CreateBookSerializer(data=request.data, partial=True)
+            serializer = UpdateBookSerializer(data=request.data, partial=True)
             serializer.is_valid(raise_exception=True)
 
             book_output = UpdateBookUseCase().execute(
-                book_id, **serializer.validated_data
+                book_id=book_id, **serializer.validated_data
             )
 
         except BookError as exc:

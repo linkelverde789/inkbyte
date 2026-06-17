@@ -25,8 +25,6 @@ class Author(models.Model):
 # =========================
 class Genre(models.Model):
     name = models.CharField(max_length=200)
-    description = models.TextField(blank=True)
-
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -40,7 +38,7 @@ class Genre(models.Model):
 # =========================
 # Book Series
 # =========================
-class BookSeries(models.Model):
+class Series(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
 
@@ -57,7 +55,7 @@ class BookSeries(models.Model):
 # =========================
 # Book Type (choices)
 # =========================
-class BookType(models.TextChoices):
+class Type(models.TextChoices):
     EBOOK = "ebook", "Ebook"
     HARDCOVER = "hardcover", "Hardcover"
     PAPERBACK = "paperback", "Paperback"
@@ -72,15 +70,15 @@ class Book(models.Model):
     image = models.ImageField(upload_to='books/', null=True, blank=True)
 
     series = models.ManyToManyField(
-        BookSeries,
-        through="BookSeriesMembership",
+        Series,
+        through="SeriesMembership",
         related_name="books",
         blank=True
     )
 
     type = models.CharField(
         max_length=20,
-        choices=BookType.choices
+        choices=Type.choices
     )
 
     authors = models.ManyToManyField(
@@ -105,7 +103,7 @@ class Book(models.Model):
         return self.title
 
 
-class BookSeriesMembership(models.Model):
+class SeriesMembership(models.Model):
     book = models.ForeignKey(
         Book,
         on_delete=models.CASCADE,
@@ -113,7 +111,7 @@ class BookSeriesMembership(models.Model):
     )
 
     series = models.ForeignKey(
-        BookSeries,
+        Series,
         on_delete=models.CASCADE,
         related_name="book_memberships"
     )
@@ -132,7 +130,7 @@ class BookSeriesMembership(models.Model):
 # =========================
 # Book File
 # =========================
-class BookFile(models.Model):
+class File(models.Model):
     book = models.ForeignKey(
         Book,
         on_delete=models.CASCADE,

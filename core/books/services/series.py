@@ -1,24 +1,21 @@
 from django.db import transaction
 from books.dto.series import CreateSeriesInput, UpdateSeriesInput
-from books.models import Book, BookSeries, BookSeriesMembership
+from books.models import Book, Series, SeriesMembership
 
 
 @transaction.atomic
-def create_series(data: CreateSeriesInput)-> BookSeries:
-    return BookSeries.objects.create(
+def create_series(data: CreateSeriesInput) -> Series:
+    return Series.objects.create(
         name=data.name,
         description=data.description,
     )
 
-#TODO: change types
-def add_book_to_series(book: Book, series: BookSeries, index: int):
-    BookSeriesMembership.objects.create(
-        book=book,
-        series=series,
-        index=index
-    )
 
-def update_series(series: BookSeries, data: UpdateSeriesInput) -> BookSeries:
+def add_book_to_series(book: Book, series: Series, index: int):
+    SeriesMembership.objects.create(book=book, series=series, index=index)
+
+
+def update_series(series: Series, data: UpdateSeriesInput) -> Series:
     if data.name is not None:
         series.name = data.name
     if data.description is not None:
@@ -26,10 +23,15 @@ def update_series(series: BookSeries, data: UpdateSeriesInput) -> BookSeries:
     series.save()
     return series
 
-def delete_series(series: BookSeries)->None:
+
+def delete_series(series: Series) -> None:
+    delete_series_membership(series)
     series.delete()
 
-def remove_book_from_series(book: Book, series: BookSeries) -> None:
-    BookSeriesMembership.objects.filter(book=book, series=series).delete()
+
+def delete_series_membership(series: Series) -> None:
+    SeriesMembership.objects.filter(series=series).delete()
 
 
+def remove_book_from_series(book: Book, series: Series) -> None:
+    SeriesMembership.objects.filter(book=book, series=series).delete()

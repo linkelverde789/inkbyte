@@ -1,23 +1,24 @@
-from books.models import BookSeries, BookSeriesMembership
+from core.books.models import Series, SeriesMembership
+from core.query_pipeline import QuerySetPipeline
 
 
 class SeriesSelector:
-    def get_series_by_id(series_id: int) -> BookSeries | None:
-        return BookSeries.objects.filter(pk=series_id).first()
+    def get_series_by_id(series_id: int) -> Series | None:
+        return Series.objects.filter(pk=series_id).first()
 
-    def get_one_series_by_name(series_name: str) -> BookSeries | None:
-        return BookSeries.objects.filter(name__icontains=series_name).first()
+    def get_one_series_by_name(series_name: str) -> Series | None:
+        return Series.objects.filter(name__icontains=series_name).first()
 
     def get_multiple_series_by_name(series_name: str):
-        return BookSeries.objects.filter(name__icontains=series_name)
+        return QuerySetPipeline(Series.objects.filter(name__icontains=series_name))
 
-    def get_last_index_from_series(series: BookSeries) -> int:
+    def get_last_index_from_series(series: Series) -> int:
         return (
-            BookSeriesMembership.objects.filter(series=series)
+            SeriesMembership.objects.filter(series=series)
             .order_by("-index")
             .first()
             .index
         )
 
     def list_series():
-        return BookSeries.objects.order_by("name")
+        return QuerySetPipeline(Series.objects.order_by("name"))
