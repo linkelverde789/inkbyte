@@ -42,7 +42,7 @@ class Genre(models.Model):
 # =========================
 class BookSeries(models.Model):
     name = models.CharField(max_length=200)
-    description = models.TextField(blank=True)
+    description = models.TextField(blank=True, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -68,15 +68,14 @@ class BookType(models.TextChoices):
 # =========================
 class Book(models.Model):
     title = models.CharField(max_length=200)
-    description = models.TextField(blank=True)
+    description = models.TextField(blank=True, null=True)
     image = models.ImageField(upload_to='books/', null=True, blank=True)
 
-    series = models.ForeignKey(
+    series = models.ManyToManyField(
         BookSeries,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="books"
+        through="BookSeriesMembership",
+        related_name="books",
+        blank=True
     )
 
     type = models.CharField(
@@ -104,6 +103,30 @@ class Book(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class BookSeriesMembership(models.Model):
+    book = models.ForeignKey(
+        Book,
+        on_delete=models.CASCADE,
+        related_name="series_memberships"
+    )
+
+    series = models.ForeignKey(
+        BookSeries,
+        on_delete=models.CASCADE,
+        related_name="book_memberships"
+    )
+
+    index = models.PositiveIntegerField()
+
+    class Meta:
+        unique_together = ("book", "series")
+
+        ordering = ["series", "index"]
+
+    def __str__(self):
+        return f"{self.series.name} - {self.book.title} ({self.index})"
 
 
 # =========================

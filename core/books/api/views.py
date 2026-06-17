@@ -90,7 +90,13 @@ class BookDetailView(PublicReadPrivateWriteMixin, APIView):
         except BookError as exc:
             return _book_error_response(exc)
 
-        return Response(_serialize_books(book_output, request))
+        return Response(
+            {
+                BookResponseSerializer(
+                    book_output, many=False, context={"request": request}
+                ).data
+            }
+        )
 
     def patch(self, request, book_id: int):
         try:

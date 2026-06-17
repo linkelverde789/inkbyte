@@ -10,4 +10,4 @@ class GetAuthorUseCase:
         if author is None:
             raise AuthorError("Author not found", "not_found")
         
-        return AuthorSelector.author_to_output(author)
+        return author

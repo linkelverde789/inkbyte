@@ -9,3 +9,9 @@ class AuthorError(Exception):
         self.message = message
         self.code = code
         super().__init__(message)
+
+class SeriesError(Exception):
+    def __init__(self, message: str, code: str = "series_error"):
+        self.message = message
+        self.code = code
+        super().__init__(message)
