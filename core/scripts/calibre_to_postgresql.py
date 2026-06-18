@@ -28,12 +28,19 @@ from books.use_cases.series.create_series import CreateSeriesUseCase
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description="metadata: path to the calibre metadata database"
+        description="path: path to the calibre metadata database"
     )
     parser.add_argument(
-        "--metadata",
+        "--path",
         type=str,
         help="Path to the Calibre metadata database",
+        required=True,
+    )
+
+    parser.add_argument(
+        "--database",
+        type=str,
+        help="The Calibre metadata database",
         required=True,
     )
     return parser.parse_args()
@@ -108,8 +115,8 @@ def process_series(book: Book, series_name: str, series_index):
     )
 
 
-def main(metadata: str) -> None:
-    conn = sqlite3.connect(metadata)
+def main(database_path: str, database: str) -> None:
+    conn = sqlite3.connect(f"{database_path}/{database}")
     cur = conn.cursor()
 
     cur.execute(
@@ -137,7 +144,8 @@ GROUP BY
         title, path, text, author_names, series_name, series_index = row
 
         author_ids = process_author(author_names or "")
-        image = process_image(path, metadata)
+
+        image = process_image(path, database_path)
         description = clean_html(text) if text else None
 
         book = process_book(
@@ -155,4 +163,4 @@ GROUP BY
 
 if __name__ == "__main__":
     args = parse_args()
-    main(args.metadata)
+    main(args.path, args.database)

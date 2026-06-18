@@ -1,23 +1,28 @@
+import { t } from "@/i18n";
+
+type GenreKey = Parameters<typeof t>[0];
+
 export interface BookGenre {
   id: number;
-  name: string;
+  name: GenreKey;
 }
 
 export interface Author {
   id: number;
   name: string;
   description?: string;
+  image?: string;
 }
 
 export interface Book {
   id: number;
   title: string;
   description?: string;
-  image: string;
-  genre: BookGenre[];
-  type: string;
+  image?: string;
+  genres?: BookGenre[];
+  type?: string;
   authors: Author[];
-  rating: number;
+  rating?: number;
 }
 
 export interface BookListResponse {

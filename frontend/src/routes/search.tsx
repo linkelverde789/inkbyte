@@ -14,7 +14,6 @@ import {
   X,
 } from "lucide-react";
 
-import bookCovers from "@/assets/book-covers.jpg";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -339,7 +338,7 @@ function SearchPage() {
                     className="group flex flex-col gap-4 bg-card p-4 shadow-[4px_5px_0_var(--color-secondary)] sm:flex-row sm:items-start sm:gap-6 sm:p-6"
                   >
                     <Link
-                      to="/book/$id"
+                      to="/books/$id"
                       params={{ id: book.id.toString() }}
                       className="relative aspect-[3/4] w-full shrink-0 overflow-hidden bg-muted sm:w-32 md:w-40"
                     >
@@ -356,8 +355,8 @@ function SearchPage() {
                     <div className="flex min-w-0 flex-1 flex-col">
                       <div className="mb-1 flex flex-wrap gap-2 text-[10px] font-bold uppercase tracking-[0.15em] text-primary">
                         <span>
-                          {book.genre?.map((item) => {
-                            return <span>{item.name}</span>;
+                          {book.genres?.map((item) => {
+                            return <span>{t(item.name)}</span>;
                           })}
                         </span>
                         <span>·</span>

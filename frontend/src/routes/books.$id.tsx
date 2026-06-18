@@ -3,43 +3,25 @@ import { ArrowLeft, Download, Heart, Star } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { t } from "@/i18n";
+import { api, API_ENDPOINTS } from "@/api";
+import { Book } from "@/types/book";
 
 /* =========================
    TYPES
 ========================= */
-export interface Book {
-  id: number;
-  title: string;
-  author: string;
-  description: string;
-  genre: string;
-  type: string;
-  year: number;
-  rating: number;
-  format: string;
-  cover_url?: string;
-}
 
 /* =========================
    API FETCH
 ========================= */
 async function fetchBook(id: string): Promise<Book> {
-  const res = await fetch(
-    `${import.meta.env.VITE_API_URL}/books/${id}/`
-  );
-
-  if (!res.ok) {
-    if (res.status === 404) throw notFound();
-    throw new Error("Error fetching book");
-  }
-
-  return res.json();
+  const res = await api.get<Book>(API_ENDPOINTS.BOOKS_DETAIL(id));
+  return res;
 }
 
 /* =========================
    ROUTE
 ========================= */
-export const Route = createFileRoute("/book/$id")({
+export const Route = createFileRoute("/books/$id")({
   loader: async ({ params }) => {
     return fetchBook(params.id);
   },
@@ -66,8 +48,11 @@ export const Route = createFileRoute("/book/$id")({
 /* =========================
    COMPONENT
 ========================= */
+
+console.log("pasa por aqui");
 function BookPage() {
   const book = Route.useLoaderData();
+  console.log(book);
 
   return (
     <div className="min-h-screen bg-background">
@@ -99,7 +84,7 @@ function BookPage() {
           {/* COVER */}
           <div className="relative aspect-[3/4] overflow-hidden bg-muted shadow-[14px_16px_0_var(--color-secondary)]">
             <img
-              src={book.cover_url ?? "/placeholder.jpg"}
+              src={book.image}
               alt={`Portada de ${book.title}`}
               className="h-full w-full object-cover"
             />
@@ -108,12 +93,10 @@ function BookPage() {
           {/* CONTENT */}
           <article className="flex flex-col justify-center">
             <p className="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-primary">
-              {book.genre} · {book.type} · {book.year}
+              {book.genre} · {book.type}
             </p>
 
-            <h1 className="text-5xl leading-tight sm:text-6xl">
-              {book.title}
-            </h1>
+            <h1 className="text-5xl leading-tight sm:text-6xl">{book.title}</h1>
 
             <p className="mt-3 text-lg italic text-muted-foreground">
               {t("by")} {book.author}
@@ -125,9 +108,7 @@ function BookPage() {
                 <Star
                   key={star}
                   className={
-                    star <= book.rating
-                      ? "fill-current"
-                      : "text-border"
+                    star <= book.rating ? "fill-current" : "text-border"
                   }
                 />
               ))}

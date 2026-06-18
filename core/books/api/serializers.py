@@ -1,7 +1,5 @@
-from dataclasses import asdict, fields
+from dataclasses import asdict
 from rest_framework import serializers
-
-from django.conf import settings
 
 
 class AuthorResponseSerializer(serializers.Serializer):
@@ -24,8 +22,9 @@ class AuthorListResponseSerializer(serializers.Serializer):
     results = AuthorResponseSerializer(many=True)
 
 
-def author_output_to_dict(author_output) -> dict:
-    return asdict(author_output)
+class GenreResponseSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField()
 
 
 class BookResponseSerializer(serializers.Serializer):
@@ -34,6 +33,7 @@ class BookResponseSerializer(serializers.Serializer):
     description = serializers.CharField()
     image = serializers.ImageField()
     authors = AuthorResponseSerializer(many=True)
+    genres = GenreResponseSerializer(many=True)
 
 
 class CreateBookSerializer(serializers.Serializer):
@@ -64,7 +64,3 @@ class UpdateBookSerializer(serializers.Serializer):
     genre_ids = serializers.ListField(
         child=serializers.IntegerField(), required=False, allow_empty=True
     )
-
-
-def book_output_to_dict(book_output) -> dict:
-    return asdict(book_output)

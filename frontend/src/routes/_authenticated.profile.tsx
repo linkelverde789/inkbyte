@@ -15,8 +15,7 @@ function ProfilePage() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
-
-  console.log("usuario login: ", user)
+  console.log("usuario login: ", user);
   useEffect(() => {
     if (!user) {
       navigate({
