@@ -23,6 +23,7 @@ export interface Book {
   type?: string;
   authors: Author[];
   rating?: number;
+  format?: string;
 }
 
 export interface BookListResponse {

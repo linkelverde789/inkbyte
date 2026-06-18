@@ -3,7 +3,7 @@
 import es from "./locales/es/es.json";
 import en from "./locales/en/en.json";
 
-export const LOCALE = "en";
+export const LOCALE = "es";
 
 const translations = {
   es,

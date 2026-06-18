@@ -37,6 +37,7 @@ import { API_ENDPOINTS } from "@/api/endpoints";
 
 import type { Book, BookListResponse } from "@/types/book";
 import { t } from "@/i18n";
+import { BookList } from "@/components/book/list/booksList";
 export const Route = createFileRoute("/search")({
   head: () => ({
     meta: [
@@ -70,10 +71,14 @@ function SearchPage() {
   const [loading, setLoading] = useState(false);
   const pageSize = 10;
 
+  const sleep = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
   useEffect(() => {
     const loadBooks = async () => {
       try {
         setLoading(true);
+
+        await sleep(3000);
 
         const response = await api.get<BookListResponse>(
           API_ENDPOINTS.BOOKS_LIST,
@@ -331,124 +336,8 @@ function SearchPage() {
             <div className="py-20 text-center">{t("Loading books...")}</div>
           ) : results.length ? (
             <>
-              <div className="flex flex-col gap-4">
-                {results.map((book) => (
-                  <article
-                    key={book.title}
-                    className="group flex flex-col gap-4 bg-card p-4 shadow-[4px_5px_0_var(--color-secondary)] sm:flex-row sm:items-start sm:gap-6 sm:p-6"
-                  >
-                    <Link
-                      to="/books/$id"
-                      params={{ id: book.id.toString() }}
-                      className="relative aspect-[3/4] w-full shrink-0 overflow-hidden bg-muted sm:w-32 md:w-40"
-                    >
-                      <img
-                        src={book.image}
-                        width={1536}
-                        height={1024}
-                        loading="lazy"
-                        alt={`Portada de ${book.title}`}
-                        className="h-full w-full max-w-none object-cover transition-transform duration-500 group-hover:scale-[1.015]"
-                      />
-                    </Link>
+              {<BookList data={results} />}
 
-                    <div className="flex min-w-0 flex-1 flex-col">
-                      <div className="mb-1 flex flex-wrap gap-2 text-[10px] font-bold uppercase tracking-[0.15em] text-primary">
-                        <span>
-                          {book.genres?.map((item) => {
-                            return <span>{t(item.name)}</span>;
-                          })}
-                        </span>
-                        <span>·</span>
-                        <span>{book.type}</span>
-                      </div>
-
-                      <h3 className="mb-1 text-lg leading-tight sm:text-xl">
-                        <Link
-                          to="/book/$id"
-                          params={{ id: book.id.toString() }}
-                          className="hover:text-primary"
-                        >
-                          {book.title}
-                        </Link>
-                      </h3>
-
-                      <p className="mb-2 text-sm italic text-muted-foreground">
-                        {t("by")}{" "}
-                        {book.authors.map((item) => item.name).join(", ")}
-                      </p>
-
-                      <div
-                        className="mb-3 flex gap-1 text-secondary"
-                        aria-label={`${book.rating} de 5 estrellas`}
-                      >
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <Star
-                            key={star}
-                            className={`size-3.5 ${
-                              star <= book.rating
-                                ? "fill-current"
-                                : "text-border"
-                            }`}
-                          />
-                        ))}
-                      </div>
-
-                      <p className="mb-4 text-sm leading-6 text-muted-foreground">
-                        {book.description
-                          ? book.description.length > 250
-                            ? book.description.slice(0, 250) + "..."
-                            : book.description
-                          : ""}
-                      </p>
-
-                      <div className="mt-auto flex flex-wrap items-center justify-between gap-4 border-t border-border pt-4">
-                        <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-primary">
-                          {book.format}
-                        </span>
-
-                        <div className="flex items-center gap-2">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="size-8"
-                            onClick={() =>
-                              setSaved((current) =>
-                                current.includes(book.title)
-                                  ? current.filter(
-                                      (title) => title !== book.title,
-                                    )
-                                  : [...current, book.title],
-                              )
-                            }
-                            aria-label={`${
-                              saved.includes(book.title)
-                                ? t("Remove")
-                                : t("Save")
-                            } ${book.title}`}
-                          >
-                            <Heart
-                              className={`size-4 ${
-                                saved.includes(book.title)
-                                  ? "fill-current text-primary"
-                                  : ""
-                              }`}
-                            />
-                          </Button>
-
-                          <Button
-                            variant="editorial"
-                            size="sm"
-                            className="rounded-none"
-                          >
-                            <Download /> {t("Download")}
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  </article>
-                ))}
-              </div>
               <Pagination className="mt-12">
                 <PaginationContent>
                   <PaginationItem>
