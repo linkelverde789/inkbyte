@@ -8,7 +8,6 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { t, MSG } from "@/i18n";
 import * as authApi from "./api";
 import type { LoginPayload, RegisterPayload, User } from "./types";
 
@@ -55,7 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [loadSession]);
 
   const login = useCallback(async (payload: LoginPayload) => {
-    await authApi.login(payload)
+    await authApi.login(payload);
 
     const me = await authApi.fetchMe();
     setUser(me.user);

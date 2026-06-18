@@ -5,7 +5,7 @@ import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/auth/AuthContext";
-import { t } from "@/i18n";
+import { useI18n } from "@/i18n/i18nProvider";
 
 export const Route = createFileRoute("/signup")({
   component: SignupPage,
@@ -21,6 +21,8 @@ const INITIAL_FORM = {
 };
 
 function SignupPage() {
+  const { t } = useI18n();
+
   const { register } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState(INITIAL_FORM);
@@ -86,7 +88,12 @@ function SignupPage() {
               a: "family-name",
               m: 120,
             },
-            { k: "username" as const, l: "Username", a: "given-username", m: 80 },
+            {
+              k: "username" as const,
+              l: "Username",
+              a: "given-username",
+              m: 80,
+            },
             { k: "email" as const, l: "Email", a: "email", m: 255 },
           ].map(({ k, l, a, m }) => (
             <div key={k}>

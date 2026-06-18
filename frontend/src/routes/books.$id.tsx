@@ -2,16 +2,12 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, Download, Heart, Star } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { t } from "@/i18n";
+import { useI18n } from "@/i18n/i18nProvider";
 import { api, API_ENDPOINTS } from "@/api";
 import { Book } from "@/types/book";
 
 /* =========================
-   TYPES
-========================= */
-
-/* =========================
-   API FETCH
+API FETCH
 ========================= */
 async function fetchBook(id: string): Promise<Book> {
   const res = await api.get<Book>(API_ENDPOINTS.BOOKS_DETAIL(id));
@@ -19,7 +15,7 @@ async function fetchBook(id: string): Promise<Book> {
 }
 
 /* =========================
-   ROUTE
+ROUTE
 ========================= */
 export const Route = createFileRoute("/books/$id")({
   loader: async ({ params }) => {
@@ -46,11 +42,12 @@ export const Route = createFileRoute("/books/$id")({
 });
 
 /* =========================
-   COMPONENT
+COMPONENT
 ========================= */
 
 console.log("pasa por aqui");
 function BookPage() {
+  const { t } = useI18n();
   const book = Route.useLoaderData();
   console.log(book);
 

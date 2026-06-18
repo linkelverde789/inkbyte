@@ -4,7 +4,7 @@ import { LogOut } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/auth/AuthContext";
-import { t } from "@/i18n";
+import { useI18n } from "@/i18n/i18nProvider";
 import { useEffect } from "react";
 
 export const Route = createFileRoute("/_authenticated/profile")({
@@ -12,6 +12,7 @@ export const Route = createFileRoute("/_authenticated/profile")({
 });
 
 function ProfilePage() {
+  const { t } = useI18n();
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 

@@ -5,7 +5,7 @@ import {
   createRootRouteWithContext,
 } from "@tanstack/react-router";
 import type { AuthContextValue } from "@/auth/AuthContext";
-import { t } from "@/i18n";
+import { useI18n } from "@/i18n/i18nProvider";
 
 export type RouterContext = {
   queryClient: QueryClient;
@@ -13,6 +13,7 @@ export type RouterContext = {
 };
 
 function NotFoundComponent() {
+  const { t } = useI18n();
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">

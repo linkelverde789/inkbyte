@@ -1,4 +1,5 @@
 from books.models import Book
+from books.dto.book import BookFilters
 from query_pipeline import QuerySetPipeline
 
 
@@ -18,3 +19,12 @@ class BookSelector:
     @staticmethod
     def list_books():
         return QuerySetPipeline(Book.objects.all().order_by("-description", "title"))
+
+    @staticmethod
+    def apply_filters(queryset, filters: BookFilters):
+        if filters.q:
+            print("oooo")
+            print(f"title: {filters.q}")
+            queryset = queryset.filter(title__icontains=filters.q)
+
+        return queryset

@@ -22,6 +22,7 @@ from books.use_cases.book.delete_book import DeleteBookUseCase
 from books.use_cases.book.get_book import GetBookUseCase
 from books.use_cases.book.list_books import ListBooksUseCase
 from books.use_cases.book.update_book import UpdateBookUseCase
+from books.dto.book import BookFilters
 
 
 def _book_error_response(exc: BookError) -> Response:
@@ -56,9 +57,15 @@ class BookListCreateView(PublicReadPrivateWriteMixin, APIView):
     def get(self, request):
         page = int(request.query_params.get("page", 1))
         page_size = int(request.query_params.get("page_size", 10))
+        q = str(request.query_params.get("q", ""))
 
-        items, total = ListBooksUseCase().execute(page=page, page_size=page_size)
+        filters_dto = BookFilters(q=q)
 
+        print(filters_dto.q)
+
+        items, total = ListBooksUseCase().execute(
+            page=page, page_size=page_size, filters=filters_dto
+        )
         return Response(
             {
                 "count": total,

@@ -1,9 +1,10 @@
-import { t } from "@/i18n";
+import { useI18n } from "@/i18n/i18nProvider";
 import { Book } from "@/types/book";
 import { Link } from "@tanstack/react-router";
 import { BookGenres } from "./bookGenre";
 
 function BookHeader({ book }: { book: Book }) {
+  const { t } = useI18n();
   return (
     <>
       {BookGenres(book.genres!)}

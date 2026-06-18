@@ -1,5 +1,4 @@
-import { LOCALE, t, MSG } from "@/i18n";
-
+import { getLocale } from "@/i18n";
 import { ApiError } from "./ApiError";
 import { API_BASE, API_ENDPOINTS, AUTH_PUBLIC_PATHS } from "./endpoints";
 
@@ -129,7 +128,7 @@ export class API {
     extra?: Record<string, string>;
   }) {
     return {
-      "Accept-Language": LOCALE,
+      "Accept-Language": getLocale(),
       ...(json
         ? {
             "Content-Type": "application/json",

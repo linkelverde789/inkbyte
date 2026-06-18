@@ -1,10 +1,6 @@
-import { t } from "@/i18n";
-
-type GenreKey = Parameters<typeof t>[0];
-
 export interface BookGenre {
   id: number;
-  name: GenreKey;
+  name: string;
 }
 
 export interface Author {

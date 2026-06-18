@@ -36,8 +36,12 @@ import { api } from "@/api";
 import { API_ENDPOINTS } from "@/api/endpoints";
 
 import type { Book, BookListResponse } from "@/types/book";
-import { t } from "@/i18n";
 import { BookList } from "@/components/book/list/booksList";
+import NavBar from "@/components/ui/navbar";
+import useDebounce from "@/hooks/debounce";
+
+import { useI18n } from "@/i18n/i18nProvider";
+
 export const Route = createFileRoute("/search")({
   head: () => ({
     meta: [
@@ -58,6 +62,7 @@ export const Route = createFileRoute("/search")({
 });
 
 function SearchPage() {
+  const { t } = useI18n();
   const [query, setQuery] = useState("");
   const [genre, setGenre] = useState("All");
   const [type, setType] = useState("All");
@@ -70,6 +75,7 @@ function SearchPage() {
   const [totalBooks, setTotalBooks] = useState(0);
   const [loading, setLoading] = useState(false);
   const pageSize = 10;
+  const debouncedQuery = useDebounce(query, 500);
 
   const sleep = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));
@@ -77,8 +83,6 @@ function SearchPage() {
     const loadBooks = async () => {
       try {
         setLoading(true);
-
-        await sleep(3000);
 
         const response = await api.get<BookListResponse>(
           API_ENDPOINTS.BOOKS_LIST,
@@ -101,6 +105,30 @@ function SearchPage() {
 
     loadBooks();
   }, [page]);
+
+  useEffect(() => {
+    const searchTitle = async () => {
+      setLoading(true);
+      const response = await api.get<BookListResponse>(
+        API_ENDPOINTS.BOOKS_LIST,
+        {
+          params: {
+            page_size: pageSize,
+            q: debouncedQuery,
+          },
+        },
+      );
+      setResults(response.results);
+      setTotalBooks(response.count);
+      try {
+      } catch (error) {
+      } finally {
+        setLoading(false);
+      }
+    };
+    searchTitle();
+  }, [debouncedQuery]);
+
   const pageCount = Math.max(1, Math.ceil(totalBooks / pageSize));
 
   const clearFilters = () => {
@@ -136,60 +164,16 @@ function SearchPage() {
 
   return (
     <div className="min-h-screen bg-muted/40 text-foreground">
-      <nav
-        className="border-b border-border bg-background"
-        aria-label="Navegación principal"
-      >
-        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-5 sm:px-8">
-          <Link
-            to="/"
-            className="font-display text-2xl font-bold tracking-tight"
-          >
-            Ink<span className="text-primary">Byte</span>
-          </Link>
-          <div className="hidden items-center gap-9 text-xs font-bold uppercase tracking-[0.15em] md:flex">
-            <Link to="/" className="transition-colors hover:text-primary">
-              {t("Home")}
-            </Link>
-            <span className="text-primary">{t("Search")}</span>
-            <Link
-              to="/"
-              hash="comunidad"
-              className="transition-colors hover:text-primary"
-            >
-              {t("Community")}
-            </Link>
-          </div>
-          <div className="flex items-center gap-1">
-            <Button variant="ghost" size="icon" aria-label="My books">
-              <Heart />
-            </Button>
-            <Button variant="ghost" size="icon" aria-label="My account" asChild>
-              <Link to="/profile">
-                <UserRound />
-              </Link>
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden"
-              aria-label="Open menu"
-            >
-              <Menu />
-            </Button>
-          </div>
-        </div>
-      </nav>
-
+      <NavBar />
       <main>
         <header className="border-b border-border bg-background">
           <div className="mx-auto max-w-7xl px-5 py-12 sm:px-8 md:py-16">
-            <Link
+            {/* <Link
               to="/"
               className="mb-8 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-muted-foreground transition-colors hover:text-primary"
             >
               <ArrowLeft className="size-4" /> {t("Back to home")}
-            </Link>
+            </Link> */}
             <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-primary">
               {t("Explore the library")}
             </p>
@@ -336,7 +320,7 @@ function SearchPage() {
             <div className="py-20 text-center">{t("Loading books...")}</div>
           ) : results.length ? (
             <>
-              {<BookList data={results} />}
+              <BookList data={results} />
 
               <Pagination className="mt-12">
                 <PaginationContent>
