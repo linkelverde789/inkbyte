@@ -1,20 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import {
-  BookOpen,
-  ChevronDown,
-  Search,
-  SlidersHorizontal,
-  X,
-} from "lucide-react";
-
-import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { createFileRoute } from "@tanstack/react-router";
+import { BookOpen } from "lucide-react";
 import {
   Pagination,
   PaginationContent,
@@ -37,6 +22,7 @@ import { useI18n } from "@/i18n/i18nProvider";
 import { BookListResponse, BookSearchParams } from "@/types/api";
 import { toQueryParams } from "@/api/queryParams";
 import SearchBar from "@/components/book/list/searchBar";
+import SearchFilters from "@/components/book/list/bookSearchFilters";
 
 export const Route = createFileRoute("/search")({
   head: () => ({
@@ -64,7 +50,6 @@ function SearchPage() {
     page_size: 10,
   });
   const debouncedQuery = useDebounce(params.q ?? "", 500);
-  const [advancedOpen, setAdvancedOpen] = useState(false);
   const [results, setResults] = useState<Book[]>([]);
   const [totalBooks, setTotalBooks] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -151,114 +136,9 @@ function SearchPage() {
           }}
         />
 
+        <SearchFilters />
+
         <div className="mx-auto max-w-7xl px-5 py-10 sm:px-8 md:py-14">
-          <section
-            aria-label="Filtros de búsqueda"
-            className="mb-12 border-b border-border pb-8"
-          >
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_auto_auto]">
-              <Select
-                value={""}
-                onValueChange={() => {
-                  console.log("change");
-                }}
-              >
-                <SelectTrigger className="h-12 rounded-none bg-background px-4 shadow-none">
-                  <SelectValue placeholder={t("Genre")} />
-                </SelectTrigger>
-                <SelectContent>
-                  {["Todos", "Ficción", "Misterio", "Fantasía"].map((item) => (
-                    <SelectItem key={item} value={item}>
-                      {item === "Todos" ? "Todos los géneros" : item}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Select
-                value={""}
-                onValueChange={() => {
-                  console.log("change");
-                }}
-              >
-                <SelectTrigger className="h-12 rounded-none bg-background px-4 shadow-none">
-                  <SelectValue placeholder={t("Type")} />
-                </SelectTrigger>
-                <SelectContent>
-                  {["Todos", "Libro", "Novela", "Cómic", "Ensayo"].map(
-                    (item) => (
-                      <SelectItem key={item} value={item}>
-                        {item === "Todos" ? "Todos los tipos" : item}
-                      </SelectItem>
-                    ),
-                  )}
-                </SelectContent>
-              </Select>
-              <Button
-                variant="outline"
-                size="editorial"
-                className="rounded-none bg-background shadow-none"
-                onClick={() => setAdvancedOpen((open) => !open)}
-                aria-expanded={advancedOpen}
-              >
-                <SlidersHorizontal /> {t("Advanced search")}
-                <ChevronDown
-                  className={
-                    advancedOpen
-                      ? "rotate-180 transition-transform"
-                      : "transition-transform"
-                  }
-                />
-              </Button>
-              <Button variant="ghost" size="editorial" onClick={clearFilters}>
-                <X /> {t("Clear")}
-              </Button>
-            </div>
-
-            {advancedOpen && (
-              <div className="page-in mt-4 grid gap-3 border-l-4 border-secondary bg-background p-5 sm:grid-cols-2">
-                <div>
-                  <label
-                    htmlFor="author-filter"
-                    className="mb-2 block text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
-                  >
-                    {t("Author")}
-                  </label>
-                  <input
-                    id="author-filter"
-                    value={""}
-                    onChange={() => {
-                      console.log("change");
-                    }}
-                    className="h-11 w-full border border-input bg-transparent px-3 text-sm outline-none focus:border-primary"
-                    placeholder={t("Author's name")}
-                  />
-                </div>
-                <div>
-                  <label className="mb-2 block text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-                    {t("Format")}
-                  </label>
-                  <Select
-                    value={""}
-                    onValueChange={() => {
-                      console.log("change");
-                    }}
-                  >
-                    <SelectTrigger className="h-11 rounded-none shadow-none">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {["Todos", "EPUB", "PDF"].map((item) => (
-                        <SelectItem key={item} value={item}>
-                          {item === "Todos" ? t("Any format") : item}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-            )}
-          </section>
-
           <div className="mb-7 flex items-end justify-between gap-4">
             <div>
               <p className="mb-1 text-xs font-bold uppercase tracking-[0.18em] text-primary">

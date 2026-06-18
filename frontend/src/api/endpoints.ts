@@ -4,8 +4,13 @@ export const API_ENDPOINTS = {
   AUTH_LOGOUT: "/auth/logout/",
   AUTH_ME: "/auth/me/",
   AUTH_TOKEN_REFRESH: "/auth/token/refresh/",
-
   BOOKS_LIST: "/books/",
+  GENRES_LIST: "/genres/",
+  AUTHORS_LIST: "/authors/",
+} as const;
+
+type EndpointKey = keyof typeof API_ENDPOINTS;
+export const API_DYNAMIC_ENDPOINTS = {
   BOOKS_DETAIL: (id: number | string) => `/books/${id}/`,
 } as const;
 
@@ -17,4 +22,6 @@ export const AUTH_PUBLIC_PATHS = new Set<string>([
   API_ENDPOINTS.AUTH_LOGOUT,
   API_ENDPOINTS.AUTH_ME,
   API_ENDPOINTS.AUTH_TOKEN_REFRESH,
+  API_ENDPOINTS.GENRES_LIST,
+  API_ENDPOINTS.AUTHORS_LIST,
 ]);
