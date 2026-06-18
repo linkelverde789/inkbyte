@@ -21,10 +21,3 @@ export interface Book {
   rating?: number;
   format?: string;
 }
-
-export interface BookListResponse {
-  count: number;
-  page: number;
-  page_size: number;
-  results: Book[];
-}

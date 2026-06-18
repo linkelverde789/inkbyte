@@ -1,16 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
-  ArrowLeft,
   BookOpen,
   ChevronDown,
-  Download,
-  Ellipsis,
-  Heart,
-  Menu,
   Search,
   SlidersHorizontal,
-  Star,
-  UserRound,
   X,
 } from "lucide-react";
 
@@ -35,12 +28,15 @@ import { useEffect, useState } from "react";
 import { api } from "@/api";
 import { API_ENDPOINTS } from "@/api/endpoints";
 
-import type { Book, BookListResponse } from "@/types/book";
+import type { Book } from "@/types/book";
 import { BookList } from "@/components/book/list/booksList";
 import NavBar from "@/components/ui/navbar";
 import useDebounce from "@/hooks/debounce";
 
 import { useI18n } from "@/i18n/i18nProvider";
+import { BookListResponse, BookSearchParams } from "@/types/api";
+import { toQueryParams } from "@/api/queryParams";
+import SearchBar from "@/components/book/list/searchBar";
 
 export const Route = createFileRoute("/search")({
   head: () => ({
@@ -63,22 +59,16 @@ export const Route = createFileRoute("/search")({
 
 function SearchPage() {
   const { t } = useI18n();
-  const [query, setQuery] = useState("");
-  const [genre, setGenre] = useState("All");
-  const [type, setType] = useState("All");
-  const [format, setFormat] = useState("All");
-  const [author, setAuthor] = useState("");
+  const [params, setParams] = useState<BookSearchParams>({
+    page: 1,
+    page_size: 10,
+  });
+  const debouncedQuery = useDebounce(params.q ?? "", 500);
   const [advancedOpen, setAdvancedOpen] = useState(false);
-  const [saved, setSaved] = useState<string[]>([]);
-  const [page, setPage] = useState(1);
   const [results, setResults] = useState<Book[]>([]);
   const [totalBooks, setTotalBooks] = useState(0);
   const [loading, setLoading] = useState(false);
-  const pageSize = 10;
-  const debouncedQuery = useDebounce(query, 500);
 
-  const sleep = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
   useEffect(() => {
     const loadBooks = async () => {
       try {
@@ -87,10 +77,10 @@ function SearchPage() {
         const response = await api.get<BookListResponse>(
           API_ENDPOINTS.BOOKS_LIST,
           {
-            params: {
-              page,
-              page_size: pageSize,
-            },
+            params: toQueryParams({
+              ...params,
+              q: debouncedQuery,
+            }),
           },
         );
 
@@ -104,39 +94,25 @@ function SearchPage() {
     };
 
     loadBooks();
-  }, [page]);
+  }, [
+    params.page,
+    params.page_size,
+    params.genres,
+    params.type,
+    debouncedQuery,
+  ]);
 
-  useEffect(() => {
-    const searchTitle = async () => {
-      setLoading(true);
-      const response = await api.get<BookListResponse>(
-        API_ENDPOINTS.BOOKS_LIST,
-        {
-          params: {
-            page_size: pageSize,
-            q: debouncedQuery,
-          },
-        },
-      );
-      setResults(response.results);
-      setTotalBooks(response.count);
-      try {
-      } catch (error) {
-      } finally {
-        setLoading(false);
-      }
-    };
-    searchTitle();
-  }, [debouncedQuery]);
-
-  const pageCount = Math.max(1, Math.ceil(totalBooks / pageSize));
+  const pageCount = Math.max(1, Math.ceil(totalBooks / params.page_size));
 
   const clearFilters = () => {
-    setGenre("All");
-    setType("All");
-    setFormat("All");
-    setAuthor("");
-    setPage(1);
+    setParams({
+      ...params,
+      genres: undefined,
+      type: undefined,
+      format: undefined,
+      authors: undefined,
+      page: 1,
+    });
   };
 
   const getVisiblePages = (current: number, total: number) => {
@@ -166,50 +142,14 @@ function SearchPage() {
     <div className="min-h-screen bg-muted/40 text-foreground">
       <NavBar />
       <main>
-        <header className="border-b border-border bg-background">
-          <div className="mx-auto max-w-7xl px-5 py-12 sm:px-8 md:py-16">
-            {/* <Link
-              to="/"
-              className="mb-8 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-muted-foreground transition-colors hover:text-primary"
-            >
-              <ArrowLeft className="size-4" /> {t("Back to home")}
-            </Link> */}
-            <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-primary">
-              {t("Explore the library")}
-            </p>
-            <h1 className="mb-8 text-4xl leading-tight sm:text-5xl">
-              {t("What do you want to read today?")}
-            </h1>
-            <form
-              className="flex max-w-4xl border-2 border-foreground bg-card p-1.5 shadow-[7px_7px_0_var(--color-secondary)]"
-              onSubmit={(event) => event.preventDefault()}
-              role="search"
-            >
-              <Search
-                className="mx-3 size-5 shrink-0 self-center text-muted-foreground"
-                aria-hidden="true"
-              />
-              <label htmlFor="library-search" className="sr-only">
-                {t("Search books")}
-              </label>
-              <input
-                id="library-search"
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                className="min-w-0 flex-1 bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground"
-                placeholder={t("Title, author or ISBN…")}
-              />
-              <Button
-                variant="editorial"
-                size="editorial"
-                type="submit"
-                className="hidden sm:inline-flex"
-              >
-                {t("Search")}
-              </Button>
-            </form>
-          </div>
-        </header>
+        <SearchBar
+          title={t("What do you want to read today?")}
+          subtitle={t("Explore the library")}
+          value={params.q ?? ""}
+          onChange={(value) => {
+            setParams({ ...params, q: value, page: 1 });
+          }}
+        />
 
         <div className="mx-auto max-w-7xl px-5 py-10 sm:px-8 md:py-14">
           <section
@@ -217,7 +157,12 @@ function SearchPage() {
             className="mb-12 border-b border-border pb-8"
           >
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_auto_auto]">
-              <Select value={genre} onValueChange={setGenre}>
+              <Select
+                value={""}
+                onValueChange={() => {
+                  console.log("change");
+                }}
+              >
                 <SelectTrigger className="h-12 rounded-none bg-background px-4 shadow-none">
                   <SelectValue placeholder={t("Genre")} />
                 </SelectTrigger>
@@ -229,7 +174,12 @@ function SearchPage() {
                   ))}
                 </SelectContent>
               </Select>
-              <Select value={type} onValueChange={setType}>
+              <Select
+                value={""}
+                onValueChange={() => {
+                  console.log("change");
+                }}
+              >
                 <SelectTrigger className="h-12 rounded-none bg-background px-4 shadow-none">
                   <SelectValue placeholder={t("Type")} />
                 </SelectTrigger>
@@ -275,8 +225,10 @@ function SearchPage() {
                   </label>
                   <input
                     id="author-filter"
-                    value={author}
-                    onChange={(event) => setAuthor(event.target.value)}
+                    value={""}
+                    onChange={() => {
+                      console.log("change");
+                    }}
                     className="h-11 w-full border border-input bg-transparent px-3 text-sm outline-none focus:border-primary"
                     placeholder={t("Author's name")}
                   />
@@ -285,7 +237,12 @@ function SearchPage() {
                   <label className="mb-2 block text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
                     {t("Format")}
                   </label>
-                  <Select value={format} onValueChange={setFormat}>
+                  <Select
+                    value={""}
+                    onValueChange={() => {
+                      console.log("change");
+                    }}
+                  >
                     <SelectTrigger className="h-11 rounded-none shadow-none">
                       <SelectValue />
                     </SelectTrigger>
@@ -329,46 +286,58 @@ function SearchPage() {
                       href="#"
                       onClick={(event) => {
                         event.preventDefault();
-                        setPage((current) => Math.max(1, current - 1));
+                        setParams({
+                          ...params,
+                          page: Math.max(1, params.page - 1),
+                        });
                       }}
-                      aria-disabled={page === 1}
+                      aria-disabled={params.page === 1}
                       className={
-                        page === 1 ? "pointer-events-none opacity-40" : ""
+                        params.page === 1
+                          ? "pointer-events-none opacity-40"
+                          : ""
                       }
                     >
                       {t("Previous")}
                     </PaginationPrevious>
                   </PaginationItem>
-                  {getVisiblePages(page, pageCount).map((item, index) => (
-                    <PaginationItem key={`${item}-${index}`}>
-                      {item === "..." ? (
-                        <span className="px-2 text-muted-foreground">...</span>
-                      ) : (
-                        <PaginationLink
-                          href="#"
-                          isActive={page === item}
-                          onClick={(event) => {
-                            event.preventDefault();
-                            if (typeof item === "number") {
-                              setPage(item);
-                            }
-                          }}
-                        >
-                          {item}
-                        </PaginationLink>
-                      )}
-                    </PaginationItem>
-                  ))}
+                  {getVisiblePages(params.page, pageCount).map(
+                    (item, index) => (
+                      <PaginationItem key={`${item}-${index}`}>
+                        {item === "..." ? (
+                          <span className="px-2 text-muted-foreground">
+                            ...
+                          </span>
+                        ) : (
+                          <PaginationLink
+                            href="#"
+                            isActive={params.page === item}
+                            onClick={(event) => {
+                              event.preventDefault();
+                              if (typeof item === "number") {
+                                setParams({ ...params, page: item });
+                              }
+                            }}
+                          >
+                            {item}
+                          </PaginationLink>
+                        )}
+                      </PaginationItem>
+                    ),
+                  )}
                   <PaginationItem>
                     <PaginationNext
                       href="#"
                       onClick={(event) => {
                         event.preventDefault();
-                        setPage((current) => Math.min(pageCount, current + 1));
+                        setParams({
+                          ...params,
+                          page: Math.min(pageCount, params.page + 1),
+                        });
                       }}
-                      aria-disabled={page === pageCount}
+                      aria-disabled={params.page === pageCount}
                       className={
-                        page === pageCount
+                        params.page === pageCount
                           ? "pointer-events-none opacity-40"
                           : ""
                       }
