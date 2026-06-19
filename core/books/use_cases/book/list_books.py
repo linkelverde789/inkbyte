@@ -10,7 +10,6 @@ class ListBooksUseCase:
         queryset = BookSelector.list_books()
 
         if filters:
-            print("applying filters")
             queryset = BookSelector.apply_filters(queryset=queryset, filters=filters)
 
         return queryset.paginate(page=page, page_size=page_size)

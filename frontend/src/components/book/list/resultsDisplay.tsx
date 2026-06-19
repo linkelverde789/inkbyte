@@ -12,7 +12,6 @@ type ResultsDisplayProps = {
   setPage: (value: number) => void;
 };
 export function ResultsDisplay(props: ResultsDisplayProps) {
-  console.log("props", props);
   const { t } = useI18n();
   return props.loading ? (
     <div className="py-20 text-center">{t("Loading books...")}</div>

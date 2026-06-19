@@ -13,6 +13,7 @@ class BookSelector:
     def search_by_title(text: str):
         return QuerySetPipeline(Book.objects.filter(title__icontains=text))
 
+    @staticmethod
     def get_book_by_title_exact(text: str) -> Book:
         return Book.objects.filter(title=text).first()
 
@@ -23,8 +24,6 @@ class BookSelector:
     @staticmethod
     def apply_filters(queryset, filters: BookFilters):
         if filters.q:
-            print("oooo")
-            print(f"title: {filters.q}")
             queryset = queryset.filter(title__icontains=filters.q)
 
         return queryset

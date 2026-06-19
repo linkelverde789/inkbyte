@@ -10,14 +10,22 @@ export interface Author {
   image?: string;
 }
 
+export interface BookSeries {
+  id: number;
+  name: string;
+  description: string | undefined;
+  index: number;
+}
+
 export interface Book {
   id: number;
   title: string;
-  description?: string;
-  image?: string;
-  genres?: BookGenre[];
+  description: string | undefined;
+  image: string | undefined;
+  genres: BookGenre[] | undefined;
+  authors: Author[];
   type?: string;
-  authors?: Author[];
   rating?: number;
   format?: string;
+  series?: BookSeries[];
 }

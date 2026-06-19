@@ -7,14 +7,31 @@ export const API_ENDPOINTS = {
   BOOKS_LIST: "/books/",
   GENRES_LIST: "/genres/",
   AUTHORS_LIST: "/authors/",
+  DATA_AUTHORS: "/data/authors/", //only id,name
+  DATA_GENRE: "/data/genres/", //only id,name
 } as const;
 
-type EndpointKey = keyof typeof API_ENDPOINTS;
 export const API_DYNAMIC_ENDPOINTS = {
   BOOKS_DETAIL: (id: number | string) => `/books/${id}/`,
 } as const;
 
 export const API_BASE = "/api";
+
+export const SELECT_DATA_ENDPOINTS = [
+  {
+    key: "authors",
+    url: API_ENDPOINTS.DATA_AUTHORS,
+  },
+  {
+    key: "genres",
+    url: API_ENDPOINTS.DATA_GENRE,
+  },
+] as const;
+
+export const RELATED_SHELF_ENDPOINTS = {
+  series: API_ENDPOINTS.BOOKS_LIST,
+  author: API_ENDPOINTS.BOOKS_LIST,
+} as const;
 
 export const AUTH_PUBLIC_PATHS = new Set<string>([
   API_ENDPOINTS.AUTH_REGISTER,

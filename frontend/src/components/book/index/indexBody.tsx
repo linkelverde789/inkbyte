@@ -12,7 +12,6 @@ type BodyProps = {
   setGenre: (value: string) => void;
 };
 export function Body(props: BodyProps) {
-  console.log("body, ", props);
   const { t } = useI18n();
   return (
     <section

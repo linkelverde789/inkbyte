@@ -67,8 +67,6 @@ function Index() {
     );
   };
 
-  console.log(results);
-
   const mainBook = results?.[0];
   const weekTop = getBooksFromGenre();
   return (

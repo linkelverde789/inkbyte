@@ -61,8 +61,6 @@ class BookListCreateView(PublicReadPrivateWriteMixin, APIView):
 
         filters_dto = BookFilters(q=q)
 
-        print(filters_dto.q)
-
         items, total = ListBooksUseCase().execute(
             page=page, page_size=page_size, filters=filters_dto
         )

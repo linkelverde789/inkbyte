@@ -35,6 +35,12 @@ class BookResponseSerializer(serializers.Serializer):
     authors = AuthorResponseSerializer(many=True)
     genres = GenreResponseSerializer(many=True)
 
+    series = serializers.SerializerMethodField()
+
+    def get_series(self, obj):
+        memberships = obj.series_memberships.select_related("series").all()
+        return SeriesInBookSerializer(memberships, many=True).data
+
 
 class CreateBookSerializer(serializers.Serializer):
     title = serializers.CharField(max_length=200)
@@ -64,3 +70,10 @@ class UpdateBookSerializer(serializers.Serializer):
     genre_ids = serializers.ListField(
         child=serializers.IntegerField(), required=False, allow_empty=True
     )
+
+
+class SeriesInBookSerializer(serializers.Serializer):
+    id = serializers.IntegerField(source="series.id")
+    name = serializers.CharField(source="series.name")
+    description = serializers.CharField(source="series.description")
+    index = serializers.IntegerField()
