@@ -1,13 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { BookOpen } from "lucide-react";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
 import { useEffect, useState } from "react";
 
 import { api } from "@/api";
@@ -23,6 +15,8 @@ import { BookListResponse, BookSearchParams } from "@/types/api";
 import { toQueryParams } from "@/api/queryParams";
 import SearchBar from "@/components/book/list/searchBar";
 import SearchFilters from "@/components/book/list/bookSearchFilters";
+import sleep from "./utils";
+import { ListPagination } from "@/components/book/list/bookPagination";
 
 export const Route = createFileRoute("/search")({
   head: () => ({
@@ -53,6 +47,7 @@ function SearchPage() {
   const [results, setResults] = useState<Book[]>([]);
   const [totalBooks, setTotalBooks] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [advancedOpen, setAdvancedOpen] = useState(false);
 
   useEffect(() => {
     const loadBooks = async () => {
@@ -82,23 +77,12 @@ function SearchPage() {
   }, [
     params.page,
     params.page_size,
-    params.genres,
+    params.genre,
     params.type,
     debouncedQuery,
   ]);
 
   const pageCount = Math.max(1, Math.ceil(totalBooks / params.page_size));
-
-  const clearFilters = () => {
-    setParams({
-      ...params,
-      genres: undefined,
-      type: undefined,
-      format: undefined,
-      authors: undefined,
-      page: 1,
-    });
-  };
 
   const getVisiblePages = (current: number, total: number) => {
     const delta = 1;
@@ -136,97 +120,63 @@ function SearchPage() {
           }}
         />
 
-        <SearchFilters />
-
         <div className="mx-auto max-w-7xl px-5 py-10 sm:px-8 md:py-14">
+          <SearchFilters
+            genres={params.genre ?? -1}
+            authors={params.author ?? -1}
+            advancedOpen={advancedOpen}
+            setAdvancedOpen={setAdvancedOpen}
+            onGenresChange={(value) =>
+              setParams((prev) => ({ ...prev, genres: value, page: 1 }))
+            }
+            onAuthorsChange={(value) =>
+              setParams((prev) => ({ ...prev, authors: value, page: 1 }))
+            }
+            onClear={() => {
+              setParams((prev) => ({
+                ...prev,
+                genres: undefined,
+                authors: undefined,
+                type: undefined,
+                format: undefined,
+                page: 1,
+              }));
+              setAdvancedOpen(false);
+            }}
+          />
           <div className="mb-7 flex items-end justify-between gap-4">
             <div>
               <p className="mb-1 text-xs font-bold uppercase tracking-[0.18em] text-primary">
                 {t("Results")}
               </p>
-              <h2 className="text-2xl sm:text-3xl">
-                {totalBooks} {t("books found")}
-              </h2>
+              {!loading ? (
+                <h2 className="text-2xl sm:text-3xl">
+                  {totalBooks} {t("books found")}
+                </h2>
+              ) : (
+                ""
+              )}
             </div>
             <span className="hidden text-xs text-muted-foreground sm:block">
               {t("Sorted by relevance")}
             </span>
           </div>
-
           {loading ? (
             <div className="py-20 text-center">{t("Loading books...")}</div>
           ) : results.length ? (
             <>
               <BookList data={results} />
 
-              <Pagination className="mt-12">
-                <PaginationContent>
-                  <PaginationItem>
-                    <PaginationPrevious
-                      href="#"
-                      onClick={(event) => {
-                        event.preventDefault();
-                        setParams({
-                          ...params,
-                          page: Math.max(1, params.page - 1),
-                        });
-                      }}
-                      aria-disabled={params.page === 1}
-                      className={
-                        params.page === 1
-                          ? "pointer-events-none opacity-40"
-                          : ""
-                      }
-                    >
-                      {t("Previous")}
-                    </PaginationPrevious>
-                  </PaginationItem>
-                  {getVisiblePages(params.page, pageCount).map(
-                    (item, index) => (
-                      <PaginationItem key={`${item}-${index}`}>
-                        {item === "..." ? (
-                          <span className="px-2 text-muted-foreground">
-                            ...
-                          </span>
-                        ) : (
-                          <PaginationLink
-                            href="#"
-                            isActive={params.page === item}
-                            onClick={(event) => {
-                              event.preventDefault();
-                              if (typeof item === "number") {
-                                setParams({ ...params, page: item });
-                              }
-                            }}
-                          >
-                            {item}
-                          </PaginationLink>
-                        )}
-                      </PaginationItem>
-                    ),
-                  )}
-                  <PaginationItem>
-                    <PaginationNext
-                      href="#"
-                      onClick={(event) => {
-                        event.preventDefault();
-                        setParams({
-                          ...params,
-                          page: Math.min(pageCount, params.page + 1),
-                        });
-                      }}
-                      aria-disabled={params.page === pageCount}
-                      className={
-                        params.page === pageCount
-                          ? "pointer-events-none opacity-40"
-                          : ""
-                      }
-                    >
-                      {t("Next")}
-                    </PaginationNext>
-                  </PaginationItem>
-                </PaginationContent>
-              </Pagination>
+              <ListPagination
+                pageCount={pageCount}
+                page={params.page}
+                setPage={(value: number) => {
+                  setParams((prev) => ({
+                    ...prev,
+                    page: value,
+                  }));
+                }}
+              />
             </>
           ) : (
             <div className="border-y border-border bg-background py-20 text-center">
