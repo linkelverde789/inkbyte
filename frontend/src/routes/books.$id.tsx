@@ -3,14 +3,16 @@ import { ArrowLeft, Download, Heart, Star } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { useI18n } from "@/i18n/i18nProvider";
-import { api, API_ENDPOINTS } from "@/api";
+import { api } from "@/api";
 import { Book } from "@/types/book";
+import { API_DYNAMIC_ENDPOINTS } from "@/api/endpoints";
+import NavBar from "@/components/ui/navbar";
 
 /* =========================
 API FETCH
 ========================= */
 async function fetchBook(id: string): Promise<Book> {
-  const res = await api.get<Book>(API_ENDPOINTS.BOOKS_DETAIL(id));
+  const res = await api.get<Book>(API_DYNAMIC_ENDPOINTS.BOOKS_DETAIL(id));
   return res;
 }
 
@@ -53,18 +55,7 @@ function BookPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* NAV */}
-      <nav className="border-b border-border">
-        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-8">
-          <Link to="/" className="font-display text-2xl font-bold">
-            Ink<span className="text-primary">Byte</span>
-          </Link>
-
-          <Button asChild variant="ghost">
-            <Link to="/profile">{t("My profile")}</Link>
-          </Button>
-        </div>
-      </nav>
+      <NavBar />
 
       {/* MAIN */}
       <main className="mx-auto max-w-7xl px-5 py-10 sm:px-8 md:py-20">
@@ -96,7 +87,7 @@ function BookPage() {
             <h1 className="text-5xl leading-tight sm:text-6xl">{book.title}</h1>
 
             <p className="mt-3 text-lg italic text-muted-foreground">
-              {t("by")} {book.author}
+              {t("by")} {book.authors?.map((author) => author.name).join(", ")}
             </p>
 
             {/* RATING */}

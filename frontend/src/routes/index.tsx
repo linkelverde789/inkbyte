@@ -8,7 +8,6 @@ import { BookListResponse } from "@/types/api";
 import { Book } from "@/types/book";
 import { Body } from "@/components/book/index/indexBody";
 import { Footer } from "@/components/book/index/indexFooter";
-import sleep from "./utils";
 
 function Index() {
   const [loading, setLoading] = useState(true);
@@ -20,7 +19,6 @@ function Index() {
     const loadBooks = async () => {
       try {
         setLoading(true);
-        await sleep(2);
         const res = await api.get<BookListResponse>(API_ENDPOINTS.BOOKS_LIST, {
           params: {
             page_size: 4,
