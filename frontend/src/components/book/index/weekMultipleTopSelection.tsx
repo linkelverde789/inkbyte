@@ -15,14 +15,14 @@ export function WeekMultipleTopSelection(props: WeekMultipleTopSelectionProps) {
           key={book.title}
           className={`group ${index === 1 ? "md:mt-20" : ""}`}
         >
-          <div className="relative mb-6 aspect-[3/4] overflow-hidden bg-muted">
+          <div className="relative mb-6 aspect-[3/4] overflow-hidden shadow-[16px_18px_0_var(--color-secondary)]">
             <img
               src={book.image}
               width={1536}
               height={1024}
               loading="lazy"
               alt={`Portada de ${book.title}`}
-              className={`h-full w-[300%] max-w-none object-cover transition-transform duration-500 group-hover:scale-[1.02] ${book.image === "center" ? "-translate-x-1/3" : book.image === "right" ? "-translate-x-2/3" : ""}`}
+              className={`h-full w-full max-w-none object-cover transition-transform duration-500 group-hover:scale-[1.02] ${book.image === "center" ? "-translate-x-1/3" : book.image === "right" ? "-translate-x-2/3" : ""}`}
             />
           </div>
           <div className="mb-3 flex items-center justify-between gap-3 text-[10px] font-bold uppercase tracking-[0.15em] text-primary">
@@ -33,7 +33,7 @@ export function WeekMultipleTopSelection(props: WeekMultipleTopSelectionProps) {
             {book.title}
           </h3>
           <p className="mb-5 text-sm italic text-muted-foreground">
-            {"JOSEMI"}
+            {book.authors?.map((author) => author.name).join(", ")}
           </p>
           <div className="flex items-center justify-between border-t border-border pt-4">
             <span className="text-xs text-muted-foreground">

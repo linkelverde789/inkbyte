@@ -21,7 +21,7 @@ export default function SearchBar({
 
   return (
     <header className="border-b border-border bg-background">
-      <div className="mx-auto max-w-7xl px-5 py-12 sm:px-8 md:py-16">
+      <div className="mx-auto max-w-5xl px-5 py-12 sm:px-8 md:py-16">
         <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-primary">
           {t(subtitle)}
         </p>
@@ -29,7 +29,7 @@ export default function SearchBar({
         <h1 className="mb-8 text-4xl leading-tight sm:text-5xl">{t(title)}</h1>
 
         <form
-          className="flex max-w-4xl border-2 border-foreground bg-card p-1.5 shadow-[7px_7px_0_var(--color-secondary)]"
+          className="flex w-full border-2 border-foreground bg-card p-1.5 shadow-[7px_7px_0_var(--color-secondary)]"
           onSubmit={(e) => {
             e.preventDefault();
             onSubmit?.();

@@ -20,7 +20,7 @@ function BookHeader({ book }: { book: Book }) {
       </h3>
 
       <p className="mb-2 text-sm italic text-muted-foreground">
-        {t("by")} {book.authors.map((author) => author.name).join(", ")}
+        {t("by")} {book.authors?.map((author) => author.name).join(", ")}
       </p>
     </>
   );

@@ -1,38 +1,33 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 
-import { Button } from "@/components/ui/button";
-import { useI18n } from "@/i18n/i18nProvider";
 import NavBar from "@/components/ui/navbar";
 import { Header } from "@/components/book/index/indexHeader";
 import { api, API_ENDPOINTS } from "@/api";
 import { BookListResponse } from "@/types/api";
 import { Book } from "@/types/book";
+import { Body } from "@/components/book/index/indexBody";
+import { Footer } from "@/components/book/index/indexFooter";
+import sleep from "./utils";
 
-type IndexResult = {
-  singular: Book;
-  multiple: Book[];
-};
 function Index() {
-  const { t } = useI18n();
-  const [loading, setLoading] = useState<Boolean>(false);
-  const [result, setResults] = useState<IndexResult>();
-  const [activeGenre, setActiveGenre] = useState<String>("");
+  const [loading, setLoading] = useState(true);
+  const [activeGenre, setActiveGenre] = useState("");
+  const [foundGenres, setFoundGenres] = useState<string[]>([]);
+  const [results, setResults] = useState<Book[]>();
 
   useEffect(() => {
     const loadBooks = async () => {
       try {
         setLoading(true);
+        await sleep(2);
         const res = await api.get<BookListResponse>(API_ENDPOINTS.BOOKS_LIST, {
           params: {
             page_size: 4,
           },
         });
 
-        setResults({
-          singular: res.results[0],
-          multiple: res.results.slice(0),
-        });
+        setResults(res.results);
       } catch (error) {
         console.error(error);
       } finally {
@@ -42,48 +37,58 @@ function Index() {
     loadBooks();
   }, []);
 
-  const getBooksfromGenre = (): Book[] => {
-    return result!.multiple.filter((item) =>
+  useEffect(() => {
+    if (results) {
+      setFoundGenres(findGenres());
+    }
+  }, [results]);
+
+  const findGenres = (): string[] => {
+    if (!results) return [];
+
+    const genreSet = new Set<string>();
+
+    results.slice(1).forEach((book) => {
+      book.genres?.forEach((g) => {
+        if (g?.name) genreSet.add(g.name);
+      });
+    });
+
+    return ["All", ...Array.from(genreSet)];
+  };
+
+  const getBooksFromGenre = (): Book[] => {
+    if (!results) return [];
+
+    const base = results.slice(1);
+
+    if (!activeGenre) return base;
+
+    return base.filter((item) =>
       item.genres?.some((genre) => genre.name === activeGenre),
     );
   };
 
+  console.log(results);
+
+  const mainBook = results?.[0];
+  const weekTop = getBooksFromGenre();
   return (
     <div className="min-h-screen overflow-hidden bg-background text-foreground bgcolor-white">
       <NavBar />
 
       <main id="inicio">
-        <Header book={result!.singular} />
-
-        <section
-          id="biblioteca"
-          className="mx-auto max-w-7xl px-5 py-20 sm:px-8 md:py-28"
-        >
-          <div
-            id="categorias"
-            className="mb-12 flex gap-2 overflow-x-auto pb-2"
-          >
-            {["Todos", "Ficción", "Misterio", "Fantasía"].map((category) => (
-              <Button
-                key={category}
-                variant={activeCategory === category ? "default" : "outline"}
-                size="sm"
-                onClick={() => setActiveCategory(category)}
-              >
-                {category}
-              </Button>
-            ))}
-          </div>
-
-          <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
-            {visibleBooks.map((book) => (
-              <article key={book.title}>
-                <h3>{book.title}</h3>
-                <p>{book.author}</p>
-              </article>
-            ))}
-          </div>
-        </section>
+        <Header book={mainBook} loading={loading} />
+        <Body
+          books={weekTop}
+          loading={loading}
+          genres={foundGenres}
+          activeGenre={activeGenre}
+          setGenre={(event) => {
+            setActiveGenre(event);
+          }}
+        />
+        <Footer />
       </main>
     </div>
   );

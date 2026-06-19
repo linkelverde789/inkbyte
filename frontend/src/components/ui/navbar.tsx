@@ -18,7 +18,9 @@ export default function NavBar() {
           <Link to="/" className="transition-colors hover:text-primary">
             {t("Home")}
           </Link>
-          <span className="text-primary">{t("Search")}</span>
+          <Link to="/search" className="transition-colors hover:text-primary">
+            {t("Search")}
+          </Link>
           <Link
             to="/"
             hash="comunidad"

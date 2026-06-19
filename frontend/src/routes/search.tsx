@@ -15,6 +15,7 @@ import SearchBar from "@/components/book/list/searchBar";
 import SearchFilters from "@/components/book/list/bookSearchFilters";
 import { ResultsInfo } from "@/components/book/list/resultsInfo";
 import { ResultsDisplay } from "@/components/book/list/resultsDisplay";
+import { MainFooter } from "@/components/book/index/mainFooter";
 
 export const Route = createFileRoute("/search")({
   head: () => ({
@@ -135,6 +136,7 @@ function SearchPage() {
           />
         </div>
       </main>
+      <MainFooter />
     </div>
   );
 }

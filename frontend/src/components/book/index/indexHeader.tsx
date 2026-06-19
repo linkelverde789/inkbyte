@@ -4,9 +4,11 @@ import { Link } from "@tanstack/react-router";
 import { Search } from "lucide-react";
 import { Book } from "@/types/book";
 import { useI18n } from "@/i18n/i18nProvider";
+import { WeekTopSelectionSkeleton } from "@/components/skeletons/weekSingularTopSelection";
 
 type HeaderProps = {
-  book: Book;
+  book: Book | undefined;
+  loading: boolean;
 };
 export function Header(props: HeaderProps) {
   const { t } = useI18n();
@@ -31,7 +33,11 @@ export function Header(props: HeaderProps) {
         </Button>
       </div>
 
-      <WeekTopSelection book={props.book} />
+      {props.loading ? (
+        <WeekTopSelectionSkeleton />
+      ) : (
+        <WeekTopSelection book={props.book!} />
+      )}
     </header>
   );
 }
