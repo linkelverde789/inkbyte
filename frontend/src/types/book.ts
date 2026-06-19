@@ -17,7 +17,7 @@ export interface Book {
   image?: string;
   genres?: BookGenre[];
   type?: string;
-  authors: Author[];
+  authors?: Author[];
   rating?: number;
   format?: string;
 }

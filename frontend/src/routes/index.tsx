@@ -1,131 +1,59 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
-import {
-  BookOpen,
-  Download,
-  Heart,
-  Menu,
-  Search,
-  UserRound,
-} from "lucide-react";
+import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 
-import heroImage from "@/assets/inkbyte-hero.jpg";
 import { Button } from "@/components/ui/button";
 import { useI18n } from "@/i18n/i18nProvider";
+import NavBar from "@/components/ui/navbar";
+import { Header } from "@/components/book/index/indexHeader";
+import { api, API_ENDPOINTS } from "@/api";
+import { BookListResponse } from "@/types/api";
+import { Book } from "@/types/book";
 
+type IndexResult = {
+  singular: Book;
+  multiple: Book[];
+};
 function Index() {
   const { t } = useI18n();
+  const [loading, setLoading] = useState<Boolean>(false);
+  const [result, setResults] = useState<IndexResult>();
+  const [activeGenre, setActiveGenre] = useState<String>("");
 
-  const [activeCategory, setActiveCategory] = useState("Todos");
-  const [saved, setSaved] = useState<string[]>([]);
+  useEffect(() => {
+    const loadBooks = async () => {
+      try {
+        setLoading(true);
+        const res = await api.get<BookListResponse>(API_ENDPOINTS.BOOKS_LIST, {
+          params: {
+            page_size: 4,
+          },
+        });
 
-  const visibleBooks = useMemo(
-    () =>
-      books.filter(
-        (book) =>
-          activeCategory === "Todos" || book.category === activeCategory,
-      ),
-    [activeCategory],
-  );
+        setResults({
+          singular: res.results[0],
+          multiple: res.results.slice(0),
+        });
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadBooks();
+  }, []);
 
-  const toggleSaved = (title: string) => {
-    setSaved((current) =>
-      current.includes(title)
-        ? current.filter((item) => item !== title)
-        : [...current, title],
+  const getBooksfromGenre = (): Book[] => {
+    return result!.multiple.filter((item) =>
+      item.genres?.some((genre) => genre.name === activeGenre),
     );
   };
 
   return (
     <div className="min-h-screen overflow-hidden bg-background text-foreground bgcolor-white">
-      <nav
-        className="border-b border-border bg-background"
-        aria-label="Navegación principal"
-      >
-        <div className="mx-auto grid h-20 max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-5 sm:flex sm:justify-between sm:px-8">
-          <a
-            href="#inicio"
-            className="min-w-0 font-display text-2xl font-bold tracking-tight"
-          >
-            Ink<span className="text-primary">Byte</span>
-          </a>
-
-          <div className="hidden items-center gap-9 text-xs font-bold uppercase tracking-[0.15em] md:flex">
-            <Link to="/search" className="transition-colors hover:text-primary">
-              {t("Search")}
-            </Link>
-
-            <a
-              href="#categorias"
-              className="transition-colors hover:text-primary"
-            >
-              {t("Categories")}
-            </a>
-
-            <a
-              href="#comunidad"
-              className="transition-colors hover:text-primary"
-            >
-              {t("Community")}
-            </a>
-          </div>
-
-          <div className="flex shrink-0 items-center gap-1">
-            <Button variant="ghost" size="icon" aria-label={t("My books")}>
-              <Heart />
-            </Button>
-
-            <Button
-              variant="ghost"
-              size="icon"
-              aria-label={t("My account")}
-              asChild
-            >
-              <Link to="/profile">
-                <UserRound />
-              </Link>
-            </Button>
-
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden"
-              aria-label={t("Open menu")}
-            >
-              <Menu />
-            </Button>
-          </div>
-        </div>
-      </nav>
+      <NavBar />
 
       <main id="inicio">
-        <header className="page-in relative mx-auto grid max-w-7xl grid-cols-12 gap-8 px-5 pb-20 pt-14 sm:px-8 md:pb-28 md:pt-20">
-          <div className="z-10 col-span-12 md:col-span-7">
-            <h1 className="mb-7 text-5xl leading-[0.94] tracking-[-0.035em] sm:text-6xl md:text-7xl lg:text-8xl">
-              {t("Your next story is here")}
-            </h1>
-
-            <p className="mb-8 max-w-lg text-base leading-relaxed text-muted-foreground sm:text-lg">
-              {t(
-                "A digital library built for unhurried discovery. Explore thousands of titles and download your next read in seconds.",
-              )}
-            </p>
-
-            <Button variant="editorial" size="editorial" asChild>
-              <Link to="/search">
-                <Search /> {t("Search the library")}
-              </Link>
-            </Button>
-          </div>
-
-          <div className="relative col-span-12 mt-4 md:col-span-5 md:mt-0">
-            <img
-              src={heroImage}
-              alt="Hero"
-              className="aspect-[4/5] w-full object-cover"
-            />
-          </div>
-        </header>
+        <Header book={result!.singular} />
 
         <section
           id="biblioteca"
