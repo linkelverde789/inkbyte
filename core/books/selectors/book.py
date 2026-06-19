@@ -19,7 +19,7 @@ class BookSelector:
 
     @staticmethod
     def list_books():
-        return QuerySetPipeline(Book.objects.all().order_by("-description", "title"))
+        return QuerySetPipeline(Book.objects.all().order_by("id", "title"))
 
     @staticmethod
     def apply_filters(queryset, filters: BookFilters):

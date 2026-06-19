@@ -19,7 +19,7 @@ export function RelatedShelf(props: Props) {
       try {
         if (!props.id) return;
         const url = RELATED_SHELF_ENDPOINTS[props.endpoint];
-        const response = await api.get<any>(url, {
+        const response = await api.get<any>(url(props.id), {
           params: { page_size: 8, page: 1, id: props.id },
         });
 
