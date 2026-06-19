@@ -1,5 +1,6 @@
 import { api } from "@/api";
 import { API_ENDPOINTS, RELATED_SHELF_ENDPOINTS } from "@/api/endpoints";
+import { useI18n } from "@/i18n/i18nProvider";
 import { Book } from "@/types/book";
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
@@ -12,6 +13,8 @@ type Props = {
   id?: number;
 };
 export function RelatedShelf(props: Props) {
+  const { t } = useI18n();
+
   const [result, setResult] = useState<Book[]>([]);
 
   useEffect(() => {
@@ -20,7 +23,7 @@ export function RelatedShelf(props: Props) {
         if (!props.id) return;
         const url = RELATED_SHELF_ENDPOINTS[props.endpoint];
         const response = await api.get<any>(url(props.id), {
-          params: { page_size: 8, page: 1, id: props.id },
+          params: { page_size: 8, page: 1 },
         });
 
         console.log(response);
@@ -65,7 +68,7 @@ export function RelatedShelf(props: Props) {
                 />
               </div>
               <p className="mt-3 text-xs font-bold uppercase tracking-widest text-primary">
-                {book.genres?.map((genre) => genre.name).join(", ")}
+                {book.genres?.map((genre) => t(genre.name)).join(", ")}
               </p>
               <p className="mt-1 text-lg leading-tight">{book.title}</p>
               <p className="text-sm italic text-muted-foreground">
