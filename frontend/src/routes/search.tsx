@@ -1,12 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { BookOpen } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { api } from "@/api";
 import { API_ENDPOINTS } from "@/api/endpoints";
 
 import type { Book } from "@/types/book";
-import { BookList } from "@/components/book/list/booksList";
 import NavBar from "@/components/ui/navbar";
 import useDebounce from "@/hooks/debounce";
 
