@@ -1,5 +1,8 @@
 from dataclasses import asdict
+from django.db.models import Avg
 from rest_framework import serializers
+
+from books.models import Rating
 
 
 class AuthorResponseSerializer(serializers.Serializer):
@@ -40,8 +43,12 @@ class BookResponseSerializer(serializers.Serializer):
     authors = AuthorResponseSerializer(many=True)
     genres = GenreResponseSerializer(many=True)
     files = FileResponseSerializer(many=True)
-
     series = serializers.SerializerMethodField()
+    rating = serializers.SerializerMethodField()
+
+    def get_rating(self, obj):
+        result = Rating.objects.filter(book=obj).aggregate(avg=Avg("rate"))
+        return result["avg"] or 0
 
     def get_series(self, obj):
         memberships = obj.series_memberships.select_related("series").all()

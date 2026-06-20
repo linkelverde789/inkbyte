@@ -90,7 +90,14 @@ def process_book(
     description: str | None,
     image: File | None,
     author_ids: list[int],
-) -> Book:
+):
+
+    book = BookSelector().get_book_by_title_exact(title)
+    if book:
+        print(f"Book {book.title} already exists")
+
+        return book
+
     serializer = CreateBookSerializer(
         data={
             "title": title,
@@ -101,7 +108,7 @@ def process_book(
     )
 
     serializer.is_valid(raise_exception=True)
-
+    print(f"Book {title} created")
     return CreateBookUseCase().execute(**serializer.validated_data)
 
 
@@ -119,10 +126,6 @@ def process_series(book: Book, series_name: str, series_index):
 
 
 def process_file(formats: str, file_names: str, path: str, metadata: str, book_id: int):
-    print(f"formats {formats}")
-    print(f"file_names {file_names}")
-    print(f"path {path}")
-    print(f"metadata {metadata}")
 
     base_path = f"{metadata}/{path}"
 
@@ -135,8 +138,6 @@ def process_file(formats: str, file_names: str, path: str, metadata: str, book_i
         CreateFileUseCase().execute(
             file=File(file, name=os.path.basename(file_path)), book_id=book_id
         )
-
-    return
 
 
 def main(database_path: str, database: str) -> None:
@@ -188,7 +189,6 @@ GROUP BY books.id;
             image=image,
             author_ids=author_ids,
         )
-        print(f"Book {book.title} created")
         if series_name is not None:
             process_series(book, series_name, series_index)
 
