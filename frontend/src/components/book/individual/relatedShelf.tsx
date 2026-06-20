@@ -1,5 +1,5 @@
 import { api } from "@/api";
-import { API_ENDPOINTS, RELATED_SHELF_ENDPOINTS } from "@/api/endpoints";
+import { RELATED_SHELF_ENDPOINTS } from "@/api/endpoints";
 import { useI18n } from "@/i18n/i18nProvider";
 import { Book } from "@/types/book";
 import { Link } from "@tanstack/react-router";
@@ -10,7 +10,7 @@ type Props = {
   subtitle?: string;
   icon: any;
   endpoint: keyof typeof RELATED_SHELF_ENDPOINTS;
-  id?: number;
+  id: number;
 };
 export function RelatedShelf(props: Props) {
   const { t } = useI18n();
@@ -35,7 +35,7 @@ export function RelatedShelf(props: Props) {
     };
 
     fetchData();
-  }, [props.endpoint]);
+  }, [props.endpoint, props.id]);
 
   return (
     <section className="mt-20 border-t border-border pt-12">

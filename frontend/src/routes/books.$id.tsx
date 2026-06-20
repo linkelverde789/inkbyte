@@ -74,7 +74,7 @@ function BookPage() {
             subtitle={firstSeries?.name}
             icon={<BookMarked className="size-4" />}
             endpoint={"series"}
-            id={firstSeries?.id}
+            id={firstSeries.id}
           />
         ) : (
           ""
