@@ -1,5 +1,7 @@
 from django.db import models
 
+from users.models import User
+
 
 # =========================
 # Author
@@ -120,3 +122,17 @@ class File(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
+
+
+# =========================
+# Rating
+# =========================
+class Rating(models.Model):
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    rate = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["book", "rate"]

@@ -1,6 +1,6 @@
-from books.services.genre import delete_genre
+from books.services.genre import GenreService
 
 
 class DeleteGenreUseCase:
     def execute(self, genre_id: int) -> None:
-        return delete_genre(genre_id)
+        return GenreService.delete_genre(genre_id)

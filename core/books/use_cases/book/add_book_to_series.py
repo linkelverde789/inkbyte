@@ -1,6 +1,6 @@
 from books.selectors.book import BookSelector
 from books.selectors.series import SeriesSelector
-from books.services.book import add_book_to_series
+from books.services.book import BookService
 
 
 class AddBookToSeriesUseCase:
@@ -10,5 +10,5 @@ class AddBookToSeriesUseCase:
         if index is None:
             index = SeriesSelector.get_last_index_from_series(series)
             index = 1 if index is None else index + 1
-        add_book_to_series(book, series, index)
+        BookService.add_book_to_series(book, series, index)
         return
