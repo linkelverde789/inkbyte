@@ -8,5 +8,5 @@ class CreateAuthorUseCase:
         self, name: str, description: str | None, image: object | None
     ) -> Author:
         author_dto = CreateAuthorInput(name, description, image).validate()
-        author = AuthorService.create_author(author_dto)
+        author = AuthorService().create_author(data=author_dto)
         return author

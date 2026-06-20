@@ -6,5 +6,5 @@ from books.models import Book
 class CreateBookUseCase:
     def execute(self, **raw) -> Book:
         book_dto = CreateBookInput(**raw).validate()
-        book = BookService.create_book(book_dto)
+        book = BookService().create_book(data=book_dto)
         return book

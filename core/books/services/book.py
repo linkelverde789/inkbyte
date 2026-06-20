@@ -13,14 +13,14 @@ class BookService:
         self.create_book_relations(book, data)
         return book
 
-    def _create_book_author_relation(book: Book, author_ids: list[int]):
+    def _create_book_author_relation(self, book: Book, author_ids: list[int]):
         if not author_ids:
             return
 
         authors = Author.objects.filter(id__in=author_ids)
         book.authors.set(authors)
 
-    def _create_book_genre_relation(book: Book, genre_ids: list[int]):
+    def _create_book_genre_relation(self, book: Book, genre_ids: list[int]):
         if not genre_ids:
             return
 

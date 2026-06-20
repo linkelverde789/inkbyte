@@ -12,11 +12,11 @@ export function WeekMultipleTopSelection(props: WeekMultipleTopSelectionProps) {
   return (
     <div className="grid grid-cols-1 gap-x-9 gap-y-16 md:grid-cols-3">
       {props.books.map((book, index) => (
-        <Link to="/books/$id" params={{ id: book.id.toString() }}>
-          <article
-            key={book.title}
-            className={`group ${index === 1 ? "md:mt-20" : ""}`}
-          >
+        <article
+          key={book.title}
+          className={`group ${index === 1 ? "md:mt-20" : ""}`}
+        >
+          <Link to="/books/$id" params={{ id: book.id.toString() }}>
             <div className="relative mb-6 aspect-[3/4] overflow-hidden shadow-[16px_18px_0_var(--color-secondary)]">
               <img
                 src={book.image}
@@ -37,17 +37,19 @@ export function WeekMultipleTopSelection(props: WeekMultipleTopSelectionProps) {
             <p className="mb-5 text-sm italic text-muted-foreground">
               {book.authors?.map((author) => author.name).join(", ")}
             </p>
-            <div className="flex items-center justify-between border-t border-border pt-4">
-              <span className="text-xs text-muted-foreground">
-                {10} {t("Downloads")}
-              </span>
+          </Link>
+          <div className="flex items-center justify-between border-t border-border pt-4">
+            <span className="text-xs text-muted-foreground">
+              {10} {t("Downloads")}
+            </span>
+            <a href={`${book.files[0].file}`} download>
               <Button variant="link" size="sm" className="px-0 font-bold">
                 <Download />
                 {t("Download")}
               </Button>
-            </div>
-          </article>
-        </Link>
+            </a>
+          </div>
+        </article>
       ))}
     </div>
   );

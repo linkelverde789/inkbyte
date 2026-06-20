@@ -9,6 +9,7 @@ from pathlib import Path
 from bs4 import BeautifulSoup
 from django.core.files import File
 
+
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings.settings")
@@ -24,6 +25,8 @@ from books.use_cases.author.create_author import CreateAuthorUseCase
 from books.use_cases.book.create_book import CreateBookUseCase
 from books.use_cases.book.add_book_to_series import AddBookToSeriesUseCase
 from books.use_cases.series.create_series import CreateSeriesUseCase
+from books.use_cases.file.create_file import CreateFileUseCase
+from books.selectors.book import BookSelector
 
 
 def parse_args():
@@ -115,6 +118,27 @@ def process_series(book: Book, series_name: str, series_index):
     )
 
 
+def process_file(formats: str, file_names: str, path: str, metadata: str, book_id: int):
+    print(f"formats {formats}")
+    print(f"file_names {file_names}")
+    print(f"path {path}")
+    print(f"metadata {metadata}")
+
+    base_path = f"{metadata}/{path}"
+
+    for format in formats.split(","):
+        file_path = os.path.join(base_path, f"{file_names}.{format.lower()}")
+
+        if not os.path.exists(file_path):
+            return None
+        file = open(file_path, "rb")
+        CreateFileUseCase().execute(
+            file=File(file, name=os.path.basename(file_path)), book_id=book_id
+        )
+
+    return
+
+
 def main(database_path: str, database: str) -> None:
     conn = sqlite3.connect(f"{database_path}/{database}")
     cur = conn.cursor()
@@ -125,23 +149,33 @@ def main(database_path: str, database: str) -> None:
   books.title,
   books.path,
   comments.text,
-  GROUP_CONCAT(authors.name, ', ') AS authors,
-  series.name,
-  books.series_index
-FROM
-  books
-  LEFT JOIN books_authors_link ON books.id = books_authors_link.book
-  LEFT JOIN authors ON authors.id = books_authors_link.author
-  LEFT JOIN comments ON comments.book = books.id
-  LEFT JOIN books_series_link ON books.id = books_series_link.book
-  LEFT JOIN series ON series.id = books_series_link.series
-GROUP BY
-  books.id
+  GROUP_CONCAT(DISTINCT authors.name) AS authors,
+  series.name AS series_name,
+  books.series_index,
+  GROUP_CONCAT(DISTINCT data.format) AS formats,
+  GROUP_CONCAT(DISTINCT data.name) AS file_names
+FROM books
+LEFT JOIN books_authors_link ON books.id = books_authors_link.book
+LEFT JOIN authors ON authors.id = books_authors_link.author
+LEFT JOIN comments ON comments.book = books.id
+LEFT JOIN books_series_link ON books.id = books_series_link.book
+LEFT JOIN series ON series.id = books_series_link.series
+LEFT JOIN data ON data.book = books.id
+GROUP BY books.id;
         """
     )
 
     for row in cur.fetchall():
-        title, path, text, author_names, series_name, series_index = row
+        (
+            title,
+            path,
+            text,
+            author_names,
+            series_name,
+            series_index,
+            formats,
+            file_names,
+        ) = row
 
         author_ids = process_author(author_names or "")
 
@@ -157,6 +191,14 @@ GROUP BY
         print(f"Book {book.title} created")
         if series_name is not None:
             process_series(book, series_name, series_index)
+
+        process_file(
+            formats=formats,
+            file_names=file_names,
+            metadata=database_path,
+            path=path,
+            book_id=book.id,
+        )
 
     conn.close()
 

@@ -68,7 +68,7 @@ class Type(models.TextChoices):
 class Book(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
-    image = models.ImageField(upload_to="books/", null=True, blank=True)
+    image = models.ImageField(upload_to="books/covers", null=True, blank=True)
 
     series = models.ManyToManyField(
         Series, through="SeriesMembership", related_name="books", blank=True
