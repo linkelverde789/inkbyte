@@ -1,19 +1,8 @@
-import { LOCALE, t, MSG } from "@/i18n";
-
+import { getLocale } from "@/i18n";
 import { ApiError } from "./ApiError";
-import {
-  API_BASE,
-  API_ENDPOINTS,
-  AUTH_PUBLIC_PATHS,
-} from "./endpoints";
+import { API_BASE, API_ENDPOINTS, AUTH_PUBLIC_PATHS } from "./endpoints";
 
-console.log(API_BASE);
-console.log(API_ENDPOINTS);
-console.log(AUTH_PUBLIC_PATHS);
-type QueryParams = Record<
-  string,
-  string | number | boolean | null | undefined
->;
+type QueryParams = Record<string, string | number | boolean | null | undefined>;
 
 type RequestOptions = RequestInit & {
   auth?: boolean;
@@ -75,102 +64,57 @@ export class API {
     });
   }
 
-  get<T = unknown>(
-    path: string,
-    options?: RequestOptions,
-  ) {
+  get<T = unknown>(path: string, options?: RequestOptions) {
     return this.request<T>(path, {
       ...options,
       method: "GET",
     });
   }
 
-  post<T = unknown>(
-    path: string,
-    body?: unknown,
-    options?: RequestOptions,
-  ) {
+  post<T = unknown>(path: string, body?: unknown, options?: RequestOptions) {
     return this.request<T>(path, {
       ...options,
       method: "POST",
-      body:
-        body !== undefined
-          ? JSON.stringify(body)
-          : undefined,
+      body: body !== undefined ? JSON.stringify(body) : undefined,
     });
   }
 
-  patch<T = unknown>(
-    path: string,
-    body?: unknown,
-    options?: RequestOptions,
-  ) {
+  patch<T = unknown>(path: string, body?: unknown, options?: RequestOptions) {
     return this.request<T>(path, {
       ...options,
       method: "PATCH",
-      body:
-        body !== undefined
-          ? JSON.stringify(body)
-          : undefined,
+      body: body !== undefined ? JSON.stringify(body) : undefined,
     });
   }
 
-  put<T = unknown>(
-    path: string,
-    body?: unknown,
-    options?: RequestOptions,
-  ) {
+  put<T = unknown>(path: string, body?: unknown, options?: RequestOptions) {
     return this.request<T>(path, {
       ...options,
       method: "PUT",
-      body:
-        body !== undefined
-          ? JSON.stringify(body)
-          : undefined,
+      body: body !== undefined ? JSON.stringify(body) : undefined,
     });
   }
 
-  delete<T = unknown>(
-    path: string,
-    options?: RequestOptions,
-  ) {
+  delete<T = unknown>(path: string, options?: RequestOptions) {
     return this.request<T>(path, {
       ...options,
       method: "DELETE",
     });
   }
 
-  #resolveUrl(
-    path: string,
-    params?: QueryParams,
-  ) {
+  #resolveUrl(path: string, params?: QueryParams) {
     const endpoint = path.startsWith("/api")
       ? path
-      : `${API_BASE}${
-          path.startsWith("/")
-            ? path
-            : `/${path}`
-        }`;
+      : `${API_BASE}${path.startsWith("/") ? path : `/${path}`}`;
 
-    const url = new URL(
-      endpoint,
-      window.location.origin,
-    );
+    const url = new URL(endpoint, window.location.origin);
 
     if (params) {
-      Object.entries(params).forEach(
-        ([key, value]) => {
-          if (
-            value !== null &&
-            value !== undefined
-          ) {
-            url.searchParams.set(
-              key,
-              String(value),
-            );
-          }
-        },
-      );
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== null && value !== undefined) {
+          url.searchParams.set(key, String(value));
+        }
+      });
     }
 
     return `${url.pathname}${url.search}`;
@@ -184,11 +128,10 @@ export class API {
     extra?: Record<string, string>;
   }) {
     return {
-      "Accept-Language": LOCALE,
+      "Accept-Language": getLocale(),
       ...(json
         ? {
-            "Content-Type":
-              "application/json",
+            "Content-Type": "application/json",
           }
         : {}),
       ...extra,
@@ -210,12 +153,9 @@ export class API {
         data = await response.json();
       } catch {
         if (!response.ok) {
-          throw new ApiError(
-            "error",
-            {
-              status: response.status,
-            },
-          );
+          throw new ApiError("error", {
+            status: response.status,
+          });
         }
       }
     }
@@ -235,18 +175,13 @@ export class API {
 
   #refreshSession() {
     if (!this.#refreshPromise) {
-      this.#refreshPromise = this.request(
-        API_ENDPOINTS.AUTH_TOKEN_REFRESH,
-        {
-          method: "POST",
-          auth: false,
-          skipRefresh: true,
-        },
-      )
+      this.#refreshPromise = this.request(API_ENDPOINTS.AUTH_TOKEN_REFRESH, {
+        method: "POST",
+        auth: false,
+        skipRefresh: true,
+      })
         .catch((err: ApiError) => {
-          throw err.status === 401
-            ? ApiError.sessionExpired()
-            : err;
+          throw err.status === 401 ? ApiError.sessionExpired() : err;
         })
         .finally(() => {
           this.#refreshPromise = null;

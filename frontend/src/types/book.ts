@@ -7,22 +7,25 @@ export interface Author {
   id: number;
   name: string;
   description?: string;
+  image?: string;
+}
+
+export interface BookSeries {
+  id: number;
+  name: string;
+  description: string | undefined;
+  index: number;
 }
 
 export interface Book {
   id: number;
   title: string;
-  description?: string;
-  image: string;
-  genre: BookGenre[];
-  type: string;
+  description: string | undefined;
+  image: string | undefined;
+  genres: BookGenre[] | undefined;
   authors: Author[];
-  rating: number;
-}
-
-export interface BookListResponse {
-  count: number;
-  page: number;
-  page_size: number;
-  results: Book[];
+  type?: string;
+  rating?: number;
+  format?: string;
+  series?: BookSeries[];
 }

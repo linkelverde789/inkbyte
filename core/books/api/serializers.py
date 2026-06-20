@@ -1,7 +1,5 @@
-from dataclasses import asdict, fields
+from dataclasses import asdict
 from rest_framework import serializers
-
-from django.conf import settings
 
 
 class AuthorResponseSerializer(serializers.Serializer):
@@ -24,8 +22,9 @@ class AuthorListResponseSerializer(serializers.Serializer):
     results = AuthorResponseSerializer(many=True)
 
 
-def author_output_to_dict(author_output) -> dict:
-    return asdict(author_output)
+class GenreResponseSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField()
 
 
 class BookResponseSerializer(serializers.Serializer):
@@ -34,6 +33,13 @@ class BookResponseSerializer(serializers.Serializer):
     description = serializers.CharField()
     image = serializers.ImageField()
     authors = AuthorResponseSerializer(many=True)
+    genres = GenreResponseSerializer(many=True)
+
+    series = serializers.SerializerMethodField()
+
+    def get_series(self, obj):
+        memberships = obj.series_memberships.select_related("series").all()
+        return SeriesInBookSerializer(memberships, many=True).data
 
 
 class CreateBookSerializer(serializers.Serializer):
@@ -66,5 +72,8 @@ class UpdateBookSerializer(serializers.Serializer):
     )
 
 
-def book_output_to_dict(book_output) -> dict:
-    return asdict(book_output)
+class SeriesInBookSerializer(serializers.Serializer):
+    id = serializers.IntegerField(source="series.id")
+    name = serializers.CharField(source="series.name")
+    description = serializers.CharField(source="series.description")
+    index = serializers.IntegerField()

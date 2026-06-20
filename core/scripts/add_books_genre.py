@@ -35,6 +35,7 @@ def parse_args():
 
 
 def process_add_genres_to_book(genres: str, book: Book):
+    print(f"processing {book.title} with genres: {genres}")
     for genre in genres:
         genre = genre.strip()
         genre_data = GenreSelector.get_genre_by_name(genre)
@@ -44,7 +45,8 @@ def process_add_genres_to_book(genres: str, book: Book):
         AddGenreToBookUseCase().execute(book_id=book.id, genre_id=genre_data.id)
 
 
-def main(origin_csv: str):
+def main(origin_csv: str) -> int:
+    count = 0
     with open(origin_csv, newline="", encoding="utf-8") as file:
         reader = csv.DictReader(file)
         for row in reader:
@@ -59,8 +61,10 @@ def main(origin_csv: str):
 
             genres = row["genres"].split(";")
             process_add_genres_to_book(genres=genres, book=book)
+            count += 1
 
 
 if __name__ == "__main__":
     args = parse_args()
-    main(args.csv)
+    processed_result = main(args.csv)
+    print(f"Books processed: {processed_result}")

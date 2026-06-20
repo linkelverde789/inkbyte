@@ -1,19 +1,18 @@
-// frontend/src/i18n/messages.ts
+"frontend/src/i18n/messages.ts";
 
 import es from "./locales/es/es.json";
 import en from "./locales/en/en.json";
-
-export const LOCALE = "en";
+import { getLocale } from "./locale";
 
 const translations = {
   es,
   en,
 } as const;
 
-export const MSG = translations[LOCALE];
+export type Locale = keyof typeof translations;
+
+export function getMessages() {
+  return translations[getLocale()];
+}
 
 export type MessageKey = keyof typeof es;
-
-export function t(key: MessageKey): string {
-  return translations[LOCALE][key];
-}

@@ -7,7 +7,7 @@ class AppError(Exception):
 
 class BookError(AppError):
     def __init__(self, message: str):
-        super().__init__(message, "book_error")
+        super().__init__(message=message, code="book_error")
 
 
 class AuthorError(AppError):

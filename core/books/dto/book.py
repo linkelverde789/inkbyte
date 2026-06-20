@@ -20,6 +20,7 @@ class AuthorOutput:
     id: int
     name: str
 
+
 @dataclass
 class CreateBookInput:
     title: str
@@ -41,7 +42,6 @@ class CreateBookInput:
         self.author_ids = self.author_ids or []
 
         return self
-    
 
 
 @dataclass
@@ -64,3 +64,9 @@ class UpdateBookInput:
             self.description = self.description.strip()
 
         return self
+
+
+@dataclass
+class BookFilters:
+    q: str = ""
+    author: str = ""
