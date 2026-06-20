@@ -29,8 +29,8 @@ export interface Book {
   image: string | undefined;
   genres: BookGenre[] | undefined;
   authors: Author[];
-  type?: string;
   rating: number;
   series: BookSeries[];
   files: BookFile[];
+  type?: string;
 }
