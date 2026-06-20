@@ -30,7 +30,7 @@ export interface Book {
   genres: BookGenre[] | undefined;
   authors: Author[];
   type?: string;
-  rating?: number;
-  series?: BookSeries[];
+  rating: number;
+  series: BookSeries[];
   files: BookFile[];
 }
