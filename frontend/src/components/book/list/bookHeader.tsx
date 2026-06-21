@@ -7,7 +7,7 @@ function BookHeader({ book }: { book: Book }) {
   const { t } = useI18n();
   return (
     <>
-      {BookGenres(book.genres!)}
+      <BookGenres genres={book.genres} />
 
       <h3 className="mb-1 text-lg leading-tight sm:text-xl">
         <Link

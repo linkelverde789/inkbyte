@@ -42,7 +42,7 @@ export function Body(props: BodyProps) {
       {props.loading ? (
         "Loading"
       ) : (
-        <WeekMultipleTopSelection books={props.books!} />
+        <WeekMultipleTopSelection books={props.books} />
       )}
     </section>
   );

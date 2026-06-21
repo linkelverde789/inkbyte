@@ -61,7 +61,7 @@ def process_author(author_names: str) -> list[int]:
         if not name:
             continue
 
-        author = AuthorSelector.get_author_by_name(name)
+        author = AuthorSelector().get_author_by_name(name)
 
         if author is None:
             author = CreateAuthorUseCase().execute(
@@ -129,8 +129,8 @@ def process_file(formats: str, file_names: str, path: str, metadata: str, book_i
 
     base_path = f"{metadata}/{path}"
 
-    for format in formats.split(","):
-        file_path = os.path.join(base_path, f"{file_names}.{format.lower()}")
+    for extension in formats.split(","):
+        file_path = os.path.join(base_path, f"{file_names}.{extension.lower()}")
 
         if not os.path.exists(file_path):
             return None

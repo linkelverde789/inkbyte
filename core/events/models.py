@@ -1,5 +1,3 @@
-from django.db import models
-
 from settings.settings import AUTH_USER_MODEL
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey

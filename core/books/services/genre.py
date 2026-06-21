@@ -1,6 +1,6 @@
 from django.db import transaction
 from books.dto.genre import CreateGenreInput, UpdateGenreInput
-from books.models import Book, Genre
+from books.models import Genre
 
 
 class GenreService:

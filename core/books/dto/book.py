@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from typing import Optional
 from books.exceptions import BookError
 
 
@@ -36,7 +35,7 @@ class CreateBookInput:
         self.description = self.description.strip()
 
         if not self.title:
-            raise BookError("The title is required", "title_required")
+            raise BookError("The title is required")
 
         self.genre_ids = self.genre_ids or []
         self.author_ids = self.author_ids or []
@@ -58,7 +57,7 @@ class UpdateBookInput:
         if self.title is not None:
             self.title = self.title.strip()
             if not self.title:
-                raise BookError("The title can't be empty", "title_required")
+                raise BookError("The title can't be empty")
 
         if self.description is not None:
             self.description = self.description.strip()

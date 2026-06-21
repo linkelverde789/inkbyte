@@ -1,5 +1,3 @@
-
-
 from books.exceptions import GenreError
 
 
@@ -10,9 +8,10 @@ class CreateGenreInput:
         self.name = self.name.strip()
 
         if not self.name:
-            raise GenreError("The name is required", "name_required")
-        
+            raise GenreError("The name is required")
+
         return self
+
 
 class UpdateGenreInput:
     name: str
@@ -21,7 +20,6 @@ class UpdateGenreInput:
         self.name = self.name.strip()
 
         if not self.name:
-            raise GenreError("The name is required", "name_required")
-        
+            raise GenreError("The name is required")
+
         return self
-    

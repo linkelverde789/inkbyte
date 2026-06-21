@@ -31,18 +31,16 @@ export default function SearchFilters({
     >
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_auto_auto]">
         <ApiSelect
-          endpoint={"GENRES_LIST"}
+          endpoint={"genres"}
           placeholder="Genres"
           value={genres}
-          label="Genres"
           onChange={onGenresChange}
         />
 
         <ApiSelect
-          endpoint={"AUTHORS_LIST"}
+          endpoint={"authors"}
           placeholder="Authors"
           value={authors}
-          label="Authors"
           onChange={onAuthorsChange}
         />
 
@@ -50,7 +48,9 @@ export default function SearchFilters({
           variant="outline"
           size="editorial"
           className="rounded-none bg-background shadow-none"
-          onClick={() => setAdvancedOpen((open) => !open)}
+          onClick={() => {
+            setAdvancedOpen((open) => !open);
+          }}
           aria-expanded={advancedOpen}
         >
           <SlidersHorizontal /> {t("Advanced search")}

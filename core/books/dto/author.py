@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from typing import Optional
 
 from books.exceptions import AuthorError
 
@@ -17,9 +16,10 @@ class CreateAuthorInput:
             self.description = self.description.strip()
 
         if not self.name:
-            raise AuthorError("The name is required", "name_required")
-        
+            raise AuthorError("The name is required")
+
         return self
+
 
 @dataclass
 class UpdateAuthorInput:
@@ -29,11 +29,10 @@ class UpdateAuthorInput:
 
     def validate(self) -> "UpdateAuthorInput":
         if self.name is not None:
-            self.title = self.title.strip()
+            self.name = self.name.strip()
 
-        if not self.name:
-            raise AuthorError("The name can't be empty", "name_required")
-
+            if not self.name:
+                raise AuthorError("The name can't be empty")
 
         if self.description is not None:
             self.description = self.description.strip()

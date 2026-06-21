@@ -1,4 +1,5 @@
-import { api, API_ENDPOINTS } from "@/api";
+import { api } from "@/api";
+import { SELECT_DATA_ENDPOINTS } from "@/api/endpoints";
 import {
   Select,
   SelectContent,
@@ -6,16 +7,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { BaseDataResponse, DataResult } from "@/types/api";
 import { useEffect, useState } from "react";
 
-type ApiItem = {
-  id: string | number;
-  name: string;
-};
-
 type Props = {
-  endpoint: keyof typeof API_ENDPOINTS;
-  label: string;
+  endpoint: keyof typeof SELECT_DATA_ENDPOINTS;
   placeholder: string;
   value: string | number | undefined | null;
   onChange: (value: number) => void;
@@ -23,7 +19,6 @@ type Props = {
 
 export default function ApiSelect({
   endpoint,
-  label,
   placeholder,
   value,
   onChange,
@@ -34,22 +29,22 @@ export default function ApiSelect({
     { id: 2, name: "Misterio" },
     { id: 3, name: "Fantasía" },
   ];
-  const [options, setOptions] = useState<ApiItem[]>(placeholder_data);
+  const [options, setOptions] = useState<DataResult[]>(placeholder_data);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get<any>(API_ENDPOINTS[endpoint], {
-          params: { page_size: 10, page: 1 },
-        });
+        const response = await api.get<BaseDataResponse>(
+          SELECT_DATA_ENDPOINTS[endpoint],
+        );
 
-        setOptions(response.data.results);
+        setOptions(response.results);
       } catch (error) {
         console.error("Error fetching data", error);
       }
     };
 
-    fetchData();
+    void fetchData();
   }, [endpoint]);
 
   return (

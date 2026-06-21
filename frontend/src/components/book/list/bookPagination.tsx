@@ -57,7 +57,7 @@ export function ListPagination(props: ListPaginationProps) {
           </PaginationPrevious>
         </PaginationItem>
         {getVisiblePages(props.page, props.pageCount).map((item, index) => (
-          <PaginationItem key={`${item}-${index}`}>
+          <PaginationItem key={index}>
             {item === "..." ? (
               <span className="px-2 text-muted-foreground">...</span>
             ) : (

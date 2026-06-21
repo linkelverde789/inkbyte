@@ -26,7 +26,9 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem(LOCALE_KEY, locale);
   }, [locale]);
 
-  const setLocale = (l: Locale) => setLocaleState(l);
+  const setLocale = (l: Locale) => {
+    setLocaleState(l);
+  };
 
   const t = (key: keyof typeof es) => {
     return translations[locale][key] ?? key;

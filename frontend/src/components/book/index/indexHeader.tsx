@@ -36,7 +36,7 @@ export function Header(props: HeaderProps) {
       {props.loading ? (
         <WeekTopSelectionSkeleton />
       ) : (
-        <WeekTopSelection book={props.book!} />
+        <WeekTopSelection book={props.book} />
       )}
     </header>
   );

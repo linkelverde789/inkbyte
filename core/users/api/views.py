@@ -11,17 +11,22 @@ from users.api.serializers import (
     AuthResponseSerializer,
     LoginSerializer,
     RegisterSerializer,
-    UserResponseSerializer,
 )
 from users.dto.auth import AuthTokensOutput
 from users.exceptions import AuthError
 from users.selectors.user import user_to_output
-from users.services.cookies import clear_auth_cookies, get_refresh_token, set_auth_cookies
+from users.services.cookies import (
+    clear_auth_cookies,
+    get_refresh_token,
+    set_auth_cookies,
+)
 from users.use_cases.login_user import LoginUserUseCase
 from users.use_cases.register_user import RegisterUserUseCase
 
 
-def _auth_success_response(user_output, tokens_output, *, remember_me: bool, status_code=200):
+def _auth_success_response(
+    user_output, tokens_output, *, remember_me: bool, status_code=200
+):
     response = Response(
         AuthResponseSerializer({"user": asdict(user_output)}).data,
         status=status_code,

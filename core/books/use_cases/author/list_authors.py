@@ -6,4 +6,4 @@ class ListAuthorUseCase:
     def execute(
         self, *, page: int = 1, page_size: int = 12
     ) -> tuple[list[Author], int]:
-        return AuthorSelector.list_author().paginate(page, page_size)
+        return AuthorSelector().list_author().paginate(page, page_size)

@@ -13,7 +13,7 @@ export interface Author {
 export interface BookSeries {
   id: number;
   name: string;
-  description: string | undefined;
+  description: string;
   index: number;
 }
 
@@ -25,9 +25,9 @@ export interface BookFile {
 export interface Book {
   id: number;
   title: string;
-  description: string | undefined;
-  image: string | undefined;
-  genres: BookGenre[] | undefined;
+  description: string;
+  image: string;
+  genres: BookGenre[];
   authors: Author[];
   rating: number;
   series: BookSeries[];

@@ -7,7 +7,7 @@ from books.api.serializers import (
     AuthorResponseSerializer,
     CreateAuthorSerializer,
 )
-from books.exceptions import AuthorError, BookError
+from books.exceptions import AuthorError
 from books.api.permissions import PublicReadPrivateWriteMixin
 from books.use_cases.author.create_author import CreateAuthorUseCase
 from books.use_cases.author.delete_author import DeleteAuthorUseCase
