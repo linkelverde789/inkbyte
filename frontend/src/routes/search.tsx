@@ -99,8 +99,8 @@ function SearchPage() {
 
         <div className="mx-auto max-w-7xl px-5 py-10 sm:px-8 md:py-14">
           <SearchFilters
-            genres={params.genre ?? -1}
-            authors={params.author ?? -1}
+            genres={params.genre}
+            authors={params.author}
             advancedOpen={advancedOpen}
             setAdvancedOpen={setAdvancedOpen}
             onGenresChange={(value) => {

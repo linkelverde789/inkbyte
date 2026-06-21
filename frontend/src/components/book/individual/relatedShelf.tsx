@@ -26,8 +26,6 @@ export function RelatedShelf(props: Props) {
           params: { page_size: 8, page: 1 },
         });
 
-        console.log(response);
-
         setResult(response.results);
       } catch (error) {
         console.error("Error fetching data", error);

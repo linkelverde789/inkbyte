@@ -5,7 +5,6 @@ type Props = {
 };
 
 export function Rating({ rating = 0 }: Props) {
-  console.log("rating", rating);
   return (
     <div className="my-7 flex gap-1">
       {[1, 2, 3, 4, 5].map((star) => {

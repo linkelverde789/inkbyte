@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 type Props = {
   endpoint: keyof typeof SELECT_DATA_ENDPOINTS;
   placeholder: string;
-  value: string | number | undefined | null;
+  value: string | number | undefined;
   onChange: (value: number) => void;
 };
 
@@ -23,13 +23,8 @@ export default function ApiSelect({
   value,
   onChange,
 }: Props) {
-  let placeholder_data = [
-    { id: -1, name: "Todos" },
-    { id: 1, name: "Ficción" },
-    { id: 2, name: "Misterio" },
-    { id: 3, name: "Fantasía" },
-  ];
-  const [options, setOptions] = useState<DataResult[]>(placeholder_data);
+  console.log("value", value);
+  const [options, setOptions] = useState<DataResult[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,9 +42,17 @@ export default function ApiSelect({
     void fetchData();
   }, [endpoint]);
 
+  const final_value = value !== undefined ? String(value) : undefined;
+  console.log("placeholder", placeholder);
+
   return (
     <div>
-      <Select value={value?.toString()} onValueChange={onChange}>
+      <Select
+        value={final_value}
+        onValueChange={(event) => {
+          onChange(Number(event));
+        }}
+      >
         <SelectTrigger className="h-12 rounded-none bg-background px-4 shadow-none">
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>

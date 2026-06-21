@@ -26,8 +26,8 @@ export interface PaginationParams {
 
 export interface BookSearchParams extends PaginationParams {
   q?: string;
-  genre?: number;
-  author?: number;
+  genre?: number | undefined;
+  author?: number | undefined;
   format?: string;
   type?: string;
 }

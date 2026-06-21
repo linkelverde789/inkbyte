@@ -6,7 +6,6 @@ import BookDescription from "./bookDescription";
 import BookFooter from "./bookFooter";
 
 export function BookCard({ book }: { book: Book }) {
-  console.log("book, ", book.rating);
   return (
     <article className="group flex flex-col gap-4 bg-card p-4 shadow-[4px_5px_0_var(--color-secondary)] sm:flex-row sm:items-start sm:gap-6 sm:p-6">
       <BookCover book={book} />

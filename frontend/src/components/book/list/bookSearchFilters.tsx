@@ -1,12 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { ChevronDown, SlidersHorizontal, X } from "lucide-react";
 import ApiSelect from "./bookSelect";
-import AdvancedFilters from "./advanceFilters";
 import { useI18n } from "@/i18n/i18nProvider";
 
 type SearchFiltersProps = {
-  genres: number;
-  authors: number;
+  genres: number | undefined;
+  authors: number | undefined;
   advancedOpen: boolean;
   setAdvancedOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onGenresChange: (value: number) => void;
@@ -31,6 +30,7 @@ export default function SearchFilters({
     >
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_auto_auto]">
         <ApiSelect
+          key={`genres-${genres ?? "empty"}`}
           endpoint={"genres"}
           placeholder="Genres"
           value={genres}
@@ -38,6 +38,7 @@ export default function SearchFilters({
         />
 
         <ApiSelect
+          key={`authors-${authors ?? "empty"}`}
           endpoint={"authors"}
           placeholder="Authors"
           value={authors}

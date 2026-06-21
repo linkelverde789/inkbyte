@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from books.api.serializers import (
+from books.api.serializers.serializers import (
     BookResponseSerializer,
     CreateBookSerializer,
     UpdateBookSerializer,

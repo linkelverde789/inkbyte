@@ -7,6 +7,7 @@ from books.api.views.books import (
     BooksFromAuthorView,
     BooksFromSeriesView,
 )
+from books.api.views.data import AuthorDataView, GenreDataView
 
 
 urlpatterns = [
@@ -24,4 +25,6 @@ urlpatterns = [
         BooksFromAuthorView.as_view(),
         name="books-from-author",
     ),
+    path("data/genres/", GenreDataView.as_view()),
+    path("data/authors/", AuthorDataView.as_view()),
 ]
