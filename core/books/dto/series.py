@@ -27,7 +27,7 @@ class UpdateSeriesInput:
 
     def validate(self) -> "UpdateSeriesInput":
         if self.name is not None:
-            self.title = self.title.strip()
+            self.name = self.name.strip()
 
         if not self.name:
             raise SeriesError("The name can't be empty")

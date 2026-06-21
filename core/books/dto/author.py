@@ -29,10 +29,10 @@ class UpdateAuthorInput:
 
     def validate(self) -> "UpdateAuthorInput":
         if self.name is not None:
-            self.title = self.title.strip()
+            self.name = self.name.strip()
 
-        if not self.name:
-            raise AuthorError("The name can't be empty")
+            if not self.name:
+                raise AuthorError("The name can't be empty")
 
         if self.description is not None:
             self.description = self.description.strip()

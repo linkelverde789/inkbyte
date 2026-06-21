@@ -38,7 +38,7 @@ def process_add_genres_to_book(genres: str, book: Book):
     print(f"processing {book.title} with genres: {genres}")
     for genre in genres:
         genre = genre.strip()
-        genre_data = GenreSelector.get_genre_by_name(genre)
+        genre_data = GenreSelector().get_genre_by_name(genre)
         if genre_data is None:
             print(f"The genre {genre} do not exists. Skipping")
             continue

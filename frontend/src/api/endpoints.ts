@@ -9,8 +9,8 @@ export const API_ENDPOINTS = {
   BOOKS_FROM_AUTHOR: "/books/books_from_author",
   GENRES_LIST: "/genres/",
   AUTHORS_LIST: "/authors/",
-  DATA_AUTHORS: "/data/authors/", //only id,name
-  DATA_GENRE: "/data/genres/", //only id,name
+  DATA_AUTHORS: "/data/authors/",
+  DATA_GENRES: "/data/genres/",
 } as const;
 
 export const API_DYNAMIC_ENDPOINTS = {
@@ -23,7 +23,7 @@ export const API_BASE = "/api";
 
 export const SELECT_DATA_ENDPOINTS = {
   authors: API_ENDPOINTS.DATA_AUTHORS,
-  genres: API_ENDPOINTS.DATA_AUTHORS,
+  genres: API_ENDPOINTS.DATA_GENRES,
 };
 
 export const RELATED_SHELF_ENDPOINTS = {

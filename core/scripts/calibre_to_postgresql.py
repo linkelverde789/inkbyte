@@ -61,7 +61,7 @@ def process_author(author_names: str) -> list[int]:
         if not name:
             continue
 
-        author = AuthorSelector.get_author_by_name(name)
+        author = AuthorSelector().get_author_by_name(name)
 
         if author is None:
             author = CreateAuthorUseCase().execute(
