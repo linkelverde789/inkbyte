@@ -32,7 +32,7 @@ function Index() {
         setLoading(false);
       }
     };
-    loadBooks();
+    void loadBooks();
   }, []);
 
   useEffect(() => {
