@@ -58,6 +58,19 @@ class BookListView(PublicReadPrivateWriteMixin, APIView):
             }
         )
 
+    def post(self, request):
+        serializer = CreateBookSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        try:
+            book_output = CreateBookUseCase().execute(**serializer.validated_data)
+        except BookError as exc:
+            return _book_error_response(exc)
+
+        return Response(
+            BookResponseSerializer(book_output, context={"request": request}).data
+        )
+
 
 class BooksFromSeriesView(PublicReadPrivateWriteMixin, APIView):
 
@@ -121,20 +134,8 @@ class BookDetailView(PublicReadPrivateWriteMixin, APIView):
             BookResponseSerializer(book_output, context={"request": request}).data
         )
 
-    def post(self, request):
-        serializer = CreateBookSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        try:
-            book_output = CreateBookUseCase().execute(**serializer.validated_data)
-        except BookError as exc:
-            return _book_error_response(exc)
-
-        return Response(
-            BookResponseSerializer(book_output, context={"request": request}).data
-        )
-
     def patch(self, request, book_id: int):
+
         try:
             serializer = UpdateBookSerializer(data=request.data, partial=True)
             serializer.is_valid(raise_exception=True)

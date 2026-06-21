@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             model_name="event",
             name="events_even_target__b09fcd_idx",
         ),
-        migrations.RemoveIndex(
+        migrations.RemoveField(
             model_name="event",
             name="anonymous_id",
         ),
