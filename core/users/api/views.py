@@ -7,6 +7,9 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from users.selectors.user import user_to_output
+from events.models import EventType
+from events.use_cases.create_event import CreateEventUseCase
 from users.api.serializers import (
     AuthResponseSerializer,
     LoginSerializer,
@@ -14,7 +17,6 @@ from users.api.serializers import (
 )
 from users.dto.auth import AuthTokensOutput
 from users.exceptions import AuthError
-from users.selectors.user import user_to_output
 from users.services.cookies import (
     clear_auth_cookies,
     get_refresh_token,
@@ -50,10 +52,12 @@ class RegisterView(APIView):
         remember_me = serializer.validated_data.get("remember_me", False)
         try:
             user_output, tokens_output = RegisterUserUseCase().execute(
-                **serializer.validated_data
+                **serializer.validated_data,
+                metadata={"path": request.path, "method": request.method},
             )
         except AuthError as exc:
             return _error_response(exc)
+
         return _auth_success_response(
             user_output,
             tokens_output,
@@ -71,10 +75,14 @@ class LoginView(APIView):
         remember_me = serializer.validated_data.get("remember_me", False)
         try:
             user_output, tokens_output = LoginUserUseCase().execute(
-                **serializer.validated_data
+                email=serializer.validated_data.get("email"),
+                password=serializer.validated_data.get("password"),
+                remember_me=remember_me,
+                metadata={"path": request.path, "method": request.method},
             )
         except AuthError as exc:
             return _error_response(exc)
+
         return _auth_success_response(
             user_output,
             tokens_output,
@@ -107,6 +115,13 @@ class LogoutView(APIView):
             except TokenError:
                 pass
         response = Response(status=status.HTTP_204_NO_CONTENT)
+        user = request.user
+        CreateEventUseCase().execute(
+            event_type=EventType.LOGOUT,
+            user=user,
+            target=user,
+            metadata={"path": request.path, "method": request.method},
+        )
         return clear_auth_cookies(response)
 
 
