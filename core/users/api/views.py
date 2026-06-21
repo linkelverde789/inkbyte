@@ -7,6 +7,8 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from events.models import EventType
+from events.use_cases.create_event import CreateEventUseCase
 from users.api.serializers import (
     AuthResponseSerializer,
     LoginSerializer,
@@ -70,13 +72,23 @@ class LoginView(APIView):
         serializer.is_valid(raise_exception=True)
         remember_me = serializer.validated_data.get("remember_me", False)
         try:
-            user_output, tokens_output = LoginUserUseCase().execute(
+            user, tokens_output = LoginUserUseCase().execute(
                 **serializer.validated_data
             )
         except AuthError as exc:
             return _error_response(exc)
+
+        CreateEventUseCase().execute(
+            event_type=EventType.LOGIN,
+            user=user,
+            target=user,
+            metadata={
+                "path": request.path,
+                "method": request.method,
+            },
+        )
         return _auth_success_response(
-            user_output,
+            user_to_output(user=user),
             tokens_output,
             remember_me=remember_me,
         )
