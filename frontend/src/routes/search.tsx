@@ -51,7 +51,6 @@ function SearchPage() {
 
   useEffect(() => {
     const controller = new AbortController();
-    console.log(params);
     const loadBooks = async () => {
       try {
         setLoading(true);
