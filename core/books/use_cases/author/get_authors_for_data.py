@@ -1,4 +1,3 @@
-from books.selectors.genre import GenreSelector
 from books.selectors.author import AuthorSelector
 
 

@@ -45,8 +45,6 @@ export default function ApiSelect({
 
   const final_value = value == null ? "" : String(value);
 
-  console.log("final_value", final_value, placeholder);
-
   return (
     <div>
       <Select
