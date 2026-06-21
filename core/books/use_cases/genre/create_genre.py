@@ -4,5 +4,6 @@ from books.services.genre import GenreService
 
 
 class CreateGenreUseCase:
-    def execute(self, genre: CreateGenreInput) -> Genre:
-        return GenreService.create_genre(genre)
+    def execute(self, name: str) -> Genre:
+        genre = CreateGenreInput(name=name)
+        return GenreService().create_genre(genre=genre)
