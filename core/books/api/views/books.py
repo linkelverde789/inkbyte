@@ -62,7 +62,9 @@ class BookListCreateView(PublicReadPrivateWriteMixin, APIView):
         except BookError as exc:
             return _book_error_response(exc)
 
-        return Response()
+        return Response(
+            BookResponseSerializer(book_output, context={"request": request}).data
+        )
 
 
 class BooksFromSeriesView(PublicReadPrivateWriteMixin, APIView):
@@ -114,7 +116,7 @@ class BookDetailView(PublicReadPrivateWriteMixin, APIView):
             return _book_error_response(exc)
 
         CreateEventUseCase().execute(
-            type=EventType.BOOK_VIEW,
+            event_type=EventType.BOOK_VIEW,
             user=request.user if request.user.is_authenticated else None,
             target=book_output,
             metadata={

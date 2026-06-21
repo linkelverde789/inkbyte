@@ -3,12 +3,12 @@ import { RELATED_SHELF_ENDPOINTS } from "@/api/endpoints";
 import { useI18n } from "@/i18n/i18nProvider";
 import { Book } from "@/types/book";
 import { Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
 type Props = {
   title: string;
   subtitle?: string;
-  icon: any;
+  icon: ReactNode;
   endpoint: keyof typeof RELATED_SHELF_ENDPOINTS;
   id: number;
 };
@@ -34,7 +34,7 @@ export function RelatedShelf(props: Props) {
       }
     };
 
-    fetchData();
+    void fetchData();
   }, [props.endpoint, props.id]);
 
   return (

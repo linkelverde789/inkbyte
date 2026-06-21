@@ -1,7 +1,6 @@
 from books.exceptions import BookError
 from books.models import Book
 from books.selectors.book import BookSelector
-from events.models import EventType
 
 
 class GetBookUseCase:

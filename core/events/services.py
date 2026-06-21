@@ -17,7 +17,7 @@ class EventService:
             object_id = data.target.pk
 
         return Event.objects.create(
-            event_type=data.type,
+            event_type=data.event_type,
             user=data.user,
             content_type=content_type,
             object_id=object_id,

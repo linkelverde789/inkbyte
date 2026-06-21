@@ -1,9 +1,21 @@
 import { Book } from "./book";
 
-export interface BookListResponse {
+export interface BaseListResponse {
   count: number;
   page: number;
   page_size: number;
+}
+
+export interface DataResult {
+  id: number;
+  name: string;
+}
+
+export interface BaseDataResponse {
+  results: DataResult[];
+}
+
+export interface BookListResponse extends BaseListResponse {
   results: Book[];
 }
 

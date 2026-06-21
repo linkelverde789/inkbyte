@@ -15,7 +15,9 @@ export function GenreFilter(props: GenreFilterProps) {
           key={category}
           variant={props.activeGenre === category ? "default" : "outline"}
           size="sm"
-          onClick={() => props.setGenre(category !== "All" ? category : "")}
+          onClick={() => {
+            props.setGenre(category !== "All" ? category : "");
+          }}
           className="shrink-0 rounded-full shadow-none"
         >
           {t(category)}

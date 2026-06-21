@@ -1,6 +1,3 @@
-from books.dto.book import *
-from books.services.book import BookService
-from books.selectors.book import *
 from books.selectors.file import FileSelector
 from books.services.file import FileService
 

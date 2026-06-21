@@ -3,7 +3,6 @@ from dataclasses import dataclass
 from books.exceptions import SeriesError
 
 
-
 @dataclass
 class CreateSeriesInput:
     name: str
@@ -16,9 +15,10 @@ class CreateSeriesInput:
             self.description = self.description.strip()
 
         if not self.name:
-            raise SeriesError("The name is required", "name_required")
-        
+            raise SeriesError("The name is required")
+
         return self
+
 
 @dataclass
 class UpdateSeriesInput:
@@ -30,8 +30,7 @@ class UpdateSeriesInput:
             self.title = self.title.strip()
 
         if not self.name:
-            raise SeriesError("The name can't be empty", "name_required")
-
+            raise SeriesError("The name can't be empty")
 
         if self.description is not None:
             self.description = self.description.strip()

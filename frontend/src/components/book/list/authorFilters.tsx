@@ -19,7 +19,9 @@ export default function AuthorFilter({ value, onChange }: Props) {
       <input
         id="author-filter"
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => {
+          onChange(e.target.value);
+        }}
         className="h-11 w-full border border-input bg-transparent px-3 text-sm outline-none focus:border-primary"
         placeholder={t("Author's name")}
       />

@@ -73,7 +73,7 @@ function SearchPage() {
       }
     };
 
-    loadBooks();
+    void loadBooks();
   }, [
     params.page,
     params.page_size,
@@ -103,12 +103,12 @@ function SearchPage() {
             authors={params.author ?? -1}
             advancedOpen={advancedOpen}
             setAdvancedOpen={setAdvancedOpen}
-            onGenresChange={(value) =>
-              setParams((prev) => ({ ...prev, genre: value, page: 1 }))
-            }
-            onAuthorsChange={(value) =>
-              setParams((prev) => ({ ...prev, author: value, page: 1 }))
-            }
+            onGenresChange={(value) => {
+              setParams((prev) => ({ ...prev, genre: value, page: 1 }));
+            }}
+            onAuthorsChange={(value) => {
+              setParams((prev) => ({ ...prev, author: value, page: 1 }));
+            }}
             onClear={() => {
               setParams((prev) => ({
                 ...prev,

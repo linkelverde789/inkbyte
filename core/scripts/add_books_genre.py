@@ -63,6 +63,8 @@ def main(origin_csv: str) -> int:
             process_add_genres_to_book(genres=genres, book=book)
             count += 1
 
+    return count
+
 
 if __name__ == "__main__":
     args = parse_args()

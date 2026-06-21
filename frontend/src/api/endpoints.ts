@@ -21,16 +21,10 @@ export const API_DYNAMIC_ENDPOINTS = {
 
 export const API_BASE = "/api";
 
-export const SELECT_DATA_ENDPOINTS = [
-  {
-    key: "authors",
-    url: API_ENDPOINTS.DATA_AUTHORS,
-  },
-  {
-    key: "genres",
-    url: API_ENDPOINTS.DATA_GENRE,
-  },
-] as const;
+export const SELECT_DATA_ENDPOINTS = {
+  authors: API_ENDPOINTS.DATA_AUTHORS,
+  genres: API_ENDPOINTS.DATA_AUTHORS,
+};
 
 export const RELATED_SHELF_ENDPOINTS = {
   series: API_DYNAMIC_ENDPOINTS.BOOKS_FROM_SERIES,

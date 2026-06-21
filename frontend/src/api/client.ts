@@ -103,11 +103,10 @@ export class API {
   }
 
   #resolveUrl(path: string, params?: QueryParams) {
-    const endpoint = path.startsWith("/api")
-      ? path
-      : `${API_BASE}${path.startsWith("/") ? path : `/${path}`}`;
-
-    const url = new URL(endpoint, window.location.origin);
+    const url = new URL(`${API_BASE}${path}`, window.location.origin);
+    if (!url.href.startsWith(API_BASE)) {
+      throw new Error("Invalid API endpoint");
+    }
 
     if (params) {
       Object.entries(params).forEach(([key, value]) => {

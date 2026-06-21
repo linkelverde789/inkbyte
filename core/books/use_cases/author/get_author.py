@@ -8,6 +8,6 @@ class GetAuthorUseCase:
         author = AuthorSelector.get_author_by_id(pk)
 
         if author is None:
-            raise AuthorError("Author not found", "not_found")
-        
+            raise AuthorError("Author not found")
+
         return author

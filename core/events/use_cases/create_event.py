@@ -7,14 +7,14 @@ class CreateEventUseCase:
     def execute(
         self,
         *,
-        type: EventType,
+        event_type: EventType,
         user=None,
         target=None,
         metadata=None,
     ):
         return EventService.create(
             data=CreateEventInput(
-                type=type,
+                event_type=event_type,
                 user=user,
                 target=target,
                 metadata=metadata,
