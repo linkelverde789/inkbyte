@@ -51,13 +51,20 @@ class RegisterView(APIView):
         serializer.is_valid(raise_exception=True)
         remember_me = serializer.validated_data.get("remember_me", False)
         try:
-            user_output, tokens_output = RegisterUserUseCase().execute(
+            user, tokens_output = RegisterUserUseCase().execute(
                 **serializer.validated_data
             )
         except AuthError as exc:
             return _error_response(exc)
+
+        CreateEventUseCase().execute(
+            event_type=EventType.SIGNUP,
+            user=user,
+            target=user,
+            metadata={"path": request.path, "method": request.method},
+        )
         return _auth_success_response(
-            user_output,
+            user_to_output(user),
             tokens_output,
             remember_me=remember_me,
             status_code=status.HTTP_201_CREATED,

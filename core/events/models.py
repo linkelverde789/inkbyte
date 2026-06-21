@@ -5,6 +5,7 @@ from django.db import models
 
 
 class EventType(models.TextChoices):
+    SIGNUP = "signup", "Sign Up"
     LOGIN = "login", "Login"
     LOGOUT = "logout", "Logout"
     BOOK_DOWNLOAD = "book:download", "Book download"

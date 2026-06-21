@@ -1,3 +1,4 @@
+from users.models import User
 from users.dto.auth import AuthTokensOutput
 from users.dto.user import UserOutput
 from users.services.auth import issue_tokens
@@ -7,8 +8,8 @@ from users.validators.register import validate_register_input
 
 
 class RegisterUserUseCase:
-    def execute(self, **raw) -> tuple[UserOutput, AuthTokensOutput]:
+    def execute(self, **raw) -> tuple[User, AuthTokensOutput]:
         data = validate_register_input(**raw)
         user = create_user(data)
         tokens = issue_tokens(user, remember_me=data.remember_me)
-        return user_to_output(user), tokens
+        return user, tokens
