@@ -50,6 +50,8 @@ function SearchPage() {
   const [advancedOpen, setAdvancedOpen] = useState(false);
 
   useEffect(() => {
+    const controller = new AbortController();
+    console.log(params);
     const loadBooks = async () => {
       try {
         setLoading(true);
@@ -74,10 +76,12 @@ function SearchPage() {
     };
 
     void loadBooks();
+    return () => controller.abort();
   }, [
     params.page,
     params.page_size,
-    params.genre,
+    params.genre_id,
+    params.author_id,
     params.type,
     debouncedQuery,
   ]);
@@ -99,21 +103,21 @@ function SearchPage() {
 
         <div className="mx-auto max-w-7xl px-5 py-10 sm:px-8 md:py-14">
           <SearchFilters
-            genres={params.genre}
-            authors={params.author}
+            genres={params.genre_id}
+            authors={params.author_id}
             advancedOpen={advancedOpen}
             setAdvancedOpen={setAdvancedOpen}
             onGenresChange={(value) => {
-              setParams((prev) => ({ ...prev, genre: value, page: 1 }));
+              setParams((prev) => ({ ...prev, genre_id: value, page: 1 }));
             }}
             onAuthorsChange={(value) => {
-              setParams((prev) => ({ ...prev, author: value, page: 1 }));
+              setParams((prev) => ({ ...prev, author_id: value, page: 1 }));
             }}
             onClear={() => {
               setParams((prev) => ({
                 ...prev,
-                genre: undefined,
-                author: undefined,
+                genre_id: undefined,
+                author_id: undefined,
                 type: undefined,
                 format: undefined,
                 page: 1,

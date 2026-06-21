@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useI18n } from "@/i18n/i18nProvider";
 import { BaseDataResponse, DataResult } from "@/types/api";
 import { useEffect, useState } from "react";
 
@@ -23,7 +24,7 @@ export default function ApiSelect({
   value,
   onChange,
 }: Props) {
-  console.log("value", value);
+  const { t } = useI18n();
   const [options, setOptions] = useState<DataResult[]>([]);
 
   useEffect(() => {
@@ -42,8 +43,9 @@ export default function ApiSelect({
     void fetchData();
   }, [endpoint]);
 
-  const final_value = value !== undefined ? String(value) : undefined;
-  console.log("placeholder", placeholder);
+  const final_value = value == null ? "" : String(value);
+
+  console.log("final_value", final_value, placeholder);
 
   return (
     <div>
@@ -54,12 +56,12 @@ export default function ApiSelect({
         }}
       >
         <SelectTrigger className="h-12 rounded-none bg-background px-4 shadow-none">
-          <SelectValue placeholder={placeholder} />
+          <SelectValue placeholder={t(placeholder)} />
         </SelectTrigger>
         <SelectContent>
           {options.map((item) => (
             <SelectItem key={item.id} value={String(item.id)}>
-              {item.name}
+              {t(item.name)}
             </SelectItem>
           ))}
         </SelectContent>

@@ -3,7 +3,7 @@ from django.urls import path
 from books.api.views.authors import AuthorDetailView, AuthorListCreateView
 from books.api.views.books import (
     BookDetailView,
-    BookListCreateView,
+    BookListView,
     BooksFromAuthorView,
     BooksFromSeriesView,
 )
@@ -11,7 +11,7 @@ from books.api.views.data import AuthorDataView, GenreDataView
 
 
 urlpatterns = [
-    path("books/", BookListCreateView.as_view(), name="book-list-create"),
+    path("books/", BookListView.as_view(), name="book-list-create"),
     path("books/<int:book_id>/", BookDetailView.as_view(), name="book-detail"),
     path("authors/", AuthorListCreateView.as_view(), name="author-list-create"),
     path("authors/<int:author_id>/", AuthorDetailView.as_view(), name="author-detail"),

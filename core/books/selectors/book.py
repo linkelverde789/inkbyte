@@ -26,4 +26,10 @@ class BookSelector:
         if filters.q:
             queryset = queryset.filter(title__icontains=filters.q)
 
+        if filters.author_id:
+            queryset = queryset.filter(authors=filters.author_id)
+
+        if filters.genre_id:
+            queryset = queryset.filter(genres=filters.genre_id)
+
         return queryset
