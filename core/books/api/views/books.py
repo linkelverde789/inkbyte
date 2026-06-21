@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from books.api.serializers import (
+from books.api.serializers.serializers import (
     BookResponseSerializer,
     CreateBookSerializer,
     UpdateBookSerializer,
@@ -30,14 +30,19 @@ def _book_error_response(exc: BookError) -> Response:
     return Response({"detail": exc.message, "code": exc.code}, status=status_code)
 
 
-class BookListCreateView(PublicReadPrivateWriteMixin, APIView):
+class BookListView(PublicReadPrivateWriteMixin, APIView):
 
     def get(self, request):
         page = int(request.query_params.get("page", 1))
         page_size = int(request.query_params.get("page_size", 10))
         q = str(request.query_params.get("q", ""))
+        genre_id = request.query_params.get("genre_id")
+        genre_id = int(genre_id) if genre_id is not None else None
 
-        filters_dto = BookFilters(q=q)
+        author_id = request.query_params.get("author_id")
+        author_id = int(author_id) if author_id is not None else None
+
+        filters_dto = BookFilters(q=q, genre_id=genre_id, author_id=author_id)
 
         items, total = ListBooksUseCase().execute(
             page=page, page_size=page_size, filters=filters_dto
@@ -51,19 +56,6 @@ class BookListCreateView(PublicReadPrivateWriteMixin, APIView):
                     items, many=True, context={"request": request}
                 ).data,
             }
-        )
-
-    def post(self, request):
-        serializer = CreateBookSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        try:
-            book_output = CreateBookUseCase().execute(**serializer.validated_data)
-        except BookError as exc:
-            return _book_error_response(exc)
-
-        return Response(
-            BookResponseSerializer(book_output, context={"request": request}).data
         )
 
 
@@ -124,6 +116,19 @@ class BookDetailView(PublicReadPrivateWriteMixin, APIView):
                 "method": request.method,
             },
         )
+
+        return Response(
+            BookResponseSerializer(book_output, context={"request": request}).data
+        )
+
+    def post(self, request):
+        serializer = CreateBookSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        try:
+            book_output = CreateBookUseCase().execute(**serializer.validated_data)
+        except BookError as exc:
+            return _book_error_response(exc)
 
         return Response(
             BookResponseSerializer(book_output, context={"request": request}).data

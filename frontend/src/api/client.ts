@@ -108,9 +108,6 @@ export class API {
       : `${API_BASE}${path.startsWith("/") ? path : `/${path}`}`;
 
     const url = new URL(endpoint, window.location.origin);
-    if (!url.href.startsWith(API_BASE)) {
-      throw new Error("Invalid API endpoint");
-    }
 
     if (params) {
       Object.entries(params).forEach(([key, value]) => {

@@ -1,12 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { ChevronDown, SlidersHorizontal, X } from "lucide-react";
 import ApiSelect from "./bookSelect";
-import AdvancedFilters from "./advanceFilters";
 import { useI18n } from "@/i18n/i18nProvider";
 
 type SearchFiltersProps = {
-  genres: number;
-  authors: number;
+  genres: number | undefined;
+  authors: number | undefined;
   advancedOpen: boolean;
   setAdvancedOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onGenresChange: (value: number) => void;
@@ -44,7 +43,7 @@ export default function SearchFilters({
           onChange={onAuthorsChange}
         />
 
-        <Button
+        {/* <Button
           variant="outline"
           size="editorial"
           className="rounded-none bg-background shadow-none"
@@ -61,7 +60,7 @@ export default function SearchFilters({
                 : "transition-transform"
             }
           />
-        </Button>
+        </Button> */}
 
         <Button variant="ghost" size="editorial" onClick={onClear}>
           <X /> {t("Clear")}

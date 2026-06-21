@@ -7,13 +7,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useI18n } from "@/i18n/i18nProvider";
 import { BaseDataResponse, DataResult } from "@/types/api";
 import { useEffect, useState } from "react";
 
 type Props = {
   endpoint: keyof typeof SELECT_DATA_ENDPOINTS;
   placeholder: string;
-  value: string | number | undefined | null;
+  value: string | number | undefined;
   onChange: (value: number) => void;
 };
 
@@ -23,13 +24,8 @@ export default function ApiSelect({
   value,
   onChange,
 }: Props) {
-  let placeholder_data = [
-    { id: -1, name: "Todos" },
-    { id: 1, name: "Ficción" },
-    { id: 2, name: "Misterio" },
-    { id: 3, name: "Fantasía" },
-  ];
-  const [options, setOptions] = useState<DataResult[]>(placeholder_data);
+  const { t } = useI18n();
+  const [options, setOptions] = useState<DataResult[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,16 +43,23 @@ export default function ApiSelect({
     void fetchData();
   }, [endpoint]);
 
+  const final_value = value == null ? "" : String(value);
+
   return (
     <div>
-      <Select value={value?.toString()} onValueChange={onChange}>
+      <Select
+        value={final_value}
+        onValueChange={(event) => {
+          onChange(Number(event));
+        }}
+      >
         <SelectTrigger className="h-12 rounded-none bg-background px-4 shadow-none">
-          <SelectValue placeholder={placeholder} />
+          <SelectValue placeholder={t(placeholder)} />
         </SelectTrigger>
         <SelectContent>
           {options.map((item) => (
             <SelectItem key={item.id} value={String(item.id)}>
-              {item.name}
+              {t(item.name)}
             </SelectItem>
           ))}
         </SelectContent>

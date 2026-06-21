@@ -3,7 +3,7 @@ from books.models import Genre
 from books.selectors.genre import GenreSelector
 
 
-class GetGenreUseCAse:
+class GetGenreUseCase:
     def execute(self, genre_id: int) -> Genre | None:
         genre = GenreSelector().get_genre_by_id(genre_id=genre_id)
         if genre is None:

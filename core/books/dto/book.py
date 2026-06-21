@@ -67,5 +67,7 @@ class UpdateBookInput:
 
 @dataclass
 class BookFilters:
-    q: str = ""
-    author: str = ""
+    q: str | None = None
+    genre_id: int | None = None
+    author_id: int | None = None
+    author: str | None = None

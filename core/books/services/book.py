@@ -31,18 +31,18 @@ class BookService:
         self._create_book_author_relation(book, data.author_ids)
         self._create_book_genre_relation(book, data.genre_ids)
 
-    def add_genre_to_book(genre: Genre, book: Book) -> Book:
+    def add_genre_to_book(self, genre: Genre, book: Book) -> Book:
         book.genres.add(genre)
         return book
 
-    def add_author_to_book(author: Author, book: Book) -> Book:
+    def add_author_to_book(self, author: Author, book: Book) -> Book:
         book.author.add(author)
         return book
 
-    def add_book_to_series(book: Book, series: Series, index: int):
+    def add_book_to_series(self, book: Book, series: Series, index: int):
         SeriesMembership.objects.create(book=book, series=series, index=index)
 
-    def update_book(book: Book, data: UpdateBookInput) -> Book:
+    def update_book(self, book: Book, data: UpdateBookInput) -> Book:
         if data.title is not None:
             book.title = data.title
         if data.description is not None:
@@ -52,5 +52,5 @@ class BookService:
         book.save()
         return book
 
-    def delete_book(book: Book) -> None:
+    def delete_book(self, book: Book) -> None:
         book.delete()
