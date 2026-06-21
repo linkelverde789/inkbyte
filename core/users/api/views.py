@@ -126,6 +126,13 @@ class LogoutView(APIView):
             except TokenError:
                 pass
         response = Response(status=status.HTTP_204_NO_CONTENT)
+        user = request.user
+        CreateEventUseCase().execute(
+            event_type=EventType.LOGOUT,
+            user=user,
+            target=user,
+            metadata={"path": request.path, "method": request.method},
+        )
         return clear_auth_cookies(response)
 
 
