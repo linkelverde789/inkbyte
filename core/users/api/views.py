@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from users.selectors.user import user_to_output
 from events.models import EventType
 from events.use_cases.create_event import CreateEventUseCase
 from users.api.serializers import (
@@ -16,7 +17,6 @@ from users.api.serializers import (
 )
 from users.dto.auth import AuthTokensOutput
 from users.exceptions import AuthError
-from users.selectors.user import user_to_output
 from users.services.cookies import (
     clear_auth_cookies,
     get_refresh_token,
@@ -51,20 +51,15 @@ class RegisterView(APIView):
         serializer.is_valid(raise_exception=True)
         remember_me = serializer.validated_data.get("remember_me", False)
         try:
-            user, tokens_output = RegisterUserUseCase().execute(
-                **serializer.validated_data
+            user_output, tokens_output = RegisterUserUseCase().execute(
+                **serializer.validated_data,
+                metadata={"path": request.path, "method": request.method},
             )
         except AuthError as exc:
             return _error_response(exc)
 
-        CreateEventUseCase().execute(
-            event_type=EventType.SIGNUP,
-            user=user,
-            target=user,
-            metadata={"path": request.path, "method": request.method},
-        )
         return _auth_success_response(
-            user_to_output(user),
+            user_output,
             tokens_output,
             remember_me=remember_me,
             status_code=status.HTTP_201_CREATED,
@@ -79,23 +74,17 @@ class LoginView(APIView):
         serializer.is_valid(raise_exception=True)
         remember_me = serializer.validated_data.get("remember_me", False)
         try:
-            user, tokens_output = LoginUserUseCase().execute(
-                **serializer.validated_data
+            user_output, tokens_output = LoginUserUseCase().execute(
+                email=serializer.validated_data.get("email"),
+                password=serializer.validated_data.get("password"),
+                remember_me=remember_me,
+                metadata={"path": request.path, "method": request.method},
             )
         except AuthError as exc:
             return _error_response(exc)
 
-        CreateEventUseCase().execute(
-            event_type=EventType.LOGIN,
-            user=user,
-            target=user,
-            metadata={
-                "path": request.path,
-                "method": request.method,
-            },
-        )
         return _auth_success_response(
-            user_to_output(user=user),
+            user_output,
             tokens_output,
             remember_me=remember_me,
         )
