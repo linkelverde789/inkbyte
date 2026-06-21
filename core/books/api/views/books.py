@@ -17,6 +17,8 @@ from books.use_cases.book.update_book import UpdateBookUseCase
 from books.dto.book import BookFilters
 from books.use_cases.book.get_books_from_series import GetBookFromSeriesUseCase
 from books.use_cases.book.get_books_from_author import GetBookFromAuthorUseCase
+from events.use_cases.create_event import CreateEventUseCase
+from events.models import EventType
 
 
 def _book_error_response(exc: BookError) -> Response:
@@ -105,12 +107,21 @@ class BooksFromAuthorView(PublicReadPrivateWriteMixin, APIView):
 
 
 class BookDetailView(PublicReadPrivateWriteMixin, APIView):
-
     def get(self, request, book_id: int):
         try:
             book_output = GetBookUseCase().execute(book_id)
         except BookError as exc:
             return _book_error_response(exc)
+
+        CreateEventUseCase().execute(
+            type=EventType.BOOK_VIEW,
+            user=request.user if request.user.is_authenticated else None,
+            target=book_output,
+            metadata={
+                "path": request.path,
+                "method": request.method,
+            },
+        )
 
         return Response(
             BookResponseSerializer(book_output, context={"request": request}).data

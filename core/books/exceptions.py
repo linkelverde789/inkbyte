@@ -28,3 +28,8 @@ class GenreError(AppError):
 class FileError(AppError):
     def __init__(self, message: str):
         super().__init__(message, "file_error")
+
+
+class RatingError(AppError):
+    def __init__(self, message: str):
+        super().__init__(message, "rating_error")

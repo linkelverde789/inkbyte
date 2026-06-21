@@ -17,6 +17,11 @@ export interface BookSeries {
   index: number;
 }
 
+export interface BookFile {
+  id: number;
+  file: string;
+}
+
 export interface Book {
   id: number;
   title: string;
@@ -24,8 +29,8 @@ export interface Book {
   image: string | undefined;
   genres: BookGenre[] | undefined;
   authors: Author[];
+  rating: number;
+  series: BookSeries[];
+  files: BookFile[];
   type?: string;
-  rating?: number;
-  format?: string;
-  series?: BookSeries[];
 }

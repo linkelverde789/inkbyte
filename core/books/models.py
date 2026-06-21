@@ -1,5 +1,7 @@
 from django.db import models
 
+from users.models import User
+
 
 # =========================
 # Author
@@ -66,7 +68,7 @@ class Type(models.TextChoices):
 class Book(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
-    image = models.ImageField(upload_to="books/", null=True, blank=True)
+    image = models.ImageField(upload_to="books/covers", null=True, blank=True)
 
     series = models.ManyToManyField(
         Series, through="SeriesMembership", related_name="books", blank=True
@@ -120,3 +122,18 @@ class File(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
+
+
+# =========================
+# Rating
+# =========================
+class Rating(models.Model):
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    rate = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ("user", "book")
+        ordering = ["book", "rate"]
