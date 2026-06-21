@@ -6,6 +6,6 @@ class GetBookFromSeriesUseCase:
     def execute(
         self, series_id: int, page_size: int = 12, page: int = 1
     ) -> tuple[list[Book], int]:
-        queryset = BookSelector.list_books()
+        queryset = BookSelector().list_books()
         queryset = queryset.filter(series__id=series_id)
         return queryset.paginate(page_size=page_size, page=page)
