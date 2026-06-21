@@ -12,7 +12,7 @@ class CreateEventUseCase:
         target=None,
         metadata=None,
     ):
-        return EventService.create(
+        return EventService().create(
             data=CreateEventInput(
                 event_type=event_type,
                 user=user,

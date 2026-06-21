@@ -1,6 +1,6 @@
 from books.services.genre import GenreService
-from core.books.exceptions import GenreError
-from core.books.selectors.genre import GenreSelector
+from books.exceptions import GenreError
+from books.selectors.genre import GenreSelector
 
 
 class DeleteGenreUseCase:

@@ -113,7 +113,7 @@ def process_book(
 
 
 def process_series(book: Book, series_name: str, series_index):
-    series = SeriesSelector.get_one_series_by_name(series_name)
+    series = SeriesSelector().get_one_series_by_name(series_name)
 
     if series is None:
         series = CreateSeriesUseCase().execute(name=series_name)

@@ -8,5 +8,5 @@ class UpdateAuthorUseCase:
     def execute(self, author_id: int, **raw) -> Author:
         author_dto = UpdateAuthorInput(**raw).validate()
         author = AuthorSelector().get_author_by_id(author_id)
-        author = AuthorService.update_author(author=author, data=author_dto)
+        author = AuthorService().update_author(author=author, data=author_dto)
         return author

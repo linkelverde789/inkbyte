@@ -53,7 +53,7 @@ def main(origin_csv: str) -> int:
 
             title = row["title"].strip()
 
-            book = BookSelector.get_book_by_title_exact(title)
+            book = BookSelector().get_book_by_title_exact(title)
 
             if book is None:
                 print(f"The book {title} do not exists. Skipping")
