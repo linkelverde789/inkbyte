@@ -75,7 +75,9 @@ function SearchPage() {
     };
 
     void loadBooks();
-    return () => controller.abort();
+    return () => {
+      controller.abort();
+    };
   }, [
     params.page,
     params.page_size,
