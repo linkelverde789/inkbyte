@@ -2,55 +2,44 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowLeft } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useAuth } from "@/auth/AuthContext";
 import { useI18n } from "@/i18n/i18nProvider";
+import { SignUpForm } from "@/components/signup/SignUpForm";
 
 export const Route = createFileRoute("/signup")({
   component: SignupPage,
 });
-
-const INITIAL_FORM = {
-  firstName: "",
-  lastName: "",
-  username: "",
-  email: "",
-  password: "",
-  passwordConfirm: "",
-};
 
 function SignupPage() {
   const { t } = useI18n();
 
   const { register } = useAuth();
   const navigate = useNavigate();
-  const [form, setForm] = useState(INITIAL_FORM);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const update =
-    (key: keyof typeof form) => (event: React.ChangeEvent<HTMLInputElement>) =>
-      setForm({ ...form, [key]: event.target.value });
-
-  async function submit(event: React.FormEvent) {
-    event.preventDefault();
-    setError("");
-
-    if (form.password !== form.passwordConfirm) {
-      setError("Las contraseñas no coinciden.");
+  async function submit(
+    firstName: string,
+    lastName: string,
+    username: string,
+    email: string,
+    password: string,
+    passwordConfirm: string,
+  ) {
+    if (password !== passwordConfirm) {
+      setError(t("Passwords don't match"));
       return;
     }
 
     setLoading(true);
     try {
       await register({
-        email: form.email.trim(),
-        password: form.password,
-        username: form.username,
-        password_confirm: form.passwordConfirm,
-        first_name: form.firstName.trim(),
-        last_name: form.lastName.trim(),
+        email: email.trim(),
+        password: password,
+        username: username,
+        password_confirm: passwordConfirm,
+        first_name: firstName.trim(),
+        last_name: lastName.trim(),
         remember_me: true,
       });
       await navigate({ to: "/profile" });
@@ -79,98 +68,7 @@ function SignupPage() {
         <p className="mb-9 text-muted-foreground">
           {t("Free, simple and ready for your next read.")}
         </p>
-        <form onSubmit={submit} className="grid gap-5 sm:grid-cols-2">
-          {[
-            { k: "firstName" as const, l: "Name", a: "given-name", m: 80 },
-            {
-              k: "lastName" as const,
-              l: "Last name",
-              a: "family-name",
-              m: 120,
-            },
-            {
-              k: "username" as const,
-              l: "Username",
-              a: "given-username",
-              m: 80,
-            },
-            { k: "email" as const, l: "Email", a: "email", m: 255 },
-          ].map(({ k, l, a, m }) => (
-            <div key={k}>
-              <label
-                htmlFor={k}
-                className="mb-2 block text-xs font-bold uppercase tracking-wider"
-              >
-                {t(l)}
-              </label>
-              <Input
-                id={k}
-                type={k === "email" ? "email" : "text"}
-                value={form[k]}
-                onChange={update(k)}
-                required
-                maxLength={m}
-                autoComplete={a}
-                className="h-12 rounded-none"
-              />
-            </div>
-          ))}
-          <div>
-            <label
-              htmlFor="signup-password"
-              className="mb-2 block text-xs font-bold uppercase tracking-wider"
-            >
-              {t("Password")}
-            </label>
-            <Input
-              id="signup-password"
-              type="password"
-              value={form.password}
-              onChange={update("password")}
-              required
-              minLength={8}
-              maxLength={128}
-              autoComplete="new-password"
-              className="h-12 rounded-none"
-            />
-            <p className="mt-2 text-xs text-muted-foreground">
-              {t("Minimum 8 characters.")}
-            </p>
-          </div>
-          <div>
-            <label
-              htmlFor="signup-password-confirm"
-              className="mb-2 block text-xs font-bold uppercase tracking-wider"
-            >
-              {t("Confirm password")}
-            </label>
-            <Input
-              id="signup-password-confirm"
-              type="password"
-              value={form.passwordConfirm}
-              onChange={update("passwordConfirm")}
-              required
-              minLength={8}
-              maxLength={128}
-              autoComplete="new-password"
-              className="h-12 rounded-none"
-            />
-          </div>
-          {error && (
-            <p role="alert" className="text-sm text-destructive sm:col-span-2">
-              {error}
-            </p>
-          )}
-          <Button
-            type="submit"
-            variant="editorial"
-            size="editorial"
-            disabled={loading}
-            className="sm:col-span-2"
-          >
-            {loading ? t("Creating…") : t("Create my account")}
-          </Button>
-        </form>
+        <SignUpForm error={error} loading={loading} onSubmit={submit} />
         <p className="mt-7 text-center text-sm text-muted-foreground">
           {t("Already have an account?")}{" "}
           <Link
