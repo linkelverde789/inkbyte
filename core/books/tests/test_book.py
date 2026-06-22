@@ -133,20 +133,14 @@ def test_check_filters_from_book_list(auth_client):
     genre = Genre.objects.create(name="Crime")
     author = Author.objects.create(name="Brandon Sanderson")
 
-    for item in range(0, 100):
-        data = {
-            "title": f"Title {item}",
-        }
-        if item % 2 == 0:
-            data["author_ids"] = [author.id]
-        else:
-            data["genre_ids"] = [genre.id]
+    books = [Book(title=f"Title {i}") for i in range(100)]
+    books = Book.objects.bulk_create(books)
 
-        auth_client.post(
-            "/api/books/",
-            data=data,
-            format="json",
-        )
+    for i, book in enumerate(books):
+        if i % 2 == 0:
+            book.authors.add(author)
+        else:
+            book.genres.add(genre)
 
     # Check pagination and page_size
     response = auth_client.get(

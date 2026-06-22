@@ -7,6 +7,6 @@ class ListAuthorUseCase:
     def execute(
         self, *, page: int = 1, page_size: int = 12
     ) -> tuple[list[Author], int]:
-        queryset = QuerySetPipeline(AuthorSelector().list_author().order_by("name"))
+        queryset = QuerySetPipeline(AuthorSelector().list_author())
 
         return queryset.paginate(page=page, page_size=page_size)

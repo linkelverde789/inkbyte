@@ -12,4 +12,4 @@ class AuthorSelector:
         return Author.objects.filter(name__icontains=author_name)
 
     def list_author(self):
-        return Author.objects.all()
+        return Author.objects.all().order_by("name", "id")
