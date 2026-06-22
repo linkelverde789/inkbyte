@@ -9,7 +9,7 @@ class EventType(models.TextChoices):
     LOGIN = "login", "Login"
     LOGOUT = "logout", "Logout"
     BOOK_DOWNLOAD = "book:download", "Book download"
-    BOOK_VIEW = "book:view", "Book viewd"
+    BOOK_VIEW = "book:view", "Book viewed"
     BOOK_RATED = "book:rated", "Book rated"
 
 

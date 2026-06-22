@@ -40,15 +40,16 @@ class AuthorListCreateView(PublicReadPrivateWriteMixin, APIView):
         page_size = int(request.query_params.get("page_size", 10))
 
         items, total = ListAuthorUseCase().execute(page=page, page_size=page_size)
-
-        payload = {
-            "count": total,
-            "page": page,
-            "page_size": page_size,
-            "results": _serialize_author(items, request),
-        }
-        serializer = AuthorListResponseSerializer(payload, context={"request": request})
-        return Response(serializer.data)
+        return Response(
+            {
+                "count": total,
+                "page": page,
+                "page_size": page_size,
+                "results": AuthorResponseSerializer(
+                    items, many=True, context={"request": request}
+                ).data,
+            }
+        )
 
     def post(self, request):
         serializer = CreateAuthorSerializer(data=request.data)
@@ -60,7 +61,7 @@ class AuthorListCreateView(PublicReadPrivateWriteMixin, APIView):
             return _author_error_response(exc)
 
         return Response(
-            _serialize_author(author_output, request),
+            AuthorResponseSerializer(author_output, context={"request": request}).data,
             status=status.HTTP_201_CREATED,
         )
 
@@ -73,7 +74,9 @@ class AuthorDetailView(PublicReadPrivateWriteMixin, APIView):
         except AuthorError as exc:
             return _author_error_response(exc)
 
-        return Response(_serialize_author(author_output, request))
+        return Response(
+            AuthorResponseSerializer(author_output, context={"request": request}).data
+        )
 
     def patch(self, request, author_id: int):
         try:
@@ -88,7 +91,7 @@ class AuthorDetailView(PublicReadPrivateWriteMixin, APIView):
             return _author_error_response(exc)
 
         return Response(
-            _serialize_author(author_output, request), status=status.HTTP_200_OK
+            AuthorResponseSerializer(author_output, context={"request": request}).data
         )
 
     def delete(self, request, author_id: int):

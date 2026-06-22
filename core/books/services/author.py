@@ -12,7 +12,7 @@ class AuthorService:
 
     def update_author(self, author: Author, data: UpdateAuthorInput) -> Author:
         if data.name is not None:
-            author.name = data.title
+            author.name = data.name
         if data.description is not None:
             author.description = data.description
         if data.image is not None:
