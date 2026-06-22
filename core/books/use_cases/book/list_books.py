@@ -1,6 +1,7 @@
 from books.selectors.book import BookSelector
 from books.models import Book
 from books.dto.book import BookFilters
+from query_pipeline import QuerySetPipeline
 
 
 class ListBooksUseCase:
@@ -12,4 +13,4 @@ class ListBooksUseCase:
         if filters:
             queryset = BookSelector().apply_filters(queryset=queryset, filters=filters)
 
-        return queryset.paginate(page=page, page_size=page_size)
+        return QuerySetPipeline(queryset).paginate(page=page, page_size=page_size)

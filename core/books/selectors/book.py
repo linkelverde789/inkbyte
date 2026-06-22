@@ -1,6 +1,5 @@
 from books.models import Book
 from books.dto.book import BookFilters
-from query_pipeline import QuerySetPipeline
 
 
 class BookSelector:
@@ -11,7 +10,7 @@ class BookSelector:
 
     @staticmethod
     def search_by_title(text: str):
-        return QuerySetPipeline(Book.objects.filter(title__icontains=text))
+        return Book.objects.filter(title__icontains=text)
 
     @staticmethod
     def get_book_by_title_exact(text: str) -> Book:
@@ -19,7 +18,7 @@ class BookSelector:
 
     @staticmethod
     def list_books():
-        return QuerySetPipeline(Book.objects.all().order_by("id", "title"))
+        return Book.objects.all().order_by("title", "id")
 
     @staticmethod
     def apply_filters(queryset, filters: BookFilters):

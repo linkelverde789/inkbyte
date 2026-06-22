@@ -1,6 +1,7 @@
 import pytest
 
 from books.models import Author, Book, Genre
+from books.api.views import data
 
 
 @pytest.mark.django_db
@@ -126,3 +127,51 @@ def test_add_authors_to_book(auth_client):
     response = auth_client.get(path=f"/api/books/{book.id}/")
 
     assert len(response.data["authors"]) == 3
+
+
+@pytest.mark.django_db
+def test_check_filters_from_book_list(auth_client):
+    genre = Genre.objects.create(name="Crime")
+    author = Author.objects.create(name="Brandon Sanderson")
+
+    for item in range(0, 100):
+        data = {
+            "title": f"Title {item}",
+        }
+        if item % 2 == 0:
+            data["author_ids"] = [author.id]
+        else:
+            data["genre_ids"] = [genre.id]
+
+        auth_client.post(
+            "/api/books/",
+            data=data,
+            format="json",
+        )
+
+    # Check pagination and page_size
+    response = auth_client.get(
+        "/api/books/", data={"page": 1, "page_size": 100}, format="json"
+    )
+
+    assert response.data["count"] == 100
+
+    # Check text filter
+    response = auth_client.get(
+        "/api/books/", data={"page_size": 100, "q": "Title 0"}, format="json"
+    )
+
+    assert response.data["count"] == 1
+    assert response.data["results"][0]["title"] == "Title 0"
+
+    # Check genre filter
+    response = auth_client.get(
+        "/api/books/", data={"page_size": 100, "author_id": author.id}, format="json"
+    )
+    assert response.data["count"] == 50
+
+    # Check author filter
+    response = auth_client.get(
+        "/api/books/", data={"page_size": 100, "genre_id": genre.id}, format="json"
+    )
+    assert response.data["count"] == 50

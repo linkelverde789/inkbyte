@@ -1,5 +1,4 @@
 from books.models import Author
-from query_pipeline import QuerySetPipeline
 
 
 class AuthorSelector:
@@ -13,4 +12,4 @@ class AuthorSelector:
         return Author.objects.filter(name__icontains=author_name)
 
     def list_author(self):
-        return QuerySetPipeline(Author.objects.all().order_by("name"))
+        return Author.objects.all()
