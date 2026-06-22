@@ -1,6 +1,5 @@
 from django.contrib.contenttypes.models import ContentType
 from events.models import Event
-from query_pipeline import QuerySetPipeline
 
 
 class EventSelector:
@@ -10,7 +9,7 @@ class EventSelector:
 
     @staticmethod
     def list_events():
-        return QuerySetPipeline(Event.objects.all().order_by("id"))
+        return Event.objects.all().order_by("id")
 
     @staticmethod
     def list_events_by_target(object_id: int, model):
@@ -19,4 +18,4 @@ class EventSelector:
             content_type=content_type,
             object_id=object_id,
         )
-        return QuerySetPipeline(queryset)
+        return queryset

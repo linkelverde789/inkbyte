@@ -1,5 +1,6 @@
 from books.selectors.book import BookSelector
 from books.models import Book
+from query_pipeline import QuerySetPipeline
 
 
 class GetBookFromSeriesUseCase:
@@ -8,4 +9,4 @@ class GetBookFromSeriesUseCase:
     ) -> tuple[list[Book], int]:
         queryset = BookSelector().list_books()
         queryset = queryset.filter(series__id=series_id)
-        return queryset.paginate(page_size=page_size, page=page)
+        return QuerySetPipeline(queryset).paginate(page_size=page_size, page=page)
