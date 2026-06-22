@@ -1,7 +1,6 @@
 import pytest
 
 from books.models import Author, Book, Genre
-from books.api.views import data
 
 
 @pytest.mark.django_db
@@ -164,13 +163,13 @@ def test_check_filters_from_book_list(auth_client):
     assert response.data["count"] == 1
     assert response.data["results"][0]["title"] == "Title 0"
 
-    # Check genre filter
+    # Check author filter
     response = auth_client.get(
         "/api/books/", data={"page_size": 100, "author_id": author.id}, format="json"
     )
     assert response.data["count"] == 50
 
-    # Check author filter
+    # Check genre filter
     response = auth_client.get(
         "/api/books/", data={"page_size": 100, "genre_id": genre.id}, format="json"
     )
