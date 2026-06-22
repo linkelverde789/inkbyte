@@ -8,12 +8,14 @@ User = get_user_model()
 def email_exists(email: str) -> bool:
     return User.objects.filter(email__iexact=email).exists()
 
+
 def username_exists(username: str) -> bool:
     return User.objects.filter(username__iexact=username).exists()
 
 
 def get_user_by_email(email: str) -> User | None:
     return User.objects.filter(email__iexact=email).first()
+
 
 def get_user_by_username(username: str) -> User | None:
     return User.objects.filter(username__iexact=username).first()
@@ -26,7 +28,7 @@ def get_user_by_id(user_id: int) -> User | None:
 def user_to_output(user: User) -> UserOutput:
     picture = None
     if user.profile_picture:
-        picture = user.profile_picture.url
+        picture = user.profile_picture
     return UserOutput(
         id=user.id,
         email=user.email,
