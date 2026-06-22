@@ -36,7 +36,7 @@ def test_create_author(auth_client):
         format="json",
     )
 
-    assert response.status_code == 200
+    assert response.status_code == 201
     author_id = response.data["id"]
     assert Author.objects.filter(id=author_id).exists() == True
 
@@ -52,7 +52,7 @@ def test_update_author(auth_client):
 
     assert response.status_code == 200
 
-    assert Author.objects.filter(id=author.id).first().name != "Isac Asimof"
+    assert Author.objects.filter(id=author.id).first().name == "Isaac Asimov"
 
 
 @pytest.mark.django_db

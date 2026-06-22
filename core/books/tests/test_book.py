@@ -34,7 +34,7 @@ def test_create_books(auth_client):
         format="json",
     )
 
-    assert response.status_code == 200
+    assert response.status_code == 201
     assert response.data["title"] == "test 1"
     assert "id" in response.data
 

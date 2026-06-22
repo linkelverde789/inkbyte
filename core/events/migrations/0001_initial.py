@@ -15,20 +15,77 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Event',
+            name="Event",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('anonymous_id', models.CharField(blank=True, max_length=255, null=True)),
-                ('event_type', models.CharField(choices=[('login', 'Login'), ('logout', 'Logout'), ('book:download', 'Book download'), ('book:view', 'Book viewd'), ('book:rated', 'Book rated')], max_length=50)),
-                ('metadata', models.JSONField(blank=True, default=dict)),
-                ('target_type', models.CharField(blank=True, choices=[('book', 'Book'), ('author', 'Author'), ('series', 'Series')], max_length=50, null=True)),
-                ('target_id', models.PositiveIntegerField(blank=True, null=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='events', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "anonymous_id",
+                    models.CharField(blank=True, max_length=255, null=True),
+                ),
+                (
+                    "event_type",
+                    models.CharField(
+                        choices=[
+                            ("login", "Login"),
+                            ("logout", "Logout"),
+                            ("book:download", "Book download"),
+                            ("book:view", "Book viewed"),
+                            ("book:rated", "Book rated"),
+                        ],
+                        max_length=50,
+                    ),
+                ),
+                ("metadata", models.JSONField(blank=True, default=dict)),
+                (
+                    "target_type",
+                    models.CharField(
+                        blank=True,
+                        choices=[
+                            ("book", "Book"),
+                            ("author", "Author"),
+                            ("series", "Series"),
+                        ],
+                        max_length=50,
+                        null=True,
+                    ),
+                ),
+                ("target_id", models.PositiveIntegerField(blank=True, null=True)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="events",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'ordering': ['-created_at'],
-                'indexes': [models.Index(fields=['event_type', 'created_at'], name='events_even_event_t_e518f4_idx'), models.Index(fields=['user', 'created_at'], name='events_even_user_id_a27bac_idx'), models.Index(fields=['target_type', 'created_at'], name='events_even_target__b09fcd_idx')],
+                "ordering": ["-created_at"],
+                "indexes": [
+                    models.Index(
+                        fields=["event_type", "created_at"],
+                        name="events_even_event_t_e518f4_idx",
+                    ),
+                    models.Index(
+                        fields=["user", "created_at"],
+                        name="events_even_user_id_a27bac_idx",
+                    ),
+                    models.Index(
+                        fields=["target_type", "created_at"],
+                        name="events_even_target__b09fcd_idx",
+                    ),
+                ],
             },
         ),
     ]

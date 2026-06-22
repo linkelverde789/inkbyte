@@ -61,7 +61,8 @@ class AuthorListCreateView(PublicReadPrivateWriteMixin, APIView):
             return _author_error_response(exc)
 
         return Response(
-            AuthorResponseSerializer(author_output, context={"request": request}).data
+            AuthorResponseSerializer(author_output, context={"request": request}).data,
+            status=status.HTTP_201_CREATED,
         )
 
 

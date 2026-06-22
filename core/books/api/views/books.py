@@ -68,7 +68,8 @@ class BookListView(PublicReadPrivateWriteMixin, APIView):
             return _book_error_response(exc)
 
         return Response(
-            BookResponseSerializer(book_output, context={"request": request}).data
+            BookResponseSerializer(book_output, context={"request": request}).data,
+            status=status.HTTP_201_CREATED,
         )
 
 

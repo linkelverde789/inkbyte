@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
                     ("login", "Login"),
                     ("logout", "Logout"),
                     ("book:download", "Book download"),
-                    ("book:view", "Book viewd"),
+                    ("book:view", "Book viewed"),
                     ("book:rated", "Book rated"),
                 ],
                 max_length=50,
