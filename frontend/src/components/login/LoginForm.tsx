@@ -14,9 +14,11 @@ export function LoginForm(props: LoginFormProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  async function handleSubmit(e: React.SubmitEvent) {
+  async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
-    await props.onSubmit(email, password);
+    props.onSubmit(email, password).catch((error) => {
+      console.log(error);
+    });
   }
   return (
     <div className="w-full max-w-md">
@@ -36,7 +38,9 @@ export function LoginForm(props: LoginFormProps) {
             id="email"
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
             required
             autoComplete="username"
             className="h-12 rounded-none"
@@ -53,7 +57,9 @@ export function LoginForm(props: LoginFormProps) {
             id="password"
             type="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
             required
             minLength={8}
             maxLength={128}
