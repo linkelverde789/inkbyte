@@ -1,9 +1,11 @@
-import { BookOpen, ListMusic, Pencil, Plus, Trash2 } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Button } from "../ui/button";
-import { Link } from "@tanstack/react-router";
+import { useI18n } from "@/i18n/i18nProvider";
+import ListCard from "./ListCard";
 
 export default function UserLists() {
-  const lists = [
+  const { t } = useI18n();
+  const placeholder_lists = [
     {
       id: "1",
       name: "Para releer en otoño",
@@ -58,63 +60,32 @@ export default function UserLists() {
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">
-            Estanterías
+            {t("Shelves")}
           </p>
-          <h2 className="mt-2 text-4xl">Mis listas</h2>
+          <h2 className="mt-2 text-4xl">{t("My lists")}</h2>
           <p className="mt-2 max-w-lg text-sm text-muted-foreground">
-            Organiza tus lecturas en estanterías propias. Crea, edita y comparte
-            cuando quieras.
+            {t(
+              "Organize your reading lists on your own shelves. Create, edit, and share them whenever you want.",
+            )}
           </p>
         </div>
         <Button variant="editorial" size="editorial">
-          <Plus className="size-4" /> Nueva lista
+          <Plus className="size-4" /> {t("New list")}
         </Button>
       </div>
 
       <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {lists.map((list, i) => (
-          <article
-            key={list.id}
-            className={`group relative flex flex-col bg-card shadow-[6px_7px_0_var(--color-secondary)] transition-transform hover:-translate-y-1 ${i % 2 ? "sm:translate-y-4" : ""}`}
-          >
-            <div className="h-28 w-full" style={{ background: list.cover }} />
-            <div className="flex flex-1 flex-col gap-3 p-5">
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary">
-                <ListMusic className="size-3.5" /> {list.count} libros
-              </div>
-              <h3 className="font-display text-2xl leading-tight">
-                {list.name}
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                {list.description}
-              </p>
-              <div className="mt-auto flex items-center justify-between border-t border-border pt-3">
-                <Link
-                  to="/search"
-                  className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-foreground hover:text-primary"
-                >
-                  <BookOpen className="size-3.5" /> Abrir
-                </Link>
-                <div className="flex items-center gap-1">
-                  <button className="grid size-8 place-items-center text-muted-foreground hover:bg-muted hover:text-foreground">
-                    <Pencil className="size-3.5" />
-                  </button>
-                  <button className="grid size-8 place-items-center text-muted-foreground hover:bg-muted hover:text-destructive">
-                    <Trash2 className="size-3.5" />
-                  </button>
-                </div>
-              </div>
-            </div>
-          </article>
+        {placeholder_lists.map((list, i) => (
+          <ListCard list={list} i={i} />
         ))}
 
         <button className="flex min-h-[260px] flex-col items-center justify-center gap-3 border-2 border-dashed border-border bg-card/50 p-6 text-center transition-colors hover:border-primary hover:bg-card">
           <div className="grid size-12 place-items-center rounded-full bg-primary/10 text-primary">
             <Plus className="size-6" />
           </div>
-          <p className="font-display text-xl">Crear nueva lista</p>
+          <p className="font-display text-xl">{t("Create list")}</p>
           <p className="text-xs text-muted-foreground">
-            Agrupa tus libros como quieras
+            {t("Organize your books however you like")}
           </p>
         </button>
       </div>

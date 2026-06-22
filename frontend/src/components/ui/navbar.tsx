@@ -30,9 +30,6 @@ export default function NavBar() {
           </Link>
         </div>
         <div className="flex items-center gap-1">
-          <Button variant="ghost" size="icon" aria-label="My books">
-            <Heart />
-          </Button>
           <Button variant="ghost" size="icon" aria-label="My account" asChild>
             <Link to="/profile">
               <UserRound />
