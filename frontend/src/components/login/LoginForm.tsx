@@ -14,9 +14,10 @@ export function LoginForm(props: LoginFormProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  async function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>): void {
     e.preventDefault();
-    props.onSubmit(email, password).catch((error) => {
+
+    void props.onSubmit(email, password).catch((error) => {
       console.log(error);
     });
   }
