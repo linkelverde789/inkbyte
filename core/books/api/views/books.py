@@ -55,21 +55,21 @@ class BookListView(PublicReadPrivateWriteMixin, APIView):
             "method": request.method,
         }
 
+        event_type = EventType.BOOK_SEARCH if is_search else EventType.BOOK_LIST_VIEW
+
         if is_search:
-            metadata["params"] = request.query_params
-            CreateEventUseCase().execute(
-                event_type=EventType.BOOK_SEARCH,
-                user=request.user if request.user.is_authenticated else None,
-                target=None,
-                metadata=metadata,
+            metadata.update(
+                {
+                    "params": request.query_params.dict(),
+                }
             )
-        else:
-            CreateEventUseCase().execute(
-                event_type=EventType.BOOK_LIST_VIEW,
-                user=request.user if request.user.is_authenticated else None,
-                target=None,
-                metadata=metadata,
-            )
+
+        CreateEventUseCase().execute(
+            event_type=event_type,
+            user=request.user if request.user.is_authenticated else None,
+            target=None,
+            metadata=metadata,
+        )
 
         return Response(
             {
