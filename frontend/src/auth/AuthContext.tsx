@@ -15,7 +15,6 @@ export type AuthContextValue = {
   user: User | null;
   loading: boolean;
   isAuthenticated: boolean;
-  sessionReady: Promise<void>;
   login: (payload: LoginPayload) => Promise<void>;
   register: (payload: RegisterPayload) => Promise<void>;
   logout: () => Promise<void>;
@@ -29,15 +28,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const readyRef = useRef<{ resolve: () => void } | null>(null);
 
-  const sessionReady = useMemo(
-    () =>
-      new Promise<void>((resolve) => {
-        readyRef.current = { resolve };
-      }),
-    [],
-  );
-
   const loadSession = useCallback(async () => {
+    setLoading(true);
     try {
       const data = await authApi.fetchMe();
       setUser(data?.user ?? null);
@@ -79,13 +71,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       user,
       loading,
       isAuthenticated: Boolean(user),
-      sessionReady,
       login,
       register,
       logout,
       refreshUser: loadSession,
     }),
-    [user, loading, sessionReady, login, register, logout, loadSession],
+    [user, loading, login, register, logout, loadSession],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

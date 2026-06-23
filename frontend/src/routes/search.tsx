@@ -5,7 +5,7 @@ import { api } from "@/api";
 import { API_ENDPOINTS } from "@/api/endpoints";
 
 import type { Book } from "@/types/book";
-import NavBar from "@/components/ui/navbar";
+import NavBar from "@/components/ui/Navbar";
 import useDebounce from "@/hooks/debounce";
 
 import { useI18n } from "@/i18n/i18nProvider";

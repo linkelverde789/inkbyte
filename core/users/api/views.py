@@ -98,9 +98,10 @@ class MeView(APIView):
     def get(self, request):
         if not request.user.is_authenticated:
             return Response({"user": None})
-        output = user_to_output(request.user)
         return Response(
-            AuthResponseSerializer({"user": asdict(output)}).data,
+            AuthResponseSerializer(
+                {"user": request.user}, context={"request": request}
+            ).data,
         )
 
 

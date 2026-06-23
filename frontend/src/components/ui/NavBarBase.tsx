@@ -1,19 +1,27 @@
+import { useI18n } from "@/i18n/i18nProvider";
 import { Link } from "@tanstack/react-router";
 import { Button } from "./button";
-import { Heart, Languages, Menu, UserRound } from "lucide-react";
-import { useI18n } from "@/i18n/i18nProvider";
+import { Languages, Menu } from "lucide-react";
 
-export default function NavBar() {
+type NavBarBaseProps = {
+  rightSlot?: React.ReactNode;
+};
+
+export function NavBarBase({ rightSlot }: NavBarBaseProps) {
   const { t, locale, setLocale } = useI18n();
+
   return (
     <nav
       className="border-b border-border bg-background"
       aria-label="Navegación principal"
     >
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-4 px-5 sm:px-8">
+        {/* Logo */}
         <Link to="/" className="font-display text-2xl font-bold tracking-tight">
           Ink<span className="text-primary">Byte</span>
         </Link>
+
+        {/* Links centrales */}
         <div className="hidden items-center gap-9 text-xs font-bold uppercase tracking-[0.15em] md:flex">
           <Link to="/" className="transition-colors hover:text-primary">
             {t("Home")}
@@ -29,15 +37,12 @@ export default function NavBar() {
             {t("Community")}
           </Link>
         </div>
+
+        {/* Acciones derecha */}
         <div className="flex items-center gap-1">
-          <Button variant="ghost" size="icon" aria-label="My books">
-            <Heart />
-          </Button>
-          <Button variant="ghost" size="icon" aria-label="My account" asChild>
-            <Link to="/profile">
-              <UserRound />
-            </Link>
-          </Button>
+          {/* Slot flexible */}
+          {rightSlot}
+
           <Button
             variant="ghost"
             size="icon"
@@ -46,13 +51,12 @@ export default function NavBar() {
           >
             <Menu />
           </Button>
+
           <Button
             variant="ghost"
             size="icon"
             aria-label="Language selector"
-            onClick={() => {
-              setLocale(locale === "es" ? "en" : "es");
-            }}
+            onClick={() => setLocale(locale === "es" ? "en" : "es")}
           >
             <Languages className="h-5 w-5 text-foreground" />
           </Button>
