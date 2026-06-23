@@ -103,7 +103,7 @@ def test_create_event_when_view_search_page(user, api_client):
 
     api_client.force_authenticate(user=user)
 
-    api_client.get(f"/api/books/")
+    api_client.get("/api/books/")
 
     assert (
         Event.objects.filter(
@@ -121,21 +121,21 @@ def test_create_event_when_search_books(user, api_client):
     )
     api_client.force_authenticate(user=user)
 
-    api_client.get(f"/api/books/", data={"q": "Some text"})
+    api_client.get("/api/books/", data={"q": "Some text"})
 
     assert (
         Event.objects.filter(event_type=EventType.BOOK_SEARCH, user_id=user.id).count()
         == 1
     )
 
-    api_client.get(f"/api/books/", data={"author_id": 1})
+    api_client.get("/api/books/", data={"author_id": 1})
 
     assert (
         Event.objects.filter(event_type=EventType.BOOK_SEARCH, user_id=user.id).count()
         == 2
     )
 
-    api_client.get(f"/api/books/", data={"genre_id": 1})
+    api_client.get("/api/books/", data={"genre_id": 1})
 
     assert (
         Event.objects.filter(event_type=EventType.BOOK_SEARCH, user_id=user.id).count()
