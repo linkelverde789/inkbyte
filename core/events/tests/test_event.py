@@ -82,4 +82,62 @@ def test_create_event_when_view_book(user, api_client):
         == 1
     )
 
-    return
+
+@pytest.mark.django_db
+def test_create_event_when_anonymous_view_book(api_client):
+    assert Event.objects.filter(event_type=EventType.BOOK_VIEW).count() == 0
+
+    book = Book.objects.create(title="Some title")
+    api_client.get(f"/api/books/{book.id}/")
+    assert Event.objects.filter(event_type=EventType.BOOK_VIEW).count() == 1
+
+
+@pytest.mark.django_db
+def test_create_event_when_view_search_page(user, api_client):
+    assert (
+        Event.objects.filter(
+            event_type=EventType.BOOK_LIST_VIEW, user_id=user.id
+        ).count()
+        == 0
+    )
+
+    api_client.force_authenticate(user=user)
+
+    api_client.get(f"/api/books/")
+
+    assert (
+        Event.objects.filter(
+            event_type=EventType.BOOK_LIST_VIEW, user_id=user.id
+        ).count()
+        == 1
+    )
+
+
+@pytest.mark.django_db
+def test_create_event_when_search_books(user, api_client):
+    assert (
+        Event.objects.filter(event_type=EventType.BOOK_SEARCH, user_id=user.id).count()
+        == 0
+    )
+    api_client.force_authenticate(user=user)
+
+    api_client.get(f"/api/books/", data={"q": "Some text"})
+
+    assert (
+        Event.objects.filter(event_type=EventType.BOOK_SEARCH, user_id=user.id).count()
+        == 1
+    )
+
+    api_client.get(f"/api/books/", data={"author_id": 1})
+
+    assert (
+        Event.objects.filter(event_type=EventType.BOOK_SEARCH, user_id=user.id).count()
+        == 2
+    )
+
+    api_client.get(f"/api/books/", data={"genre_id": 1})
+
+    assert (
+        Event.objects.filter(event_type=EventType.BOOK_SEARCH, user_id=user.id).count()
+        == 3
+    )
