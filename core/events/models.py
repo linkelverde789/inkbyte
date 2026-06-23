@@ -13,6 +13,11 @@ class EventType(models.TextChoices):
     BOOK_LIST_VIEW = "list:book:view", "Book list viewed"
     BOOK_RATED = "book:rated", "Book rated"
     BOOK_SEARCH = "book:search", "Books searched"
+    LIST_VIEW = "global:list:view", "Global List view"
+    MINE_LIST_VIEW = "mine:list:view", "Mine List view"
+    LIST_CREATE = "list:create", "List created"
+    LIST_UPDATE = "list:update", "List updated"
+    LIST_DELETE = "list:delete", "List deleted"
 
 
 class TargetType(models.TextChoices):
