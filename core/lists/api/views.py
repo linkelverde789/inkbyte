@@ -3,6 +3,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from events.models import EventType
+from events.use_cases.create_event import CreateEventUseCase
 from lists.use_cases.list_lists import ListListUseCase
 from lists.exceptions import ListError
 from lists.use_cases.delete_list import DeleteListUseCase
@@ -15,6 +17,17 @@ from lists.api.serializers import (
     ListResponseSerializer,
     UpdateListSerializer,
 )
+
+
+def _create_event(
+    event_type: EventType,
+    user,
+    metadata,
+    target=None,
+):
+    CreateEventUseCase().execute(
+        user=user, event_type=event_type, target=target, metadata=metadata
+    )
 
 
 def _list_error_response(exc: ListError) -> Response:
@@ -34,6 +47,15 @@ class ListView(APIView):
         page_size = int(request.query_params.get("page_size", 10))
 
         items, total = ListListUseCase().execute(page=page, page_size=page_size)
+        _create_event(
+            event_type=EventType.LIST_VIEW,
+            user=request.user,
+            metadata={
+                "path": request.path,
+                "method": request.method,
+                "params": request.query_params.dict(),
+            },
+        )
         return Response(
             {
                 "count": total,
@@ -58,6 +80,19 @@ class ListView(APIView):
         except ListError as exc:
             return _list_error_response(exc)
 
+        metadata = {
+            "path": request.path,
+            "method": request.method,
+            "params": request.data,
+        }
+
+        _create_event(
+            event_type=EventType.LIST_CREATE,
+            user=request.user,
+            metadata=metadata,
+            target=list_output,
+        )
+
         return Response(
             ListResponseSerializer(list_output, context={"request": request}).data,
             status=status.HTTP_201_CREATED,
@@ -77,6 +112,16 @@ class MyListView(APIView):
             page=page, page_size=page_size, user=user
         )
 
+        _create_event(
+            event_type=EventType.MINE_LIST_VIEW,
+            user=request.user,
+            metadata={
+                "path": request.path,
+                "method": request.method,
+                "params": request.query_params.dict(),
+            },
+        )
+
         return Response(
             {
                 "count": total,
@@ -94,13 +139,24 @@ class ListDetailsView(APIView):
 
     def get(self, request, list_id):
         try:
-            list_instance = GetListUseCase().execute(list_id=list_id)
+            list_output = GetListUseCase().execute(list_id=list_id)
 
         except ListError as exc:
-            _list_error_response(exc=exc)
+            return _list_error_response(exc=exc)
+
+        _create_event(
+            event_type=EventType.LIST_VIEW,
+            user=request.user,
+            metadata={
+                "path": request.path,
+                "method": request.method,
+                "params": request.query_params.dict(),
+            },
+            target=list_output,
+        )
 
         return Response(
-            ListResponseSerializer(list_instance, context={"request": request}).data
+            ListResponseSerializer(list_output, context={"request": request}).data
         )
 
     def patch(self, request, list_id):
@@ -115,6 +171,17 @@ class ListDetailsView(APIView):
         except ListError as exc:
             return _list_error_response(exc)
 
+        _create_event(
+            event_type=EventType.LIST_UPDATE,
+            user=request.user,
+            metadata={
+                "path": request.path,
+                "method": request.method,
+                "params": request.data,
+            },
+            target=list_output,
+        )
+
         return Response(
             ListResponseSerializer(list_output, context={"request": request}).data
         )
@@ -124,5 +191,14 @@ class ListDetailsView(APIView):
             DeleteListUseCase().execute(list_id=list_id, user=request.user)
         except ListError as exc:
             return _list_error_response(exc)
+
+        _create_event(
+            event_type=EventType.LIST_DELETE,
+            user=request.user,
+            metadata={
+                "path": request.path,
+                "method": request.method,
+            },
+        )
 
         return Response(status=status.HTTP_204_NO_CONTENT)

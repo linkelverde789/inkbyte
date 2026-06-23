@@ -2,6 +2,7 @@ import pytest
 from rest_framework.status import HTTP_201_CREATED
 
 from books.models import Book
+from lists.models import List
 from events.models import Event, EventType
 
 
@@ -142,3 +143,64 @@ def test_create_event_when_search_books(user, api_client):
         Event.objects.filter(event_type=EventType.BOOK_SEARCH, user_id=user.id).count()
         == 3
     )
+
+
+@pytest.mark.django_db
+def test_create_event_when_create_list(user, api_client):
+    event_type = EventType.LIST_CREATE
+    assert Event.objects.filter(event_type=event_type, user_id=user.id).count() == 0
+    api_client.force_authenticate(user=user)
+
+    data = {"name": "Some list name", "description": "Some description"}
+
+    api_client.post(path="/api/lists/", data=data, format="json")
+
+    assert Event.objects.filter(event_type=event_type, user_id=user.id).count() == 1
+
+
+@pytest.mark.django_db
+def test_create_event_when_update_list(user, api_client):
+    event_type = EventType.LIST_UPDATE
+    assert Event.objects.filter(event_type=event_type, user_id=user.id).count() == 0
+    list_instance = List.objects.create(name="Some name", user=user)
+    api_client.force_authenticate(user=user)
+
+    data = {"name": "Some list name", "description": "Some description"}
+
+    api_client.patch(path=f"/api/lists/{list_instance.id}/", data=data, format="json")
+
+    assert Event.objects.filter(event_type=event_type, user_id=user.id).count() == 1
+
+
+@pytest.mark.django_db
+def test_create_event_when_delete_list(user, api_client):
+    event_type = EventType.LIST_DELETE
+    assert Event.objects.filter(event_type=event_type, user_id=user.id).count() == 0
+    list_instance = List.objects.create(name="Some name", user=user)
+    api_client.force_authenticate(user=user)
+
+    api_client.delete(path=f"/api/lists/{list_instance.id}/")
+
+    assert Event.objects.filter(event_type=event_type, user_id=user.id).count() == 1
+
+
+@pytest.mark.django_db
+def test_create_event_when_view_lists(user, api_client):
+    event_type = EventType.LIST_VIEW
+    assert Event.objects.filter(event_type=event_type, user_id=user.id).count() == 0
+    api_client.force_authenticate(user=user)
+
+    api_client.get(path="/api/lists/", data={"page": 1}, format="json")
+
+    assert Event.objects.filter(event_type=event_type, user_id=user.id).count() == 1
+
+
+@pytest.mark.django_db
+def test_create_event_when_view_my_lists(user, api_client):
+    event_type = EventType.MINE_LIST_VIEW
+    assert Event.objects.filter(event_type=event_type, user_id=user.id).count() == 0
+    api_client.force_authenticate(user=user)
+
+    api_client.get(path="/api/lists/mine/", data={"page": 1}, format="json")
+
+    assert Event.objects.filter(event_type=event_type, user_id=user.id).count() == 1
