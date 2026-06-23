@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 
-import NavBar from "@/components/ui/navbar";
+import NavBar from "@/components/ui/Navbar";
 import { Header } from "@/components/book/index/indexHeader";
 import { api, API_ENDPOINTS } from "@/api";
 import { BookListResponse } from "@/types/api";

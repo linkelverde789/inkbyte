@@ -5,7 +5,7 @@ import { useI18n } from "@/i18n/i18nProvider";
 import { api } from "@/api";
 import { Book } from "@/types/book";
 import { API_DYNAMIC_ENDPOINTS } from "@/api/endpoints";
-import NavBar from "@/components/ui/navbar";
+import NavBar from "@/components/ui/Navbar";
 import { MainBook } from "@/components/book/individual/mainBook";
 import { RelatedShelf } from "@/components/book/individual/relatedShelf";
 
