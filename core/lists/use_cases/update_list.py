@@ -9,7 +9,7 @@ class UpdateListUseCase:
     def execute(
         self,
         list_id: int,
-        name: str,
+        name: str | None = None,
         description: str | None = None,
         image: object | None = None,
         book_ids: list[int] | None = None,
