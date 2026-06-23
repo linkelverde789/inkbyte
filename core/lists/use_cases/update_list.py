@@ -1,8 +1,8 @@
+from lists.exceptions import ListError
 from lists.dto import UpdateListInput
 from lists.models import List
 from lists.selectors import ListSelector
 from lists.services import ListService
-from users.models import User
 
 
 class UpdateListUseCase:
@@ -22,6 +22,9 @@ class UpdateListUseCase:
         ).validate()
 
         list_instance = ListSelector().get_list_by_id(list_id=list_id)
+
+        if list_instance is None:
+            raise ListError("List not found")
 
         list_instance = ListService().update_list(
             data=list_dto, list_instance=list_instance
