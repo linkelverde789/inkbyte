@@ -1,5 +1,5 @@
 import { User } from "@/auth/types";
-import { ProfileAvatar } from "./Avatar";
+import { ProfileAvatar } from "./ProfileAvatar";
 import ProfileInfo from "./Info";
 
 type ProfileCardProps = {

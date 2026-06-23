@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError as DjangoValidationError
 
 from users.dto.auth import LoginInput, RegisterInput
 from users.exceptions import AuthError
-from users.selectors.user import email_exists, username_exists
+from users.selectors.user import UserSelector
 
 
 def validate_register_input(
@@ -24,13 +24,15 @@ def validate_register_input(
         raise AuthError("El correo es obligatorio.", "email_required")
     if "@" not in email:
         raise AuthError("Introduce un correo válido.", "email_invalid")
-    if email_exists(email):
+    if UserSelector().email_exists(email):
         raise AuthError("Ya existe una cuenta con este correo.", "email_taken")
-        
+
     if not username:
         raise AuthError("El nombre de usuario es obligatorio.", "username_required")
-    if username_exists(username):
-        raise AuthError("Ya existe una cuenta con este nombre de usuario.", "username_taken")
+    if UserSelector().username_exists(username):
+        raise AuthError(
+            "Ya existe una cuenta con este nombre de usuario.", "username_taken"
+        )
     if not password:
         raise AuthError("La contraseña es obligatoria.", "password_required")
     if password != password_confirm:

@@ -1,6 +1,7 @@
 import pytest
 
 from books.models import Author, Book, Genre
+from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED
 
 
 @pytest.mark.django_db
@@ -10,7 +11,7 @@ def test_list_books(api_client):
 
     response = api_client.get("/api/books/")
 
-    assert response.status_code == 200
+    assert response.status_code == HTTP_200_OK
     assert response.data["count"] == 2
     assert len(response.data["results"]) == 2
     assert response.data["results"][0]["title"] == "Book 1"
@@ -22,7 +23,7 @@ def test_get_book(api_client):
 
     response = api_client.get(f"/api/books/{book.id}/")
 
-    assert response.status_code == 200
+    assert response.status_code == HTTP_200_OK
     assert response.data["title"] == book.title
 
 
@@ -34,7 +35,7 @@ def test_create_books(auth_client):
         format="json",
     )
 
-    assert response.status_code == 201
+    assert response.status_code == HTTP_201_CREATED
     assert response.data["title"] == "test 1"
     assert "id" in response.data
 
@@ -50,7 +51,7 @@ def test_update_books(auth_client):
         format="json",
     )
 
-    assert response.status_code == 200
+    assert response.status_code == HTTP_200_OK
 
     updated_book = Book.objects.filter(id=book.id).first()
     assert updated_book.description == "this is a book description"
@@ -74,7 +75,7 @@ def test_add_genre_to_book(auth_client):
         path=f"/api/books/{book.id}/", data={"genre_ids": [genre.id]}
     )
 
-    assert response.status_code == 200
+    assert response.status_code == HTTP_200_OK
     response = auth_client.get(path=f"/api/books/{book.id}/")
 
     assert response.data["genres"][0]["name"] == genre.name
@@ -91,7 +92,7 @@ def test_add_multiple_genres_to_book(auth_client):
         path=f"/api/books/{book.id}/", data={"genre_ids": created_genres}
     )
 
-    assert response.status_code == 200
+    assert response.status_code == HTTP_200_OK
     response = auth_client.get(path=f"/api/books/{book.id}/")
 
     assert len(response.data["genres"]) == 3
@@ -105,7 +106,7 @@ def test_add_author_to_book(auth_client):
         path=f"/api/books/{book.id}/", data={"author_ids": [author.id]}
     )
 
-    assert response.status_code == 200
+    assert response.status_code == HTTP_200_OK
     response = auth_client.get(path=f"/api/books/{book.id}/")
 
     assert response.data["authors"][0]["name"] == author.name
@@ -122,7 +123,7 @@ def test_add_authors_to_book(auth_client):
         path=f"/api/books/{book.id}/", data={"author_ids": created_authors}
     )
 
-    assert response.status_code == 200
+    assert response.status_code == HTTP_200_OK
     response = auth_client.get(path=f"/api/books/{book.id}/")
 
     assert len(response.data["authors"]) == 3

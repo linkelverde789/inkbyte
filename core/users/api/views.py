@@ -1,22 +1,23 @@
 from dataclasses import asdict
 
 from rest_framework import status
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from users.selectors.user import user_to_output
+from users.use_cases.update_user import UpdateUserUseCase
 from events.models import EventType
 from events.use_cases.create_event import CreateEventUseCase
 from users.api.serializers import (
     AuthResponseSerializer,
     LoginSerializer,
     RegisterSerializer,
+    UserResponseSerializer,
 )
 from users.dto.auth import AuthTokensOutput
-from users.exceptions import AuthError
+from users.exceptions import AuthError, UserError
 from users.services.cookies import (
     clear_auth_cookies,
     get_refresh_token,
@@ -30,7 +31,7 @@ def _auth_success_response(
     user_output, tokens_output, *, remember_me: bool, status_code=200
 ):
     response = Response(
-        AuthResponseSerializer({"user": asdict(user_output)}).data,
+        AuthResponseSerializer({"user": user_output}).data,
         status=status_code,
     )
     return set_auth_cookies(response, tokens_output, remember_me=remember_me)
@@ -41,6 +42,38 @@ def _error_response(exc: AuthError) -> Response:
         {"detail": exc.message, "code": exc.code},
         status=status.HTTP_400_BAD_REQUEST,
     )
+
+
+def _user_error_response(exc: UserError) -> Response:
+    return Response(
+        {"detail": exc.message, "code": exc.code},
+        status=status.HTTP_400_BAD_REQUEST,
+    )
+
+
+class UserProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request):
+        user = request.user
+        data = request.data
+
+        try:
+            user_instance = UpdateUserUseCase().execute(
+                user=user,
+                username=data.get("username"),
+                email=data.get("email"),
+                first_name=data.get("first_name"),
+                last_name=data.get("last_name"),
+                profile_picture=request.FILES.get("profile_picture"),
+            )
+
+        except UserError as exc:
+            _user_error_response(exc=exc)
+
+        return Response(
+            UserResponseSerializer(user_instance, context={"request": request}).data
+        )
 
 
 class RegisterView(APIView):
@@ -72,6 +105,7 @@ class LoginView(APIView):
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+
         remember_me = serializer.validated_data.get("remember_me", False)
         try:
             user_output, tokens_output = LoginUserUseCase().execute(

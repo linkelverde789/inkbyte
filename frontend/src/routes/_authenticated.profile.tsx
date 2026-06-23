@@ -6,7 +6,7 @@ import { useI18n } from "@/i18n/i18nProvider";
 import { useEffect } from "react";
 import { ProfileNavBar } from "@/components/ui/ProfileNavbar";
 import sleep from "./utils";
-import { ProfileAvatar } from "@/components/profile/Avatar";
+import { ProfileAvatar } from "@/components/profile/ProfileAvatar";
 import ProfileInfo from "@/components/profile/Info";
 import UserLists from "@/components/profile/UserLists";
 import ProfileCard from "@/components/profile/ProfileCard";

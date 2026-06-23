@@ -31,6 +31,7 @@ urlpatterns = [
     ),
     path("api/", include("users.urls")),
     path("api/", include("books.urls")),
+    path("api/", include("lists.urls")),
 ]
 
 

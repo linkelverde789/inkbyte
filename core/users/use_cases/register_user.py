@@ -1,12 +1,14 @@
 from typing import Any
+
+from django.contrib.auth import get_user_model
 from events.models import EventType
 from events.use_cases.create_event import CreateEventUseCase
-from users.dto.user import UserOutput
-from users.selectors.user import user_to_output
 from users.dto.auth import AuthTokensOutput
 from users.services.auth import issue_tokens
-from users.services.user import create_user
+from users.services.user import UserService
 from users.validators.register import validate_register_input
+
+User = get_user_model()
 
 
 class RegisterUserUseCase:
@@ -20,7 +22,7 @@ class RegisterUserUseCase:
         username: str = "",
         remember_me: bool = False,
         metadata: dict[str, Any] | None = None,
-    ) -> tuple[UserOutput, AuthTokensOutput]:
+    ) -> tuple[User, AuthTokensOutput]:
         data = validate_register_input(
             email=email,
             password=password,
@@ -30,7 +32,7 @@ class RegisterUserUseCase:
             username=username,
             remember_me=remember_me,
         )
-        user = create_user(data)
+        user = UserService().create_user(data)
         tokens = issue_tokens(user, remember_me=data.remember_me)
 
         CreateEventUseCase().execute(
@@ -40,4 +42,4 @@ class RegisterUserUseCase:
             metadata=metadata,
         )
 
-        return user_to_output(user), tokens
+        return user, tokens
