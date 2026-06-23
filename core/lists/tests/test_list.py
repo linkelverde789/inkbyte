@@ -70,30 +70,32 @@ def test_create_list(api_client, user):
 
     assert response.status_code == HTTP_201_CREATED
 
-    list = List.objects.filter(user=user).first()
-    assert list.name == "My list"
+    list_instance = List.objects.filter(user=user).first()
+    assert list_instance.name == "My list"
 
 
 @pytest.mark.django_db
 def test_update_list(api_client, user):
     api_client.force_authenticate(user=user)
 
-    list = List.objects.create(name="Some name", user=user)
+    list_instance = List.objects.create(name="Some name", user=user)
     data = {"name": "Updated name", "description": "Some description"}
-    response = api_client.patch(path=f"/api/lists/{list.id}/", data=data, format="json")
+    response = api_client.patch(
+        path=f"/api/lists/{list_instance.id}/", data=data, format="json"
+    )
 
     assert response.status_code == HTTP_200_OK
 
-    assert List.objects.filter(id=list.id).first().name == "Updated name"
+    assert List.objects.filter(id=list_instance.id).first().name == "Updated name"
 
 
 @pytest.mark.django_db
 def test_delete_list(api_client, user):
     api_client.force_authenticate(user=user)
 
-    list = List.objects.create(name="To delete", user=user)
+    list_instance = List.objects.create(name="To delete", user=user)
 
-    response = api_client.delete(path=f"/api/lists/{list.id}/")
+    response = api_client.delete(path=f"/api/lists/{list_instance.id}/")
 
     assert response.status_code == HTTP_204_NO_CONTENT
 
@@ -136,10 +138,10 @@ def test_anonymous_user_can_not_create_list(api_client):
 @pytest.mark.django_db
 def test_anonymous_user_can_not_update_list(api_client, user):
 
-    list = List.objects.create(name="To delete", user=user)
+    list_instance = List.objects.create(name="To delete", user=user)
 
     response = api_client.patch(
-        path=f"/api/lists/{list.id}/", data={"name": "new name"}, format="json"
+        path=f"/api/lists/{list_instance.id}/", data={"name": "new name"}, format="json"
     )
 
     assert response.status_code == HTTP_401_UNAUTHORIZED
@@ -148,8 +150,8 @@ def test_anonymous_user_can_not_update_list(api_client, user):
 @pytest.mark.django_db
 def test_anonymous_user_can_not_delete_list(user, api_client):
 
-    list = List.objects.create(name="To delete", user=user)
+    list_instance = List.objects.create(name="To delete", user=user)
 
-    response = api_client.delete(path=f"/api/lists/{list.id}/")
+    response = api_client.delete(path=f"/api/lists/{list_instance.id}/")
 
     assert response.status_code == HTTP_401_UNAUTHORIZED

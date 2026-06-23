@@ -21,8 +21,10 @@ class UpdateListUseCase:
             book_ids=book_ids,
         ).validate()
 
-        list = ListSelector().get_list_by_id(list_id=list_id)
+        list_instance = ListSelector().get_list_by_id(list_id=list_id)
 
-        list = ListService().update_list(data=list_dto, list=list)
+        list_instance = ListService().update_list(
+            data=list_dto, list_instance=list_instance
+        )
 
-        return list
+        return list_instance

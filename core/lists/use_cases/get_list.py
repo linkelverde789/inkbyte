@@ -5,8 +5,8 @@ from lists.selectors import ListSelector
 
 class GetListUseCase:
     def execute(self, list_id: int) -> List | None:
-        list = ListSelector().get_list_by_id(list_id)
+        list_instance = ListSelector().get_list_by_id(list_id)
         if list is None:
             raise ListError("List not found")
 
-        return list
+        return list_instance

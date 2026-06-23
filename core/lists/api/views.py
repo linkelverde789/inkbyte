@@ -94,9 +94,11 @@ class ListDetailsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, list_id):
-        list = GetListUseCase().execute(list_id=list_id)
+        list_instance = GetListUseCase().execute(list_id=list_id)
 
-        return Response(ListResponseSerializer(list, context={"request": request}).data)
+        return Response(
+            ListResponseSerializer(list_instance, context={"request": request}).data
+        )
 
     def patch(self, request, list_id):
         try:

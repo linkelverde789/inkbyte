@@ -21,6 +21,6 @@ class CreateListUseCase:
             book_ids=book_ids,
         ).validate()
 
-        list = ListService().create_list(data=list_dto)
+        list_instance = ListService().create_list(data=list_dto)
 
-        return list
+        return list_instance
