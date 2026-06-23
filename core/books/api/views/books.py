@@ -47,6 +47,30 @@ class BookListView(PublicReadPrivateWriteMixin, APIView):
         items, total = ListBooksUseCase().execute(
             page=page, page_size=page_size, filters=filters_dto
         )
+
+        is_search = bool(q or genre_id or author_id)
+
+        metadata = {
+            "path": request.path,
+            "method": request.method,
+        }
+
+        event_type = EventType.BOOK_SEARCH if is_search else EventType.BOOK_LIST_VIEW
+
+        if is_search:
+            metadata.update(
+                {
+                    "params": request.query_params.dict(),
+                }
+            )
+
+        CreateEventUseCase().execute(
+            event_type=event_type,
+            user=request.user if request.user.is_authenticated else None,
+            target=None,
+            metadata=metadata,
+        )
+
         return Response(
             {
                 "count": total,
