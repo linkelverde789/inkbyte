@@ -10,16 +10,14 @@ class UpdateListUseCase:
         self,
         list_id: int,
         name: str,
-        description: str | None,
-        image: object | None,
-        user: User,
-        book_ids: list[int] | None,
+        description: str | None = None,
+        image: object | None = None,
+        book_ids: list[int] | None = None,
     ) -> List:
         list_dto = UpdateListInput(
             name=name,
             description=description,
             image=image,
-            user=user,
             book_ids=book_ids,
         ).validate()
 

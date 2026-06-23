@@ -30,6 +30,7 @@ class ListService:
 
         self._set_relations(list=list, book_ids=data.book_ids)
 
+        list.save()
         return list
 
     def _set_relations(self, list: List, book_ids: list[int] | None):

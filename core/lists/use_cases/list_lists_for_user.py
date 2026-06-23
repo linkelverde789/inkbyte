@@ -4,6 +4,12 @@ from query_pipeline import QuerySetPipeline
 
 
 class ListListForUserUseCase:
-    def execute(self, page: int, page_size: int, user: User):
+    def execute(
+        self,
+        user: User,
+        page: int = 1,
+        page_size: int = 12,
+    ):
         queryset = ListSelector().list_lists().filter(user=user)
-        return QuerySetPipeline(queryset).paginate(page=page, page_size=page_size)
+        queryset = QuerySetPipeline(queryset)
+        return queryset.paginate(page=page, page_size=page_size)
