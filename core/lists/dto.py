@@ -25,7 +25,7 @@ class CreateListInput:
 
 @dataclass
 class UpdateListInput:
-    name: str | None = None
+    name: str | None
     description: str | None = None
     image: object | None = None
     book_ids: list[int] = None

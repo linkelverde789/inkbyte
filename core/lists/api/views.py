@@ -1,4 +1,3 @@
-from django.contrib.admin.decorators import action
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -71,7 +70,7 @@ class MyListView(APIView):
     def get(self, request):
         page = int(request.query_params.get("page", 1))
 
-        page_size = int(request.query_params.get("page", 10))
+        page_size = int(request.query_params.get("page_size", 10))
         user = request.user
 
         items, total = ListListForUserUseCase().execute(
@@ -94,7 +93,11 @@ class ListDetailsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, list_id):
-        list_instance = GetListUseCase().execute(list_id=list_id)
+        try:
+            list_instance = GetListUseCase().execute(list_id=list_id)
+
+        except ListError as exc:
+            _list_error_response(exc=exc)
 
         return Response(
             ListResponseSerializer(list_instance, context={"request": request}).data
