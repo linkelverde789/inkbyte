@@ -1,4 +1,5 @@
 import pytest
+from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED
 
 from books.models import Author
 
@@ -11,7 +12,7 @@ def test_list_authors(api_client):
 
     response = api_client.get("/api/authors/")
 
-    assert response.status_code == 200
+    assert response.status_code == HTTP_200_OK
     assert response.data["count"] == 3
 
 
@@ -20,7 +21,7 @@ def test_get_author(api_client):
     author = Author.objects.create(name="Tolkien")
 
     response = api_client.get(f"/api/authors/{author.id}/")
-    assert response.status_code == 200
+    assert response.status_code == HTTP_200_OK
     assert response.data["name"] == author.name
 
 
@@ -36,7 +37,7 @@ def test_create_author(auth_client):
         format="json",
     )
 
-    assert response.status_code == 201
+    assert response.status_code == HTTP_201_CREATED
     author_id = response.data["id"]
     assert Author.objects.filter(id=author_id).exists() == True
 
@@ -50,7 +51,7 @@ def test_update_author(auth_client):
         format="json",
     )
 
-    assert response.status_code == 200
+    assert response.status_code == HTTP_200_OK
 
     assert Author.objects.filter(id=author.id).first().name == "Isaac Asimov"
 

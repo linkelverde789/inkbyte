@@ -1,4 +1,5 @@
 import pytest
+from rest_framework.status import HTTP_201_CREATED
 
 from books.models import Book
 from events.models import Event, EventType
@@ -55,7 +56,7 @@ def test_create_event_when_user_signup(api_client):
 
     response = api_client.post("/api/auth/register/", data=data, format="json")
 
-    assert response.status_code == 201
+    assert response.status_code == HTTP_201_CREATED
 
     assert (
         Event.objects.filter(
