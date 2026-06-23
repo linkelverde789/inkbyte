@@ -1,3 +1,4 @@
+from users.models import User
 from lists.exceptions import ListError
 from lists.dto import UpdateListInput
 from lists.models import List
@@ -9,22 +10,26 @@ class UpdateListUseCase:
     def execute(
         self,
         list_id: int,
+        user: User,
         name: str | None = None,
         description: str | None = None,
         image: object | None = None,
         book_ids: list[int] | None = None,
     ) -> List:
+        list_instance = ListSelector().get_list_by_id(list_id=list_id)
+
+        if list_instance is None:
+            raise ListError("List not found")
+
+        if list_instance.user != user:
+            raise ListError("Can't edit other user lists")
+
         list_dto = UpdateListInput(
             name=name,
             description=description,
             image=image,
             book_ids=book_ids,
         ).validate()
-
-        list_instance = ListSelector().get_list_by_id(list_id=list_id)
-
-        if list_instance is None:
-            raise ListError("List not found")
 
         list_instance = ListService().update_list(
             data=list_dto, list_instance=list_instance

@@ -3,6 +3,7 @@ from rest_framework.status import (
     HTTP_200_OK,
     HTTP_201_CREATED,
     HTTP_204_NO_CONTENT,
+    HTTP_400_BAD_REQUEST,
     HTTP_401_UNAUTHORIZED,
 )
 from rest_framework.test import APIClient
@@ -87,6 +88,37 @@ def test_update_list(api_client, user):
     assert response.status_code == HTTP_200_OK
 
     assert List.objects.filter(id=list_instance.id).first().name == "Updated name"
+
+
+@pytest.mark.django_db
+def test_other_user_cant_update_list(api_client, user):
+    list_instance = List.objects.create(name="Some name", user=user)
+
+    other_user = User.objects.create(
+        username="other", email="other@mail.com", password="testpassword2."
+    )
+
+    api_client.force_authenticate(user=other_user)
+
+    data = {"name": "Updated name", "description": "Some description"}
+    response = api_client.patch(
+        path=f"/api/lists/{list_instance.id}/", data=data, format="json"
+    )
+
+    assert response.status_code == HTTP_400_BAD_REQUEST
+
+
+@pytest.mark.django_db
+def test_other_user_cant_delete_list(api_client, user):
+
+    list_instance = List.objects.create(name="To delete", user=user)
+    other_user = User.objects.create(
+        username="other", email="other@mail.com", password="testpassword2."
+    )
+    api_client.force_authenticate(user=other_user)
+    response = api_client.delete(path=f"/api/lists/{list_instance.id}/")
+
+    assert response.status_code == HTTP_400_BAD_REQUEST
 
 
 @pytest.mark.django_db

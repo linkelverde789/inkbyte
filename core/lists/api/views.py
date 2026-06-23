@@ -109,7 +109,7 @@ class ListDetailsView(APIView):
             serializer.is_valid(raise_exception=True)
 
             list_output = UpdateListUseCase().execute(
-                list_id=list_id, **serializer.validated_data
+                list_id=list_id, user=request.user, **serializer.validated_data
             )
 
         except ListError as exc:
@@ -121,7 +121,7 @@ class ListDetailsView(APIView):
 
     def delete(self, request, list_id):
         try:
-            DeleteListUseCase().execute(list_id=list_id)
+            DeleteListUseCase().execute(list_id=list_id, user=request.user)
         except ListError as exc:
             return _list_error_response(exc)
 
