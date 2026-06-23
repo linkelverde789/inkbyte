@@ -23,7 +23,7 @@ class UserResponseSerializer(serializers.Serializer):
     username = serializers.CharField()
     first_name = serializers.CharField()
     last_name = serializers.CharField()
-    profile_picture = serializers.ImageField()
+    profile_picture = serializers.ImageField(allow_null=True)
 
 
 class AuthResponseSerializer(serializers.Serializer):

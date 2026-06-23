@@ -76,7 +76,7 @@ export default function UserLists() {
 
       <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {placeholder_lists.map((list, i) => (
-          <ListCard list={list} i={i} />
+          <ListCard list={list} isEven={i % 2 == 0} key={i} />
         ))}
 
         <button className="flex min-h-[260px] flex-col items-center justify-center gap-3 border-2 border-dashed border-border bg-card/50 p-6 text-center transition-colors hover:border-primary hover:bg-card">

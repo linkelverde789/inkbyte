@@ -42,8 +42,6 @@ function ProfilePage() {
 
   if (!user) return null;
 
-  const profile_picture = null;
-
   return (
     <main className="min-h-screen bg-muted/40">
       <ProfileNavBar logOut={signOut} />

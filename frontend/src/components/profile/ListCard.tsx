@@ -10,15 +10,14 @@ type ListCardProps = {
     name: string;
     description: string;
   };
-  i: number;
+  isEven: boolean;
 };
 export default function ListCard(props: ListCardProps) {
   const { t } = useI18n();
 
   return (
     <article
-      key={props.list.id}
-      className={`group relative flex flex-col bg-card shadow-[6px_7px_0_var(--color-secondary)] transition-transform hover:-translate-y-1 ${props.i % 2 ? "sm:translate-y-4" : ""}`}
+      className={`group relative flex flex-col bg-card shadow-[6px_7px_0_var(--color-secondary)] transition-transform hover:-translate-y-1 ${props.isEvent ? "sm:translate-y-4" : ""}`}
     >
       <div className="h-28 w-full" style={{ background: props.list.cover }} />
       <div className="flex flex-1 flex-col gap-3 p-5">

@@ -65,7 +65,7 @@ export default function StatCard({
         </div>
         <ul className="space-y-2 text-sm">
           {data.map((d, i) => {
-            const pct = Math.round((d.value / total) * 100);
+            const pct = total > 0 ? Math.round((d.value / total) * 100) : 0;
             return (
               <li key={d.name} className="flex items-center gap-3">
                 <span
