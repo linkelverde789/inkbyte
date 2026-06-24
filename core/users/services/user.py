@@ -1,30 +1,37 @@
 from django.contrib.auth import get_user_model
 
+from users.dto.user import UpdateUserInput
 from users.dto.auth import RegisterInput
 
 User = get_user_model()
 
 
-#TODO remove this unused function
-def _unique_username(email: str) -> str:
-    base = email.replace("@", "_at_").replace(".", "_")
-    candidate = base[:150]
-    if not User.objects.filter(username=candidate).exists():
-        return candidate
-    suffix = 1
-    while True:
-        trimmed = base[: 150 - len(str(suffix)) - 1]
-        candidate = f"{trimmed}_{suffix}"
-        if not User.objects.filter(username=candidate).exists():
-            return candidate
-        suffix += 1
+class UserService:
 
+    def create_user(self, data: RegisterInput) -> User:
+        return User.objects.create_user(
+            username=data.username,
+            email=data.email,
+            password=data.password,
+            first_name=data.first_name,
+            last_name=data.last_name,
+        )
 
-def create_user(data: RegisterInput) -> User:
-    return User.objects.create_user(
-        username=data.username,
-        email=data.email,
-        password=data.password,
-        first_name=data.first_name,
-        last_name=data.last_name,
-    )
+    def update_user(self, data: UpdateUserInput, user: User) -> User:
+        if data.profile_picture is not None:
+            user.profile_picture = data.profile_picture
+
+        if data.username is not None:
+            user.username = data.username
+
+        if data.first_name is not None:
+            user.first_name = data.first_name
+
+        if data.last_name is not None:
+            user.last_name = data.last_name
+
+        if data.email is not None:
+            user.email = data.email
+
+        user.save()
+        return user

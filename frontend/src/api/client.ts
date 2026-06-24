@@ -72,26 +72,50 @@ export class API {
   }
 
   post<T = unknown>(path: string, body?: unknown, options?: RequestOptions) {
+    const isFormData = body instanceof FormData;
+
     return this.request<T>(path, {
       ...options,
       method: "POST",
-      body: body !== undefined ? JSON.stringify(body) : undefined,
+      body:
+        body !== undefined
+          ? isFormData
+            ? body
+            : JSON.stringify(body)
+          : undefined,
+      json: !isFormData,
     });
   }
 
   patch<T = unknown>(path: string, body?: unknown, options?: RequestOptions) {
+    const isFormData = body instanceof FormData;
+
     return this.request<T>(path, {
       ...options,
       method: "PATCH",
-      body: body !== undefined ? JSON.stringify(body) : undefined,
+      body:
+        body !== undefined
+          ? isFormData
+            ? body
+            : JSON.stringify(body)
+          : undefined,
+      json: !isFormData,
     });
   }
 
   put<T = unknown>(path: string, body?: unknown, options?: RequestOptions) {
+    const isFormData = body instanceof FormData;
+
     return this.request<T>(path, {
       ...options,
       method: "PUT",
-      body: body !== undefined ? JSON.stringify(body) : undefined,
+      body:
+        body !== undefined
+          ? isFormData
+            ? body
+            : JSON.stringify(body)
+          : undefined,
+      json: !isFormData,
     });
   }
 
@@ -129,11 +153,9 @@ export class API {
   }) {
     return {
       "Accept-Language": getLocale(),
-      ...(json
-        ? {
-            "Content-Type": "application/json",
-          }
-        : {}),
+
+      ...(json ? { "Content-Type": "application/json" } : {}),
+
       ...extra,
     };
   }

@@ -48,7 +48,9 @@ export default function SearchBar({
           <input
             id="library-search"
             value={value}
-            onChange={(e) => onChange(e.target.value)}
+            onChange={(e) => {
+              onChange(e.target.value);
+            }}
             className="min-w-0 flex-1 bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground"
             placeholder={t("Title, author or ISBN…")}
           />

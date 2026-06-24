@@ -18,7 +18,7 @@ export function LoginForm(props: LoginFormProps) {
     e.preventDefault();
 
     void props.onSubmit(email, password).catch((error) => {
-      console.log(error);
+      console.error(error);
     });
   }
   return (

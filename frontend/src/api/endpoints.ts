@@ -11,6 +11,7 @@ export const API_ENDPOINTS = {
   AUTHORS_LIST: "/authors/",
   DATA_AUTHORS: "/data/authors/",
   DATA_GENRES: "/data/genres/",
+  PROFILE: "/profile/",
 } as const;
 
 export const API_DYNAMIC_ENDPOINTS = {
