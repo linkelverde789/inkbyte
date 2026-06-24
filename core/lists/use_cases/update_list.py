@@ -13,7 +13,7 @@ class UpdateListUseCase:
         user: User,
         name: str | None = None,
         description: str | None = None,
-        image: object | None = None,
+        cover: str | None = None,
         book_ids: list[int] | None = None,
     ) -> List:
         list_instance = ListSelector().get_list_by_id(list_id=list_id)
@@ -27,7 +27,7 @@ class UpdateListUseCase:
         list_dto = UpdateListInput(
             name=name,
             description=description,
-            image=image,
+            cover=cover,
             book_ids=book_ids,
         ).validate()
 

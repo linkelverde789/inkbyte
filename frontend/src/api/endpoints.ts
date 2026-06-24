@@ -12,12 +12,15 @@ export const API_ENDPOINTS = {
   DATA_AUTHORS: "/data/authors/",
   DATA_GENRES: "/data/genres/",
   PROFILE: "/profile/",
+  MY_LISTS: "/lists/mine/",
+  LISTS: "/lists/",
 } as const;
 
 export const API_DYNAMIC_ENDPOINTS = {
   BOOKS_DETAIL: (id: number | string) => `/books/${id}/`,
   BOOKS_FROM_SERIES: (id: number | string) => `/books/series/${id}/`,
   BOOKS_FROM_AUTHOR: (id: number | string) => `/books/author/${id}/`,
+  EDIT_LISTS: (id: number | string) => `/lists/${id}/`,
 } as const;
 
 export const API_BASE = "/api";

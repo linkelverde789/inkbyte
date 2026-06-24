@@ -11,7 +11,7 @@ class ListService:
         list_instance = List.objects.create(
             name=data.name,
             description=data.description,
-            image=data.image,
+            cover=data.cover,
             user=data.user,
         )
 
@@ -25,8 +25,8 @@ class ListService:
         if data.description is not None:
             list_instance.description = data.description
 
-        if data.image is not None:
-            list_instance.image = data.image
+        if data.cover is not None:
+            list_instance.cover = data.cover
 
         self._set_relations(list_instance=list_instance, book_ids=data.book_ids)
 

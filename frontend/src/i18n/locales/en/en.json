@@ -224,5 +224,11 @@
   "Open": "Open",
   "Create list": "Create list",
   "Organize your books however you like": "Organize your books however you like",
-  "Change profile picture": "Change picture"
+  "Change profile picture": "Change picture",
+  "Edit list": "Edit list",
+  "Modify your list's information.": "Modify your list's information.",
+  "Name and description.": "Name and description.",
+  "Description": "Description",
+  "Cancel": "Cancel",
+  "Save changes": "Save changes"
 }

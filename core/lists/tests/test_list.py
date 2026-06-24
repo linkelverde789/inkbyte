@@ -80,14 +80,18 @@ def test_update_list(api_client, user):
     api_client.force_authenticate(user=user)
 
     list_instance = List.objects.create(name="Some name", user=user)
-    data = {"name": "Updated name", "description": "Some description"}
+    data = {"name": "Updated name", "description": "Some description", "cover": "blue"}
     response = api_client.patch(
         path=f"/api/lists/{list_instance.id}/", data=data, format="json"
     )
 
     assert response.status_code == HTTP_200_OK
 
-    assert List.objects.filter(id=list_instance.id).first().name == "Updated name"
+    list_instance = List.objects.filter(id=list_instance.id).first()
+
+    assert list_instance.name == "Updated name"
+    assert list_instance.description == "Some description"
+    assert list_instance.cover == "blue"
 
 
 @pytest.mark.django_db
