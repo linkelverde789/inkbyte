@@ -8,6 +8,13 @@ from rest_framework.status import (
 
 from users.models import User
 from pathlib import Path
+from django.core.files.uploadedfile import SimpleUploadedFile
+
+
+def _partial_update(auth_client, data, status_code):
+    res = auth_client.patch(path="/api/profile/", data=data, format="json")
+
+    assert res.status_code == status_code
 
 
 @pytest.mark.django_db
@@ -107,22 +114,25 @@ def test_logout(auth_client):
 @pytest.mark.django_db
 def test_user_can_update_data(auth_client, user):
     image_path = Path("fixtures/test_image.png")
+    email = "updated_email@test.com"
+    username = "username_update"
+    first_name = "Arthur update"
+    last_name = "Morgan update"
+
     with open(image_path, "rb") as f:
-        image = f.read()
+        profile_picture = SimpleUploadedFile(
+            name="test_image.png", content=f.read(), content_type="image/png"
+        )
         auth_client.patch(
-            path="/api/profile/", data={"profile_picture": image}, format="multipart"
+            path="/api/profile/",
+            data={"profile_picture": profile_picture},
+            format="multipart",
         )
 
-    email = "updated_email@test.com"
-    _partial_update(auth_client, {"email": email}, 200)
-    username = "username_update"
-    _partial_update(auth_client, {"username": username}, 200)
-
-    first_name = "Arthur update"
-    _partial_update(auth_client, {"first_name": first_name}, 200)
-
-    last_name = "Morgan update"
-    _partial_update(auth_client, {"last_name": last_name}, 200)
+    _partial_update(auth_client, {"email": email}, HTTP_200_OK)
+    _partial_update(auth_client, {"username": username}, HTTP_200_OK)
+    _partial_update(auth_client, {"first_name": first_name}, HTTP_200_OK)
+    _partial_update(auth_client, {"last_name": last_name}, HTTP_200_OK)
     user_instance = User.objects.filter(id=user.id).first()
 
     assert user_instance.email == email
@@ -132,7 +142,16 @@ def test_user_can_update_data(auth_client, user):
     assert user_instance.profile_picture is not None
 
 
-def _partial_update(auth_client, data, status_code):
-    res = auth_client.patch(path="/api/profile/", data=data, format="json")
+@pytest.mark.django_db
+def test_user_can_update_data_with_same_username(auth_client, user):
+    username = user.username
+    first_name = "Arthur update"
+    last_name = "Morgan update"
+    data = {"username": username, "first_name": first_name, "last_name": last_name}
 
-    assert res.status_code == status_code
+    _partial_update(auth_client=auth_client, data=data, status_code=HTTP_200_OK)
+
+    user_instance = User.objects.filter(id=user.id).first()
+    assert user_instance.first_name == first_name
+    assert user_instance.last_name == last_name
+    assert user_instance.username == username

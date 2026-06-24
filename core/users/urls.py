@@ -19,5 +19,5 @@ urlpatterns = [
         CookieTokenRefreshView.as_view(),
         name="auth-token-refresh",
     ),
-    path("profile/", UserProfileView.as_view(), name="auth-me"),
+    path("profile/", UserProfileView.as_view(), name="profile"),
 ]

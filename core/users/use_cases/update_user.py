@@ -22,7 +22,7 @@ class UpdateUserUseCase:
             email=email,
             first_name=first_name,
             last_name=last_name,
-        )
+        ).validate(user_id=user.id)
 
         user_instance = UserService().update_user(data=user_dto, user=user)
         return user_instance

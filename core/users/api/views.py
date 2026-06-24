@@ -69,7 +69,7 @@ class UserProfileView(APIView):
             )
 
         except UserError as exc:
-            _user_error_response(exc=exc)
+            return _user_error_response(exc=exc)
 
         return Response(
             UserResponseSerializer(user_instance, context={"request": request}).data

@@ -20,9 +20,6 @@ export function ProfileAvatar({ profile_picture }: ProfileAvatarProps) {
     const formData = new FormData();
     formData.append("profile_picture", file);
 
-    console.log("formData", formData);
-    console.log("file", file);
-
     const res = await api.patch(API_ENDPOINTS.PROFILE, formData);
 
     return res;
@@ -39,7 +36,9 @@ export function ProfileAvatar({ profile_picture }: ProfileAvatarProps) {
           type="file"
           accept="image/jpeg,image/png,image/webp"
           className="sr-only"
-          onChange={handleSubmitImage}
+          onChange={(e) => {
+            void handleSubmitImage(e);
+          }}
         />
       </label>
     </div>

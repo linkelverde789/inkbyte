@@ -12,12 +12,12 @@ class UpdateUserInput:
     first_name: str | None = None
     last_name: str | None = None
 
-    def validate(self) -> "UpdateUserInput":
+    def validate(self, user_id: int | None = None) -> "UpdateUserInput":
         if self.username is not None:
             self.username = self.username.strip()
             if not self.username:
                 raise UserError("The username can't be empty")
-            if UserSelector().username_exists(self.username):
+            if UserSelector().username_exists(self.username, user_id=user_id):
                 raise UserError("The username already exists")
 
         if self.email is not None:
