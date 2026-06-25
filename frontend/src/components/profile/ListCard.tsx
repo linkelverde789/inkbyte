@@ -6,7 +6,7 @@ import { BookOpen, ListMusic, Pencil, Trash2 } from "lucide-react";
 type ListCardProps = {
   list: List;
   isEven: boolean;
-  deleteList: (listID: number | string) => {};
+  deleteList: (listId: number | string) => {};
   onEdit: (list: List) => void;
 };
 export default function ListCard(props: ListCardProps) {
@@ -31,7 +31,8 @@ export default function ListCard(props: ListCardProps) {
       />
       <div className="flex flex-1 flex-col gap-3 p-5">
         <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary">
-          <ListMusic className="size-3.5" /> {props.list.bookCount} {t("books")}
+          <ListMusic className="size-3.5" /> {props.list.books.length}{" "}
+          {t("books")}
         </div>
         <h3 className="font-display text-2xl leading-tight">
           {props.list.name}

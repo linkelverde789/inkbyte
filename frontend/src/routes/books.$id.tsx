@@ -4,10 +4,13 @@ import { ArrowLeft, BookMarked, Users } from "lucide-react";
 import { useI18n } from "@/i18n/i18nProvider";
 import { api } from "@/api";
 import { Book } from "@/types/book";
-import { API_DYNAMIC_ENDPOINTS } from "@/api/endpoints";
+import { API_DYNAMIC_ENDPOINTS, API_ENDPOINTS } from "@/api/endpoints";
 import NavBar from "@/components/ui/Navbar";
 import { MainBook } from "@/components/book/individual/mainBook";
 import { RelatedShelf } from "@/components/book/individual/relatedShelf";
+import { AddToListSection } from "@/components/book/individual/AddToList";
+import { List, ListResponse } from "@/types/list";
+import { useEffect, useState } from "react";
 
 async function fetchBook(id: string): Promise<Book> {
   const res = await api.get<Book>(API_DYNAMIC_ENDPOINTS.BOOKS_DETAIL(id));
@@ -44,6 +47,26 @@ function BookPage() {
 
   const firstSeries = book.series?.[0] ?? null;
 
+  const [loading, setLoading] = useState(false);
+
+  const [lists, setLists] = useState<List[]>([]);
+
+  useEffect(() => {
+    const fetchLists = async () => {
+      setLoading(true);
+      try {
+        const res = await api.get<ListResponse>(API_ENDPOINTS.MY_LISTS);
+        setLists(res.results);
+        console.log(res.results);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    void fetchLists();
+  }, [book.id]);
+
   return (
     <div className="min-h-screen bg-background">
       <NavBar />
@@ -57,10 +80,17 @@ function BookPage() {
           {t("Go back to results")}
         </Link>
         <MainBook book={book} />
+        {lists.length > 0 && (
+          <AddToListSection
+            bookId={book.id}
+            lists={lists}
+            setLists={setLists}
+          />
+        )}
         {book.authors?.map((author) => {
           return (
             <RelatedShelf
-              title={`More books from the author`}
+              title={t(`More books from the author`)}
               subtitle={author.name}
               icon={<Users className="size-4" />}
               endpoint={"author"}
@@ -70,7 +100,7 @@ function BookPage() {
         })}
         {firstSeries ? (
           <RelatedShelf
-            title={`In the same series`}
+            title={t("In the same series")}
             subtitle={firstSeries?.name}
             icon={<BookMarked className="size-4" />}
             endpoint={"series"}

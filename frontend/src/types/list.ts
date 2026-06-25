@@ -1,9 +1,11 @@
+import { Book } from "./book";
+
 export type List = {
   id: number | string;
   name: string;
   description: string | null;
   cover: string | null;
-  bookCount: number;
+  books: Book[];
 };
 
 export type ListResponse = {

@@ -59,9 +59,9 @@ export default function UserLists() {
     setLists((prev) => prev.map((item) => (item.id === res.id ? res : item)));
   }
 
-  async function deleteList(listID: number | string) {
-    await api.delete(API_DYNAMIC_ENDPOINTS.EDIT_LISTS(listID));
-    setLists((prev) => prev.filter((item) => item.id !== listID));
+  async function deleteList(listId: number | string) {
+    await api.delete(API_DYNAMIC_ENDPOINTS.EDIT_LISTS(listId));
+    setLists((prev) => prev.filter((item) => item.id !== listId));
   }
 
   function openCreateDialog() {
