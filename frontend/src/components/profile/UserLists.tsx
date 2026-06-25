@@ -6,16 +6,9 @@ import { useEffect, useState } from "react";
 import { api, API_ENDPOINTS } from "@/api";
 import { API_DYNAMIC_ENDPOINTS } from "@/api/endpoints";
 import { ListDialog } from "../dialogs/ListDialog";
-import { List, ListResponse } from "@/types/list";
+import { List, ListForm, ListResponse } from "@/types/list";
 
 type ListDialogMode = "create" | "edit";
-
-type ListForm = {
-  id?: number | string;
-  name: string;
-  description: string;
-  cover: string;
-};
 
 export default function UserLists() {
   const { t } = useI18n();
