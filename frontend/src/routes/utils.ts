@@ -1,4 +1,4 @@
-import { useI18n } from "@/i18n/i18nProvider";
+import { TranslateFn } from "@/i18n/i18nProvider";
 import { Author, BookGenre } from "@/types/book";
 
 export default function sleep(s: number) {
@@ -19,9 +19,7 @@ export function showGenres(genres: BookGenre[]): string {
   return genres.map((genre) => genre.name).join(", ");
 }
 
-export function timeAgo(dateString: string) {
-  const { t } = useI18n();
-
+export function timeAgo(dateString: string, t: TranslateFn) {
   const diffMs = Date.now() - new Date(dateString).getTime();
 
   const seconds = Math.floor(diffMs / 1000);

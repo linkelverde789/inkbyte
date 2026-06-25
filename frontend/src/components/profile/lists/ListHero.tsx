@@ -47,12 +47,11 @@ export function ListHero(props: ListHeroProps) {
         <div className="absolute inset-0 grid grid-cols-2 gap-1 p-3">
           {props.list.books.slice(0, 4).map((book, i) => (
             <div
-              key={i}
+              key={book.id}
               className="overflow-hidden bg-background/20 shadow-[3px_3px_0_rgba(0,0,0,0.15)]"
             >
               <img
                 src={book.image}
-                alt=""
                 className="h-full w-full max-w-none object-cover"
               />
             </div>
@@ -78,7 +77,7 @@ export function ListHero(props: ListHeroProps) {
           </span>
 
           <span className="text-muted-foreground">
-            {` - ${t("Updated")} ${timeAgo(props.list.updated_at)}`}
+            {` - ${t("Updated")} ${timeAgo(props.list.updated_at, t)}`}
           </span>
         </div>
 

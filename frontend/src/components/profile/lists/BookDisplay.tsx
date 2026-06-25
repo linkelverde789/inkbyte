@@ -30,7 +30,6 @@ export function BookDisplay(props: BookDisplayProps) {
       >
         <img
           src={book.image}
-          alt={t("Cover of {{title}}", { title: book.title })}
           className="h-full w-full max-w-none object-cover"
         />
       </Link>

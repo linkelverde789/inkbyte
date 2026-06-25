@@ -17,6 +17,11 @@ type I18nContextType = {
   t: (key: keyof typeof es, values?: Record<string, string | number>) => string;
 };
 
+export type TranslateFn = (
+  key: keyof typeof es,
+  values?: Record<string, string | number>,
+) => string;
+
 const I18nContext = createContext<I18nContextType | null>(null);
 
 export function I18nProvider({ children }: { children: React.ReactNode }) {
