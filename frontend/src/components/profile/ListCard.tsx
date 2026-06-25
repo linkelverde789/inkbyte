@@ -6,7 +6,7 @@ import { BookOpen, ListMusic, Pencil, Trash2 } from "lucide-react";
 type ListCardProps = {
   list: List;
   isEven: boolean;
-  deleteList: (listID: number | string) => {};
+  deleteList: (listId: number | string) => {};
   onEdit: (list: List) => void;
 };
 export default function ListCard(props: ListCardProps) {

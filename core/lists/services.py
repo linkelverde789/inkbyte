@@ -36,4 +36,4 @@ class ListService:
     def _set_relations(self, list_instance: List, book_ids: list[int] | None):
         if book_ids is not None:
             books = Book.objects.filter(id__in=book_ids)
-            list_instance.books.set(books)
+            list_instance.books.add(*books)

@@ -8,6 +8,7 @@ from rest_framework.status import (
 )
 from rest_framework.test import APIClient
 
+from books.models import Book
 from users.models import User
 from lists.models import List
 
@@ -134,6 +135,36 @@ def test_delete_list(api_client, user):
     response = api_client.delete(path=f"/api/lists/{list_instance.id}/")
 
     assert response.status_code == HTTP_204_NO_CONTENT
+
+
+@pytest.mark.django_db
+def test_add_book_to_list(api_client, user):
+    api_client.force_authenticate(user=user)
+    book = Book.objects.create(title="Some book title")
+
+    list_instance = List.objects.create(name="Some name", user=user)
+    data = {"book_ids": [book.id]}
+    response = api_client.patch(
+        path=f"/api/lists/{list_instance.id}/", data=data, format="json"
+    )
+
+    assert response.status_code == HTTP_200_OK
+
+    list_instance = List.objects.prefetch_related("books").get(id=list_instance.id)
+
+    assert list_instance.books.count() == 1
+
+    new_book = Book.objects.create(title="Some new book title")
+    data = {"book_ids": [new_book.id]}
+    response = api_client.patch(
+        path=f"/api/lists/{list_instance.id}/", data=data, format="json"
+    )
+
+    assert response.status_code == HTTP_200_OK
+
+    list_instance = List.objects.filter(id=list_instance.id).first()
+
+    assert list_instance.books.count() == 2
 
 
 ## Anonymous User test ##
