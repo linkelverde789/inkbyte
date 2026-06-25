@@ -9,7 +9,7 @@ class CreateListInput:
     name: str
     user: User
     description: str = ""
-    image: object | None = None
+    cover: str | None = None
     book_ids: list[int] = None
 
     def validate(self) -> "CreateListInput":
@@ -27,7 +27,7 @@ class CreateListInput:
 class UpdateListInput:
     name: str | None
     description: str | None = None
-    image: object | None = None
+    cover: str | None = None
     book_ids: list[int] = None
 
     def validate(self) -> "UpdateListInput":

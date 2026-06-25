@@ -10,13 +10,13 @@ class CreateListUseCase:
         name: str,
         user: User,
         description: str | None = None,
-        image: object | None = None,
+        cover: str | None = None,
         book_ids: list[int] | None = None,
     ) -> List:
         list_dto = CreateListInput(
             name=name,
             description=description,
-            image=image,
+            cover=cover,
             user=user,
             book_ids=book_ids,
         ).validate()

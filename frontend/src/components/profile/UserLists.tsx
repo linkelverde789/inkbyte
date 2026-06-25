@@ -2,59 +2,94 @@ import { Plus } from "lucide-react";
 import { Button } from "../ui/button";
 import { useI18n } from "@/i18n/i18nProvider";
 import ListCard from "./ListCard";
+import { useEffect, useState } from "react";
+import { api, API_ENDPOINTS } from "@/api";
+import { API_DYNAMIC_ENDPOINTS } from "@/api/endpoints";
+import { ListDialog } from "../dialogs/ListDialog";
+import { List, ListResponse } from "@/types/list";
+
+type ListDialogMode = "create" | "edit";
+
+type ListForm = {
+  id?: number | string;
+  name: string;
+  description: string;
+  cover: string;
+};
 
 export default function UserLists() {
   const { t } = useI18n();
-  const placeholder_lists = [
-    {
-      id: "1",
-      name: "Para releer en otoño",
-      description: "Novelas que merecen una segunda vuelta junto a la ventana.",
-      count: 12,
-      cover:
-        "linear-gradient(135deg, var(--color-primary), var(--color-accent))",
-      bookSlugs: [
-        "circe",
-        "la-paciente-silenciosa",
-        "yellowface",
-        "el-infinito-en-un-junco",
-      ],
-    },
-    {
-      id: "2",
-      name: "Cómics indie",
-      description:
-        "Autoediciones y pequeñas imprentas que vale la pena seguir.",
-      count: 8,
-      cover:
-        "linear-gradient(135deg, var(--color-secondary), var(--color-primary))",
-      bookSlugs: ["persépolis", "yellowface"],
-    },
-    {
-      id: "3",
-      name: "Ensayos sobre el oficio",
-      description: "Cartas, diarios y reflexiones de escritores en activo.",
-      count: 5,
-      cover:
-        "linear-gradient(135deg, var(--color-accent), var(--color-secondary))",
-      bookSlugs: ["el-infinito-en-un-junco", "circe"],
-    },
-    {
-      id: "4",
-      name: "Pendientes 2026",
-      description: "Lo que quiero terminar antes de fin de año.",
-      count: 17,
-      cover:
-        "linear-gradient(135deg, var(--color-primary), var(--color-secondary))",
-      bookSlugs: [
-        "proyecto-hail-mary",
-        "la-paciente-silenciosa",
-        "yellowface",
-        "circe",
-        "persépolis",
-      ],
-    },
-  ];
+
+  const [loading, setLoading] = useState(false);
+  const [lists, setLists] = useState<List[]>([]);
+
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogMode, setDialogMode] = useState<ListDialogMode>("create");
+  const [selectedList, setSelectedList] = useState<List | null>(null);
+
+  useEffect(() => {
+    const fetchLists = async () => {
+      setLoading(true);
+      try {
+        const res = await api.get<ListResponse>(API_ENDPOINTS.MY_LISTS);
+        setLists(res.results);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    void fetchLists();
+  }, []);
+
+  async function createList(data: ListForm) {
+    const res = await api.post<List>(API_ENDPOINTS.LISTS, data);
+    setLists((prev) => [...prev, res]);
+  }
+
+  async function updateList(data: ListForm) {
+    if (!data.id) return;
+
+    const res = await api.patch<List>(
+      API_DYNAMIC_ENDPOINTS.EDIT_LISTS(data.id),
+      data,
+    );
+
+    setLists((prev) => prev.map((item) => (item.id === res.id ? res : item)));
+  }
+
+  async function deleteList(listID: number | string) {
+    await api.delete(API_DYNAMIC_ENDPOINTS.EDIT_LISTS(listID));
+    setLists((prev) => prev.filter((item) => item.id !== listID));
+  }
+
+  function openCreateDialog() {
+    setSelectedList(null);
+    setDialogMode("create");
+    setDialogOpen(true);
+  }
+
+  function openEditDialog(list: List) {
+    setSelectedList(list);
+    setDialogMode("edit");
+    setDialogOpen(true);
+  }
+
+  async function handleSubmit(data: ListForm) {
+    try {
+      if (dialogMode === "create") {
+        await createList(data);
+      } else {
+        await updateList(data);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setDialogOpen(false);
+    }
+  }
+
   return (
     <section>
       <div className="flex flex-wrap items-end justify-between gap-4">
@@ -63,32 +98,47 @@ export default function UserLists() {
             {t("Shelves")}
           </p>
           <h2 className="mt-2 text-4xl">{t("My lists")}</h2>
-          <p className="mt-2 max-w-lg text-sm text-muted-foreground">
-            {t(
-              "Organize your reading lists on your own shelves. Create, edit, and share them whenever you want.",
-            )}
-          </p>
         </div>
-        <Button variant="editorial" size="editorial">
+
+        <Button variant="editorial" size="editorial" onClick={openCreateDialog}>
           <Plus className="size-4" /> {t("New list")}
         </Button>
       </div>
 
       <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {placeholder_lists.map((list, i) => (
-          <ListCard list={list} isEven={i % 2 == 0} key={i} />
-        ))}
+        {!loading &&
+          lists.map((list, i) => (
+            <ListCard
+              key={list.id}
+              list={list}
+              isEven={i % 2 === 0}
+              deleteList={deleteList}
+              onEdit={() => {
+                openEditDialog(list);
+              }}
+            />
+          ))}
 
-        <button className="flex min-h-[260px] flex-col items-center justify-center gap-3 border-2 border-dashed border-border bg-card/50 p-6 text-center transition-colors hover:border-primary hover:bg-card">
+        <button
+          onClick={openCreateDialog}
+          className="flex min-h-[260px] flex-col items-center justify-center gap-3 border-2 border-dashed border-border bg-card/50 p-6 text-center transition-colors hover:border-primary hover:bg-card"
+        >
           <div className="grid size-12 place-items-center rounded-full bg-primary/10 text-primary">
             <Plus className="size-6" />
           </div>
           <p className="font-display text-xl">{t("Create list")}</p>
-          <p className="text-xs text-muted-foreground">
-            {t("Organize your books however you like")}
-          </p>
         </button>
       </div>
+
+      <ListDialog
+        open={dialogOpen}
+        setOpen={setDialogOpen}
+        mode={dialogMode}
+        initialValue={selectedList ?? undefined}
+        onSubmit={(e) => {
+          void handleSubmit(e);
+        }}
+      />
     </section>
   );
 }
