@@ -3,8 +3,8 @@ import { API_DYNAMIC_ENDPOINTS } from "@/api/endpoints";
 import { Button } from "@/components/ui/button";
 import { useI18n } from "@/i18n/i18nProvider";
 import { List } from "@/types/list";
-import { Check, ListPlus } from "lucide-react";
 import { useState } from "react";
+import { ListCard } from "./ListCard";
 
 type AddToListSectionProps = {
   bookId: number;
@@ -22,11 +22,15 @@ export function AddToListSection(props: AddToListSectionProps) {
 
     if (checkIfListHasBook(selectedList)) return;
 
+    const bookIds = Array.from(
+      new Set([...selectedList.books.map((book) => book.id), props.bookId]),
+    );
+
     try {
       const updatedList = await api.patch<List>(
         API_DYNAMIC_ENDPOINTS.EDIT_LISTS(selectedList.id),
         {
-          book_ids: [props.bookId],
+          book_ids: bookIds,
         },
       );
 
@@ -89,58 +93,13 @@ export function AddToListSection(props: AddToListSectionProps) {
       {selectedList && (
         <div className="mt-6 flex items-center justify-between border border-dashed border-primary/40 bg-primary/5 px-4 py-3 text-sm">
           <span>
-            <strong>1</strong> lista seleccionada
+            <strong>1</strong> {t("selected list")}
           </span>
           <Button variant="editorial" size="sm" onClick={handleAddBook}>
-            Guardar cambios
+            {t("Save changes")}
           </Button>
         </div>
       )}
     </section>
-  );
-}
-
-type ListCardProps = {
-  active: boolean;
-  hasBook: boolean;
-  list: List;
-  toggle: (list: List) => void;
-};
-function ListCard(props: ListCardProps) {
-  const { t } = useI18n();
-  return (
-    <button
-      key={props.list.id}
-      type="button"
-      disabled={props.hasBook}
-      onClick={() => props.toggle(props.list)}
-      className={`group flex items-center gap-4 border p-4 text-left transition-all ${
-        props.hasBook
-          ? "cursor-not-allowed opacity-50"
-          : props.active
-            ? "border-primary bg-primary/5 shadow-[6px_6px_0_var(--color-primary)]"
-            : "border-border hover:border-primary/50"
-      }`}
-    >
-      <div
-        className="size-14 shrink-0"
-        style={{ background: props.list.cover ?? "var(--color-secondary)" }}
-      />
-      <div className="flex-1 overflow-hidden">
-        <p className="truncate text-base font-bold">{props.list.name}</p>
-        <p className="text-xs text-muted-foreground">
-          {props.list.books.length} {t("books")}
-        </p>
-      </div>
-      <div
-        className={`flex size-9 shrink-0 items-center justify-center border ${props.active ? "border-primary bg-primary text-primary-foreground" : "border-border text-muted-foreground"}`}
-      >
-        {props.active ? (
-          <Check className="size-4" />
-        ) : (
-          <ListPlus className="size-4" />
-        )}
-      </div>
-    </button>
   );
 }

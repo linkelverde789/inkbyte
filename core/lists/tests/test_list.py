@@ -140,31 +140,29 @@ def test_delete_list(api_client, user):
 @pytest.mark.django_db
 def test_add_book_to_list(api_client, user):
     api_client.force_authenticate(user=user)
+
     book = Book.objects.create(title="Some book title")
-
-    list_instance = List.objects.create(name="Some name", user=user)
-    data = {"book_ids": [book.id]}
-    response = api_client.patch(
-        path=f"/api/lists/{list_instance.id}/", data=data, format="json"
-    )
-
-    assert response.status_code == HTTP_200_OK
-
-    list_instance = List.objects.prefetch_related("books").get(id=list_instance.id)
-
-    assert list_instance.books.count() == 1
-
     new_book = Book.objects.create(title="Some new book title")
-    data = {"book_ids": [new_book.id]}
-    response = api_client.patch(
-        path=f"/api/lists/{list_instance.id}/", data=data, format="json"
+
+    list_instance = List.objects.create(
+        name="Some name",
+        user=user,
     )
 
-    assert response.status_code == HTTP_200_OK
+    def update_books(book_ids):
+        response = api_client.patch(
+            f"/api/lists/{list_instance.id}/",
+            {"book_ids": book_ids},
+            format="json",
+        )
+        assert response.status_code == HTTP_200_OK
 
-    list_instance = List.objects.filter(id=list_instance.id).first()
+        list_instance.refresh_from_db()
+        return set(list_instance.books.values_list("id", flat=True))
 
-    assert list_instance.books.count() == 2
+    assert update_books([book.id]) == {book.id}
+    assert update_books([new_book.id]) == {new_book.id}
+    assert update_books([new_book.id, book.id]) == {book.id, new_book.id}
 
 
 ## Anonymous User test ##
