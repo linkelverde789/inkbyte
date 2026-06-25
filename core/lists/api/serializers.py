@@ -11,6 +11,7 @@ class ListResponseSerializer(serializers.Serializer):
     cover = serializers.CharField(allow_null=True, allow_blank=True)
     books = BookResponseSerializer(many=True, required=False)
     user = UserResponseSerializer()
+    updated_at = serializers.DateTimeField()
 
 
 class CreateListSerializer(serializers.Serializer):

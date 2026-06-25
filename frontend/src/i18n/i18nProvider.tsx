@@ -14,8 +14,13 @@ type Locale = keyof typeof translations;
 type I18nContextType = {
   locale: Locale;
   setLocale: (l: Locale) => void;
-  t: (key: keyof typeof es) => string;
+  t: (key: keyof typeof es, values?: Record<string, string | number>) => string;
 };
+
+export type TranslateFn = (
+  key: keyof typeof es,
+  values?: Record<string, string | number>,
+) => string;
 
 const I18nContext = createContext<I18nContextType | null>(null);
 
@@ -30,8 +35,19 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
     setLocaleState(l);
   };
 
-  const t = (key: keyof typeof es) => {
-    return translations[locale][key] ?? key;
+  const t = (
+    key: keyof typeof es,
+    values?: Record<string, string | number>,
+  ) => {
+    let text = translations[locale][key] ?? key;
+
+    if (!values) return text;
+
+    Object.entries(values).forEach(([k, v]) => {
+      text = text.replace(`{${k}}`, String(v));
+    });
+
+    return text;
   };
 
   return (

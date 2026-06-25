@@ -11,12 +11,12 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SearchRouteImport } from './routes/search'
-import { Route as PruebaRouteImport } from './routes/prueba'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BooksIdRouteImport } from './routes/books.$id'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated.profile'
+import { Route as AuthenticatedListIdRouteImport } from './routes/_authenticated.list.$id'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -26,11 +26,6 @@ const SignupRoute = SignupRouteImport.update({
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
   path: '/search',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PruebaRoute = PruebaRouteImport.update({
-  id: '/prueba',
-  path: '/prueba',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -57,72 +52,76 @@ const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedListIdRoute = AuthenticatedListIdRouteImport.update({
+  id: '/list/$id',
+  path: '/list/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/prueba': typeof PruebaRoute
   '/search': typeof SearchRoute
   '/signup': typeof SignupRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/books/$id': typeof BooksIdRoute
+  '/list/$id': typeof AuthenticatedListIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
-  '/prueba': typeof PruebaRoute
   '/search': typeof SearchRoute
   '/signup': typeof SignupRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/books/$id': typeof BooksIdRoute
+  '/list/$id': typeof AuthenticatedListIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/login': typeof LoginRoute
-  '/prueba': typeof PruebaRoute
   '/search': typeof SearchRoute
   '/signup': typeof SignupRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/books/$id': typeof BooksIdRoute
+  '/_authenticated/list/$id': typeof AuthenticatedListIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/login'
-    | '/prueba'
     | '/search'
     | '/signup'
     | '/profile'
     | '/books/$id'
+    | '/list/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/login'
-    | '/prueba'
     | '/search'
     | '/signup'
     | '/profile'
     | '/books/$id'
+    | '/list/$id'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/login'
-    | '/prueba'
     | '/search'
     | '/signup'
     | '/_authenticated/profile'
     | '/books/$id'
+    | '/_authenticated/list/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   LoginRoute: typeof LoginRoute
-  PruebaRoute: typeof PruebaRoute
   SearchRoute: typeof SearchRoute
   SignupRoute: typeof SignupRoute
   BooksIdRoute: typeof BooksIdRoute
@@ -142,13 +141,6 @@ declare module '@tanstack/react-router' {
       path: '/search'
       fullPath: '/search'
       preLoaderRoute: typeof SearchRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/prueba': {
-      id: '/prueba'
-      path: '/prueba'
-      fullPath: '/prueba'
-      preLoaderRoute: typeof PruebaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -186,15 +178,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProfileRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/list/$id': {
+      id: '/_authenticated/list/$id'
+      path: '/list/$id'
+      fullPath: '/list/$id'
+      preLoaderRoute: typeof AuthenticatedListIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedListIdRoute: typeof AuthenticatedListIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedListIdRoute: AuthenticatedListIdRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -204,7 +205,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   LoginRoute: LoginRoute,
-  PruebaRoute: PruebaRoute,
   SearchRoute: SearchRoute,
   SignupRoute: SignupRoute,
   BooksIdRoute: BooksIdRoute,

@@ -42,7 +42,8 @@ export default function ListCard(props: ListCardProps) {
         </p>
         <div className="mt-auto flex items-center justify-between border-t border-border pt-3">
           <Link
-            to="/search"
+            to="/list/$id"
+            params={{ id: props.list.id.toString() }}
             className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-foreground hover:text-primary"
           >
             <BookOpen className="size-3.5" /> {t("Open")}

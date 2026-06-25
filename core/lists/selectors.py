@@ -6,4 +6,4 @@ class ListSelector:
         return List.objects.filter(id=list_id).first()
 
     def list_lists(self):
-        return List.objects.all()
+        return List.objects.all().order_by("id")
