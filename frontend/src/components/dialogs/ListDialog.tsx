@@ -100,16 +100,18 @@ export function ListDialog(props: ListDialogProps) {
           <Input
             placeholder={t("Name")}
             value={list.name}
-            onChange={(e) => setList((p) => ({ ...p, name: e.target.value }))}
+            onChange={(e) => {
+              setList((p) => ({ ...p, name: e.target.value }));
+            }}
           />
 
           <Textarea
             placeholder={t("Description")}
             rows={3}
             value={list.description}
-            onChange={(e) =>
-              setList((p) => ({ ...p, description: e.target.value }))
-            }
+            onChange={(e) => {
+              setList((p) => ({ ...p, description: e.target.value }));
+            }}
           />
 
           <div className="grid gap-2">
@@ -120,7 +122,9 @@ export function ListDialog(props: ListDialogProps) {
                 <button
                   key={color}
                   type="button"
-                  onClick={() => setList((p) => ({ ...p, cover: color }))}
+                  onClick={() => {
+                    setList((p) => ({ ...p, cover: color }));
+                  }}
                   className={`h-7 w-7 rounded-full border-2 transition ${
                     list.cover === color
                       ? "border-foreground scale-110"
@@ -134,7 +138,12 @@ export function ListDialog(props: ListDialogProps) {
         </div>
 
         <DialogFooter>
-          <Button variant="ghost" onClick={() => props.setOpen(false)}>
+          <Button
+            variant="ghost"
+            onClick={() => {
+              props.setOpen(false);
+            }}
+          >
             {t("Cancel")}
           </Button>
 

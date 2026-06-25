@@ -40,7 +40,7 @@ export default function UserLists() {
       }
     };
 
-    fetchLists();
+    void fetchLists();
   }, []);
 
   async function createList(data: ListForm) {
@@ -77,13 +77,17 @@ export default function UserLists() {
   }
 
   async function handleSubmit(data: ListForm) {
-    if (dialogMode === "create") {
-      await createList(data);
-    } else {
-      await updateList(data);
+    try {
+      if (dialogMode === "create") {
+        await createList(data);
+      } else {
+        await updateList(data);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setDialogOpen(false);
     }
-
-    setDialogOpen(false);
   }
 
   return (
@@ -109,7 +113,9 @@ export default function UserLists() {
               list={list}
               isEven={i % 2 === 0}
               deleteList={deleteList}
-              onEdit={() => openEditDialog(list)}
+              onEdit={() => {
+                openEditDialog(list);
+              }}
             />
           ))}
 
@@ -129,7 +135,9 @@ export default function UserLists() {
         setOpen={setDialogOpen}
         mode={dialogMode}
         initialValue={selectedList ?? undefined}
-        onSubmit={handleSubmit}
+        onSubmit={(e) => {
+          void handleSubmit(e);
+        }}
       />
     </section>
   );

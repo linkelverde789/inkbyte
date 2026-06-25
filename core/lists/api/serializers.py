@@ -8,7 +8,7 @@ class ListResponseSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     name = serializers.CharField()
     description = serializers.CharField()
-    cover = serializers.CharField()
+    cover = serializers.CharField(allow_null=True, allow_blank=True)
     books = BookResponseSerializer(many=True, required=False)
     user = UserResponseSerializer()
 
