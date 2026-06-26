@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 
 import { useAuth } from "@/auth/AuthContext";
 import { useI18n } from "@/i18n/i18nProvider";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ProfileNavBar } from "@/components/ui/ProfileNavbar";
 import UserLists from "@/components/profile/UserLists";
 import ProfileCard from "@/components/profile/ProfileCard";
@@ -14,7 +14,7 @@ export const Route = createFileRoute("/_authenticated/profile")({
 
 function ProfilePage() {
   const { t } = useI18n();
-  const { user, logout, loading } = useAuth();
+  const { user, loading } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,14 +27,6 @@ function ProfilePage() {
       });
     }
   }, [loading, user, navigate]);
-
-  async function signOut() {
-    await logout();
-    await navigate({
-      to: "/login",
-      replace: true,
-    });
-  }
 
   if (!user) return null;
 

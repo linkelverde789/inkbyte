@@ -53,8 +53,8 @@ def test_update_books(auth_client):
 
     assert response.status_code == HTTP_200_OK
 
-    updated_book = Book.objects.filter(id=book.id).first()
-    assert updated_book.description == "this is a book description"
+    book.refresh_from_db()
+    assert book.description == "this is a book description"
 
 
 @pytest.mark.django_db

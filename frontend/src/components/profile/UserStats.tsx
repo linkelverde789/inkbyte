@@ -1,25 +1,40 @@
 import { useI18n } from "@/i18n/i18nProvider";
 import StatCard from "./StatCard";
+import { useEffect, useState } from "react";
+import { api, API_ENDPOINTS } from "@/api";
 
-const GENRE_DATA = [
-  { name: "Espionage", value: 24 },
-  { name: "Poetry", value: 12 },
-  { name: "Sonnet", value: 7 },
-  { name: "Comics", value: 9 },
-  { name: "Sci-Fi", value: 15 },
-  { name: "Memoir", value: 6 },
-];
+export type ChartItem = {
+  name: string;
+  value: number;
+};
 
-const AUTHOR_DATA = [
-  { name: "Ursula K. Le Guin", value: 8 },
-  { name: "Italo Calvino", value: 6 },
-  { name: "Clarice Lispector", value: 5 },
-  { name: "Haruki Murakami", value: 7 },
-  { name: "Octavia E. Butler", value: 4 },
-  { name: "Other", value: 11 },
-];
+type ListStats = {
+  genres: ChartItem[];
+  authors: ChartItem[];
+  books_count: number;
+};
 export default function UserStats() {
   const { t } = useI18n();
+
+  const [loading, setLoading] = useState(false);
+  const [stats, setStats] = useState<ListStats>();
+
+  useEffect(() => {
+    const fetchLists = async () => {
+      setLoading(true);
+      try {
+        const res = await api.get<ListStats>(API_ENDPOINTS.MY_LISTS_STATS);
+        setStats(res);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    void fetchLists();
+  }, []);
+
   return (
     <section>
       <div>
@@ -37,10 +52,16 @@ export default function UserStats() {
       <div className="mt-8 grid gap-6 md:grid-cols-2">
         <StatCard
           title={t("By genre")}
-          subtitle={`37 ${t("Book Saved")}`}
-          data={GENRE_DATA}
+          subtitle={`${stats?.books_count} ${t("Book Saved")}`}
+          data={stats?.genres ?? []}
+          topLimit={5}
         />
-        <StatCard title={t("By author")} subtitle="Top 5" data={AUTHOR_DATA} />
+        <StatCard
+          title={t("By author")}
+          subtitle="Top 5"
+          topLimit={5}
+          data={stats?.authors ?? []}
+        />
       </div>
     </section>
   );

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useI18n } from "@/i18n/i18nProvider";
 import { timeAgo } from "@/routes/utils";
 import { List, ListForm } from "@/types/list";
-import { ListMusic, Pencil, Share2, Trash2 } from "lucide-react";
+import { Library, ListMusic, Pencil, Share2, Trash2 } from "lucide-react";
 import { useState } from "react";
 
 type ListHeroProps = {
@@ -72,7 +72,7 @@ export function ListHero(props: ListHeroProps) {
 
         <div className="mt-6 flex flex-wrap items-center gap-3 text-xs font-bold uppercase tracking-wider">
           <span className="inline-flex items-center gap-1.5 text-foreground">
-            <ListMusic className="size-3.5 text-primary" />
+            <Library className="size-5.5 text-primary" />
             {props.list.books.length} {t("books")}
           </span>
 

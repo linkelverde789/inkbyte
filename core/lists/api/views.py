@@ -3,6 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from lists.use_cases.get_stats import GetStatsUseCase
 from events.models import EventType
 from events.use_cases.create_event import CreateEventUseCase
 from lists.use_cases.list_lists import ListListUseCase
@@ -15,6 +16,7 @@ from lists.use_cases.list_lists_for_user import ListListForUserUseCase
 from lists.api.serializers import (
     CreateListSerializer,
     ListResponseSerializer,
+    ListStatsSerializer,
     UpdateListSerializer,
 )
 
@@ -131,6 +133,22 @@ class MyListView(APIView):
                     items, many=True, context={"request": request}
                 ).data,
             }
+        )
+
+
+class MyListStatsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+
+        try:
+            stats_dto = GetStatsUseCase().execute(user=user)
+        except ListError as exc:
+            _list_error_response(exc)
+
+        return Response(
+            ListStatsSerializer(stats_dto, context={"request": request}).data
         )
 
 

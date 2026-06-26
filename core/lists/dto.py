@@ -39,3 +39,16 @@ class UpdateListInput:
             self.description = self.description.strip()
 
         return self
+
+
+@dataclass
+class ChartItemDTO:
+    name: str
+    value: int
+
+
+@dataclass
+class ListStats:
+    genres: list[ChartItemDTO]
+    authors: list[ChartItemDTO]
+    books_count: int

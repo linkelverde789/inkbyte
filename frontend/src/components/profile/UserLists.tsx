@@ -9,7 +9,6 @@ import { ListDialog } from "../dialogs/ListDialog";
 import { List, ListForm, ListResponse } from "@/types/list";
 
 type ListDialogMode = "create" | "edit";
-
 export default function UserLists() {
   const { t } = useI18n();
 

@@ -255,5 +255,7 @@
   "time_seconds_ago": "hace {value} segundos",
   "time_minutes_ago": "hace {value} minutos",
   "time_hours_ago": "hace {value} horas",
-  "time_days_ago": "hace {value} días"
+  "time_days_ago": "hace {value} días",
+  "No data": "Todavía no hay datos",
+  "No data description": "Aún no has añadido ningún libro. Cuando empieces a registrar lecturas, aquí aparecerán las estadísticas."
 }
