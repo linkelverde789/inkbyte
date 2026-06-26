@@ -78,10 +78,8 @@ function ListPage() {
           <ArrowLeft className="size-4" /> {t("Back to my profile")}
         </Link>
 
-        {/* HERO */}
         <ListHero list={list} deleteList={deleteList} onUpdated={refreshList} />
 
-        {/* BOOKS LIST */}
         <ListBookDisplay list={list} removeBookFromList={removeBookFromList} />
       </div>
     </main>

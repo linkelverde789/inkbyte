@@ -13,6 +13,7 @@ export const API_ENDPOINTS = {
   DATA_GENRES: "/data/genres/",
   PROFILE: "/profile/",
   MY_LISTS: "/lists/mine/",
+  MY_LISTS_STATS: "/lists/mine/stats/",
   LISTS: "/lists/",
 } as const;
 

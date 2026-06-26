@@ -255,5 +255,7 @@
   "time_hours_ago": "{value} hours ago",
   "time_days_ago": "{value} days ago",
   "Shelves": "Shelves",
-  "My lists": "My lists"
+  "My lists": "My lists",
+  "No data": "Nothing here yet",
+  "No data description": "You haven't added any books yet. Start building your library to see your reading statistics."
 }

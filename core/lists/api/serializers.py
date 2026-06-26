@@ -27,3 +27,14 @@ class UpdateListSerializer(serializers.Serializer):
     )
     cover = serializers.CharField(required=False, allow_null=True, allow_blank=True)
     book_ids = serializers.ListField(child=serializers.IntegerField(), required=False)
+
+
+class ChartItemSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    value = serializers.IntegerField()
+
+
+class ListStatsSerializer(serializers.Serializer):
+    genres = ChartItemSerializer(many=True)
+    authors = ChartItemSerializer(many=True)
+    books_count = serializers.IntegerField()

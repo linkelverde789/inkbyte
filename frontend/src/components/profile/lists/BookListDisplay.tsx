@@ -9,9 +9,10 @@ type DisplayBooksProps = {
 export function DisplayBooks(props: DisplayBooksProps) {
   return (
     <ul className="mt-6 divide-y divide-border border-y border-border bg-card">
-      {props.books.map((book) => (
+      {props.books.map((book, index) => (
         <BookDisplay
-          index={book.id}
+          key={book.id}
+          index={index}
           book={book}
           removeBookFromList={props.removeBookFromList}
         />
