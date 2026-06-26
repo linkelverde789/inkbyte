@@ -30,4 +30,4 @@ class ListSelector:
         )
 
     def get_book_count(self, user: User) -> int:
-        return Book.objects.filter(lists__user=user).count()
+        return Book.objects.filter(lists__user=user).distinct().count()

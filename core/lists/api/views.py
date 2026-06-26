@@ -145,7 +145,7 @@ class MyListStatsView(APIView):
         try:
             stats_dto = GetStatsUseCase().execute(user=user)
         except ListError as exc:
-            _list_error_response(exc)
+            return _list_error_response(exc)
 
         return Response(
             ListStatsSerializer(stats_dto, context={"request": request}).data

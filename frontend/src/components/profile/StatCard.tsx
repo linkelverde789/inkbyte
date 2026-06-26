@@ -71,18 +71,6 @@ export default function StatCard({
     );
   }
 
-  if (data.length > 5) {
-    setDataStats([
-      ...data.slice(0, topLimit),
-      {
-        name: "Other",
-        value: data
-          .slice(topLimit)
-          .reduce((accumulator, value) => accumulator + value.value, 0),
-      },
-    ]);
-  }
-
   const total = dataStats.reduce((s, d) => s + d.value, 0);
   const topicCount = dataStats.reduce((s) => s + 1, 0);
   return (

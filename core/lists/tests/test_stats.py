@@ -1,11 +1,4 @@
 import pytest
-from rest_framework.status import (
-    HTTP_200_OK,
-    HTTP_201_CREATED,
-    HTTP_204_NO_CONTENT,
-    HTTP_400_BAD_REQUEST,
-    HTTP_401_UNAUTHORIZED,
-)
 from books.models import Author, Book, Genre
 from users.models import User
 from lists.models import List
@@ -92,6 +85,7 @@ def test_get_stats_with_multiple_lists(api_client, user):
     ]
 
 
+@pytest.mark.django_db
 def test_get_stats_from_other_user(api_client, user):
     user2 = User.objects.create_user(
         username="testuser2",

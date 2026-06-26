@@ -11,6 +11,7 @@ export function DisplayBooks(props: DisplayBooksProps) {
     <ul className="mt-6 divide-y divide-border border-y border-border bg-card">
       {props.books.map((book, index) => (
         <BookDisplay
+          key={book.id}
           index={index}
           book={book}
           removeBookFromList={props.removeBookFromList}
