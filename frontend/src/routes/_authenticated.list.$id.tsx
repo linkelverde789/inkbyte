@@ -10,7 +10,6 @@ import { ListBookDisplay } from "@/components/profile/lists/ListBookDisplay";
 import { useRouter } from "@tanstack/react-router";
 import { ListPageSkeleton } from "@/components/skeletons/lists/ListPageSkeleton";
 import { toast } from "sonner";
-import sleep from "./utils";
 async function fetchList(listId: string): Promise<List> {
   return await api.get<List>(API_DYNAMIC_ENDPOINTS.EDIT_LISTS(listId));
 }
@@ -50,18 +49,14 @@ function ListPage() {
   }
 
   async function deleteList() {
-    try {
-      await api.delete(API_DYNAMIC_ENDPOINTS.EDIT_LISTS(list.id));
-    } catch (error) {
-      console.error(error);
-      toast.error(t("Error deleting list. Please try again later."));
-      return;
-    }
-    toast.loading(t("Deleting list..."), {
-      description: t("Will redirect to profile shortly."),
+    const promise = api.delete(API_DYNAMIC_ENDPOINTS.EDIT_LISTS(list.id));
+
+    await toast.promise(promise, {
+      loading: t("Deleting list..."),
+      success: t("List deleted"),
+      error: t("Error deleting list. Please try again later."),
     });
-    await sleep(2);
-    toast.dismiss();
+
     navigate({
       to: "/profile",
       replace: true,

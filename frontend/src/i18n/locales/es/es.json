@@ -258,7 +258,7 @@
   "time_days_ago": "hace {value} días",
   "No data": "Todavía no hay datos",
   "No data description": "Aún no has añadido ningún libro. Cuando empieces a registrar lecturas, aquí aparecerán las estadísticas.",
-  "Profile picture sucessfully updated!": "¡Se ha actualizado correctamente!",
+  "Profile picture successfully updated!": "¡Se ha actualizado correctamente!",
   "Book added to list": "Libro añadido a la lista",
   "Error adding book to list": "Error al añadir el libro a la lista",
   "List created": "Lista creada",
@@ -273,5 +273,9 @@
   "Error deleting list. Please try again later.": "Error al eliminar la lista. Por favor, inténtalo de nuevo más tarde.",
   "Will redirect to profile shortly.": "Se redirigirá a perfil en breve.",
   "Error fetching books": "Error al obtener los libros",
-  "Error fetching data": "Error al obtener los datos"
+  "Error fetching data": "Error al obtener los datos",
+  "Error updating profile picture": "Error al actualizar la imagen de perfil",
+  "Book not found": "Libro no encontrado",
+  "Go back": "Volver",
+  "Name can't be empty": "El nombre no puede estar vacío"
 }

@@ -3,14 +3,16 @@ import { useEffect, useState } from "react";
 
 import NavBar from "@/components/ui/Navbar";
 import { Header } from "@/components/book/index/indexHeader";
-import { api, API_ENDPOINTS, ApiError } from "@/api";
+import { api, API_ENDPOINTS } from "@/api";
 import { BookListResponse } from "@/types/api";
 import { Book } from "@/types/book";
 import { Body } from "@/components/book/index/indexBody";
 import { Footer } from "@/components/book/index/indexFooter";
 import { toast } from "sonner";
+import { useI18n } from "@/i18n/i18nProvider";
 
 function Index() {
+  const { t } = useI18n();
   const [loading, setLoading] = useState(true);
   const [activeGenre, setActiveGenre] = useState("");
   const [foundGenres, setFoundGenres] = useState<string[]>([]);
@@ -30,16 +32,7 @@ function Index() {
       } catch (error: unknown) {
         console.error(error);
 
-        let message = "Error inesperado";
-
-        if (error instanceof ApiError) {
-          console.log(error.message);
-          message = error.message || `Error ${error.status}`;
-        } else if (error instanceof Error) {
-          message = error.message;
-        }
-
-        toast.error(message);
+        toast.error(t("Error fetching books"));
       } finally {
         setLoading(false);
       }

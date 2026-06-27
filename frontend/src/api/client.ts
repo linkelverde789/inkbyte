@@ -59,9 +59,7 @@ export class API {
       });
     }
 
-    return this.#parseResponse<T>(response, {
-      json,
-    });
+    return this.#parseResponse<T>(response);
   }
 
   get<T = unknown>(path: string, options?: RequestOptions) {
@@ -160,10 +158,7 @@ export class API {
     };
   }
 
-  async #parseResponse<T>(
-    response: Response,
-    { json }: { json: boolean },
-  ): Promise<T> {
+  async #parseResponse<T>(response: Response): Promise<T> {
     const contentType = response.headers.get("content-type") || "";
     const isJsonResponse = contentType.includes("application/json");
 

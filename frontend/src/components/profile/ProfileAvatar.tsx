@@ -37,11 +37,12 @@ export function ProfileAvatar({ profile_picture }: ProfileAvatarProps) {
 
       setImage(res.profile_picture ?? profile_picture_default);
 
-      toast.success(t("Profile picture sucessfully updated!"));
+      toast.success(t("Profile picture successfully updated!"));
 
       return res;
     } catch (err) {
       console.error("Upload failed:", err);
+      toast.error(t("Error updating profile picture"));
     }
   }
 

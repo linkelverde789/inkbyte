@@ -258,7 +258,7 @@
   "My lists": "My lists",
   "No data": "Nothing here yet",
   "No data description": "You haven't added any books yet. Start building your library to see your reading statistics.",
-  "Profile picture sucessfully updated!": "Profile picture sucessfully updated!",
+  "Profile picture successfully updated!": "Profile picture successfully updated!",
   "Book added to list": "Book added to list",
   "Error adding book to list": "Error adding book to list",
   "List created": "List created",
@@ -273,5 +273,9 @@
   "Error deleting list. Please try again later.": "Error deleting list. Please try again later.",
   "Will redirect to profile shortly.": "Will redirect to profile shortly.",
   "Error fetching books": "Error fetching books",
-  "Error fetching data": "Error fetching data"
+  "Error fetching data": "Error fetching data",
+  "Error updating profile picture": "Error updating profile picture",
+  "Book not found": "Book not found",
+  "Go back": "Go back",
+  "Name can't be empty": "Name can't be empty"
 }

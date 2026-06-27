@@ -26,19 +26,15 @@ export const Route = createFileRoute("/books/$id")({
       return await fetchBook(params.id);
     } catch (error) {
       console.error(error);
-      return null;
     }
   },
 
-  onError: () => {
-    toast.error("Book not found");
-  },
-
   errorComponent: () => {
+    const { t } = useI18n();
     return (
       <div className="p-10 text-center">
-        <p>Book not found</p>
-        <Link to="/search">Go back</Link>
+        <p>{t("Book not found")}</p>
+        <Link to="/search">{t("Go back")}</Link>
       </div>
     );
   },
