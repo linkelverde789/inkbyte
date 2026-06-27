@@ -5,11 +5,12 @@ import { BookFile } from "@/types/book";
 
 type Props = {
   format: BookFile[];
+  loading: boolean;
 };
 export function BookFormats(props: Props) {
   const { t } = useI18n();
 
-  if (!props.format?.length) {
+  if (props.loading) {
     return <BookFormatsSkeleton />;
   }
 

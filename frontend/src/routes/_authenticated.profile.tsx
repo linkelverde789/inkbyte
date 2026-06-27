@@ -46,7 +46,7 @@ function ProfilePage() {
           <h1 className="mt-2 text-5xl">{t("My profile")}</h1>
         </header>
 
-        {loading ? <ProfileCardSkeleton /> : <ProfileCard user={user} />}
+        <ProfileCard user={user} />
 
         <UserLists />
         <UserStats />

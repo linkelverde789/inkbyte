@@ -84,7 +84,7 @@ function BookPage() {
           <ArrowLeft className="size-4" />
           {t("Go back to results")}
         </Link>
-        {book ? <MainBook book={book} /> : <MainBookSkeleton />}
+        <MainBook book={book} loading={loading} />
         {loading ? (
           <AddToListSkeleton />
         ) : (
