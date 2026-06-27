@@ -12,6 +12,7 @@ import { Label } from "../ui/Label";
 import { Textarea } from "../ui/TextArea";
 import { Button } from "../ui/button";
 import { useI18n } from "@/i18n/i18nProvider";
+import { toast } from "sonner";
 
 type ListDialogProps = {
   open: boolean;
@@ -65,7 +66,10 @@ export function ListDialog(props: ListDialogProps) {
   }, [props.open, props.initialValue]);
 
   const handleSubmit = () => {
-    if (!list.name.trim()) return;
+    if (!list.name.trim()) {
+      toast.error(t("Name can't be empty"));
+      return;
+    }
 
     props.onSubmit(list);
 

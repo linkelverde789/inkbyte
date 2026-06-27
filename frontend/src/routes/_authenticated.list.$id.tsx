@@ -9,6 +9,7 @@ import { ListHero } from "@/components/profile/lists/ListHero";
 import { ListBookDisplay } from "@/components/profile/lists/ListBookDisplay";
 import { useRouter } from "@tanstack/react-router";
 import { ListPageSkeleton } from "@/components/skeletons/lists/ListPageSkeleton";
+import { toast } from "sonner";
 async function fetchList(listId: string): Promise<List> {
   return await api.get<List>(API_DYNAMIC_ENDPOINTS.EDIT_LISTS(listId));
 }
@@ -48,9 +49,15 @@ function ListPage() {
   }
 
   async function deleteList() {
-    await api.delete(API_DYNAMIC_ENDPOINTS.EDIT_LISTS(list.id));
+    const promise = api.delete(API_DYNAMIC_ENDPOINTS.EDIT_LISTS(list.id));
 
-    await navigate({
+    await toast.promise(promise, {
+      loading: t("Deleting list..."),
+      success: t("List deleted"),
+      error: t("Error deleting list. Please try again later."),
+    });
+
+    navigate({
       to: "/profile",
       replace: true,
     });
@@ -60,10 +67,16 @@ function ListPage() {
       .filter((item) => item.id !== bookId)
       .map((item) => item.id);
 
-    await api.patch<List>(API_DYNAMIC_ENDPOINTS.EDIT_LISTS(list.id), {
-      book_ids: bookIds,
-    });
-
+    try {
+      await api.patch<List>(API_DYNAMIC_ENDPOINTS.EDIT_LISTS(list.id), {
+        book_ids: bookIds,
+      });
+    } catch (error) {
+      console.error(error);
+      toast.error(t("Error removing book from list. Please try again later."));
+      return;
+    }
+    toast.success(t("Book removed from list"));
     await router.invalidate();
   }
 

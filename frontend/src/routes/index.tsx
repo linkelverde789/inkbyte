@@ -8,8 +8,11 @@ import { BookListResponse } from "@/types/api";
 import { Book } from "@/types/book";
 import { Body } from "@/components/book/index/indexBody";
 import { Footer } from "@/components/book/index/indexFooter";
+import { toast } from "sonner";
+import { useI18n } from "@/i18n/i18nProvider";
 
 function Index() {
+  const { t } = useI18n();
   const [loading, setLoading] = useState(true);
   const [activeGenre, setActiveGenre] = useState("");
   const [foundGenres, setFoundGenres] = useState<string[]>([]);
@@ -26,8 +29,10 @@ function Index() {
         });
 
         setResults(res.results);
-      } catch (error) {
+      } catch (error: unknown) {
         console.error(error);
+
+        toast.error(t("Error fetching books"));
       } finally {
         setLoading(false);
       }

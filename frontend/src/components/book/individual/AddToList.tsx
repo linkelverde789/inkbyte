@@ -6,6 +6,7 @@ import { List } from "@/types/list";
 import { useState } from "react";
 import { ListCard } from "./ListCard";
 import { AddToListSkeleton } from "@/components/skeletons/book/AddToListSkeleton";
+import { toast } from "sonner";
 
 type AddToListSectionProps = {
   bookId: number;
@@ -40,8 +41,10 @@ export function AddToListSection(props: AddToListSectionProps) {
           return list.id === updatedList.id ? updatedList : list;
         }),
       );
+      toast.success(t("Book added to list"));
     } catch (error) {
       console.error(error);
+      toast.error(t("Error adding book to list"));
     } finally {
       setSelectedList(undefined);
     }
