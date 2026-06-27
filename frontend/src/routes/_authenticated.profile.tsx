@@ -7,6 +7,8 @@ import { ProfileNavBar } from "@/components/ui/ProfileNavbar";
 import UserLists from "@/components/profile/UserLists";
 import ProfileCard from "@/components/profile/ProfileCard";
 import UserStats from "@/components/profile/UserStats";
+import { ProfileCardSkeleton } from "@/components/skeletons/profile/ProfileCardSkeleton";
+import { ProfileSkeleton } from "@/components/skeletons/profile/ProfileSkeleton";
 
 export const Route = createFileRoute("/_authenticated/profile")({
   component: ProfilePage,
@@ -28,6 +30,7 @@ function ProfilePage() {
     }
   }, [loading, user, navigate]);
 
+  if (loading) return <ProfileSkeleton />;
   if (!user) return null;
 
   return (

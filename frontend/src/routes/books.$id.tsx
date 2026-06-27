@@ -11,6 +11,9 @@ import { RelatedShelf } from "@/components/book/individual/relatedShelf";
 import { AddToListSection } from "@/components/book/individual/AddToList";
 import { List, ListResponse } from "@/types/list";
 import { useEffect, useState } from "react";
+import { BookPageSkeleton } from "@/components/skeletons/book/BookPageSkeleton";
+import { MainBookSkeleton } from "@/components/skeletons/book/MainBookSkeleton";
+import { AddToListSkeleton } from "@/components/skeletons/book/AddToListSkeleton";
 
 async function fetchBook(id: string): Promise<Book> {
   const res = await api.get<Book>(API_DYNAMIC_ENDPOINTS.BOOKS_DETAIL(id));
@@ -67,6 +70,8 @@ function BookPage() {
     void fetchLists();
   }, [book.id]);
 
+  if (!book) return <BookPageSkeleton />;
+
   return (
     <div className="min-h-screen bg-background">
       <NavBar />
@@ -79,13 +84,17 @@ function BookPage() {
           <ArrowLeft className="size-4" />
           {t("Go back to results")}
         </Link>
-        <MainBook book={book} />
-        {lists.length > 0 && (
-          <AddToListSection
-            bookId={book.id}
-            lists={lists}
-            setLists={setLists}
-          />
+        <MainBook book={book} loading={loading} />
+        {loading ? (
+          <AddToListSkeleton />
+        ) : (
+          lists.length > 0 && (
+            <AddToListSection
+              bookId={book.id}
+              lists={lists}
+              setLists={setLists}
+            />
+          )
         )}
         {book.authors?.map((author) => {
           return (

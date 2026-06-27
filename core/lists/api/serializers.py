@@ -4,14 +4,17 @@ from books.api.serializers.serializers import BookResponseSerializer
 from users.api.serializers import UserResponseSerializer
 
 
-class ListResponseSerializer(serializers.Serializer):
+class MineListResponseSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     name = serializers.CharField()
     description = serializers.CharField()
     cover = serializers.CharField(allow_null=True, allow_blank=True)
     books = BookResponseSerializer(many=True, required=False)
-    user = UserResponseSerializer()
     updated_at = serializers.DateTimeField()
+
+
+class ListResponseSerializer(MineListResponseSerializer):
+    user = UserResponseSerializer()
 
 
 class CreateListSerializer(serializers.Serializer):

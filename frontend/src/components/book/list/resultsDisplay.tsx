@@ -3,6 +3,7 @@ import { BookList } from "./booksList";
 import { ListPagination } from "./bookPagination";
 import { BookOpen } from "lucide-react";
 import { useI18n } from "@/i18n/i18nProvider";
+import { ResultsSkeleton } from "@/components/skeletons/search/ResultsSkeleton";
 
 type ResultsDisplayProps = {
   loading: boolean;
@@ -13,9 +14,12 @@ type ResultsDisplayProps = {
 };
 export function ResultsDisplay(props: ResultsDisplayProps) {
   const { t } = useI18n();
-  return props.loading ? (
-    <div className="py-20 text-center">{t("Loading books...")}</div>
-  ) : props.results.length ? (
+
+  if (props.loading) {
+    return <ResultsSkeleton />;
+  }
+
+  return props.results.length ? (
     <>
       <BookList data={props.results} />
 

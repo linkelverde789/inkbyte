@@ -7,6 +7,7 @@ import { api, API_ENDPOINTS } from "@/api";
 import { API_DYNAMIC_ENDPOINTS } from "@/api/endpoints";
 import { ListDialog } from "../dialogs/ListDialog";
 import { List, ListForm, ListResponse } from "@/types/list";
+import { UserListsSkeleton } from "../skeletons/profile/UserListSkeleton";
 
 type ListDialogMode = "create" | "edit";
 export default function UserLists() {
@@ -80,6 +81,10 @@ export default function UserLists() {
     } finally {
       setDialogOpen(false);
     }
+  }
+
+  if (loading) {
+    return <UserListsSkeleton />;
   }
 
   return (

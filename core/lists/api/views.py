@@ -17,6 +17,7 @@ from lists.api.serializers import (
     CreateListSerializer,
     ListResponseSerializer,
     ListStatsSerializer,
+    MineListResponseSerializer,
     UpdateListSerializer,
 )
 
@@ -129,7 +130,7 @@ class MyListView(APIView):
                 "count": total,
                 "page": page,
                 "page_size": page_size,
-                "results": ListResponseSerializer(
+                "results": MineListResponseSerializer(
                     items, many=True, context={"request": request}
                 ).data,
             }

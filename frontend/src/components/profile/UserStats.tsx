@@ -2,6 +2,7 @@ import { useI18n } from "@/i18n/i18nProvider";
 import StatCard from "./StatCard";
 import { useEffect, useState } from "react";
 import { api, API_ENDPOINTS } from "@/api";
+import { UserStatsSkeleton } from "../skeletons/profile/UserStatsSkeleton";
 
 export type ChartItem = {
   name: string;
@@ -35,6 +36,10 @@ export default function UserStats() {
     void fetchLists();
   }, []);
 
+  if (loading) {
+    return <UserStatsSkeleton />;
+  }
+
   return (
     <section>
       <div>
@@ -59,8 +64,8 @@ export default function UserStats() {
         <StatCard
           title={t("By author")}
           subtitle="Top 5"
-          topLimit={5}
           data={stats?.authors ?? []}
+          topLimit={5}
         />
       </div>
     </section>

@@ -4,15 +4,14 @@ import { Cover } from "./cover";
 import { Genres } from "./genres";
 import { Authors } from "./authors";
 import { Title } from "./title";
-import { Rating } from "./rating";
 import { Description } from "./description";
 import { BookFormats } from "./format";
 import { DownloadButton } from "./downloads";
 import BookRating from "../list/bookRating";
-import { getExtension } from "@/routes/utils";
 
 type Props = {
   book: Book;
+  loading: boolean;
 };
 
 export function MainBook(props: Props) {
@@ -29,7 +28,7 @@ export function MainBook(props: Props) {
         <BookRating rating={props.book.rating} />
 
         <Description description={props.book.description} />
-        <BookFormats format={props.book.files} />
+        <BookFormats format={props.book.files} loading={props.loading} />
 
         <DownloadButton />
       </article>
