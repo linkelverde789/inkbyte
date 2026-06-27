@@ -133,13 +133,21 @@ def test_user_can_update_data(auth_client, user):
     _partial_update(auth_client, {"username": username}, HTTP_200_OK)
     _partial_update(auth_client, {"first_name": first_name}, HTTP_200_OK)
     _partial_update(auth_client, {"last_name": last_name}, HTTP_200_OK)
-    user_instance = User.objects.filter(id=user.id).first()
 
-    assert user_instance.email == email
-    assert user_instance.first_name == first_name
-    assert user_instance.last_name == last_name
-    assert user_instance.username == username
-    assert user_instance.profile_picture is not None
+    user.refresh_from_db()
+
+    assert user.email == email
+    assert user.first_name == first_name
+    assert user.last_name == last_name
+    assert user.username == username
+    assert user.profile_picture is not None
+
+    user.profile_picture.delete(save=False)
+    user.profile_picture = None
+    user.save()
+    user.refresh_from_db()
+
+    assert not user.profile_picture
 
 
 @pytest.mark.django_db
