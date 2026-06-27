@@ -5,6 +5,7 @@ import { useI18n } from "@/i18n/i18nProvider";
 import { List } from "@/types/list";
 import { useState } from "react";
 import { ListCard } from "./ListCard";
+import { AddToListSkeleton } from "@/components/skeletons/book/AddToListSkeleton";
 
 type AddToListSectionProps = {
   bookId: number;
@@ -55,6 +56,7 @@ export function AddToListSection(props: AddToListSectionProps) {
   const toggle = (list: List) => {
     setSelectedList((prev) => (prev?.id === list.id ? undefined : list));
   };
+
   return (
     <section className="mt-20 border-t border-border pt-12">
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">

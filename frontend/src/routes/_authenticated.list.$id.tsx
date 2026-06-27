@@ -7,8 +7,8 @@ import { useI18n } from "@/i18n/i18nProvider";
 import { ProfileNavBar } from "@/components/ui/ProfileNavbar";
 import { ListHero } from "@/components/profile/lists/ListHero";
 import { ListBookDisplay } from "@/components/profile/lists/ListBookDisplay";
-import { useState } from "react";
 import { useRouter } from "@tanstack/react-router";
+import { ListPageSkeleton } from "@/components/skeletons/lists/ListPageSkeleton";
 async function fetchList(listId: string): Promise<List> {
   return await api.get<List>(API_DYNAMIC_ENDPOINTS.EDIT_LISTS(listId));
 }
@@ -33,6 +33,7 @@ export const Route = createFileRoute("/_authenticated/list/$id")({
       ],
     };
   },
+  pendingComponent: ListPageSkeleton,
   component: ListPage,
 });
 

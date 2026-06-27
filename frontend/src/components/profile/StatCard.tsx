@@ -3,6 +3,7 @@ import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 import { ChartItem } from "./UserStats";
 import { BookX } from "lucide-react";
 import { useEffect, useState } from "react";
+import { StatCardSkeleton } from "../skeletons/profile/StatCardSkeleton";
 
 const CHART_COLORS = [
   "oklch(0.62 0.15 35)",
@@ -18,30 +19,28 @@ export default function StatCard({
   subtitle,
   data,
   topLimit,
+  loading,
 }: {
   title: string;
   subtitle: string;
   data: ChartItem[];
   topLimit: number;
+  loading?: boolean;
 }) {
   const { t } = useI18n();
   const [dataStats, setDataStats] = useState<ChartItem[]>([]);
 
   useEffect(() => {
     let result = data;
-    if (result.length > 5) {
-      result = [
-        ...data.slice(0, topLimit),
-        {
-          name: "Other",
-          value: data
-            .slice(topLimit)
-            .reduce((accumulator, value) => accumulator + value.value, 0),
-        },
-      ];
+    if (result.length > topLimit) {
+      result = [...data.slice(0, topLimit)];
     }
     setDataStats(result);
   }, [data]);
+
+  if (loading) {
+    return <StatCardSkeleton />;
+  }
 
   const hasData = data.length > 0 && data.some((item) => item.value > 0);
 

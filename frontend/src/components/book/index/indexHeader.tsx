@@ -4,7 +4,7 @@ import { Link } from "@tanstack/react-router";
 import { Search } from "lucide-react";
 import { Book } from "@/types/book";
 import { useI18n } from "@/i18n/i18nProvider";
-import { WeekTopSelectionSkeleton } from "@/components/skeletons/weekSingularTopSelection";
+import { WeekTopSelectionSkeleton } from "@/components/skeletons/index/weekSingularTopSelection";
 
 type HeaderProps = {
   book: Book | undefined;

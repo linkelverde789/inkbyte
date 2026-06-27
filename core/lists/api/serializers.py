@@ -14,6 +14,15 @@ class ListResponseSerializer(serializers.Serializer):
     updated_at = serializers.DateTimeField()
 
 
+class MineListResponseSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField()
+    description = serializers.CharField()
+    cover = serializers.CharField(allow_null=True, allow_blank=True)
+    books = BookResponseSerializer(many=True, required=False)
+    updated_at = serializers.DateTimeField()
+
+
 class CreateListSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=50)
     description = serializers.CharField(max_length=200, allow_blank=True)

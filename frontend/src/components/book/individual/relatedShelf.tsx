@@ -1,5 +1,6 @@
 import { api } from "@/api";
 import { RELATED_SHELF_ENDPOINTS } from "@/api/endpoints";
+import { RelatedShelfSkeleton } from "@/components/skeletons/book/RelatedShelfSkeleton";
 import { useI18n } from "@/i18n/i18nProvider";
 import { Book } from "@/types/book";
 import { Link } from "@tanstack/react-router";
@@ -16,9 +17,11 @@ export function RelatedShelf(props: Props) {
   const { t } = useI18n();
 
   const [result, setResult] = useState<Book[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         if (!props.id) return;
         const url = RELATED_SHELF_ENDPOINTS[props.endpoint];
@@ -29,11 +32,15 @@ export function RelatedShelf(props: Props) {
         setResult(response.results);
       } catch (error) {
         console.error("Error fetching data", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     void fetchData();
   }, [props.endpoint, props.id]);
+
+  if (loading) return <RelatedShelfSkeleton />;
 
   return (
     <section className="mt-20 border-t border-border pt-12">

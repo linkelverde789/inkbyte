@@ -3,6 +3,7 @@ import { WeekMultipleTopSelection } from "./weekMultipleTopSelection";
 import { Link } from "@tanstack/react-router";
 import { useI18n } from "@/i18n/i18nProvider";
 import { GenreFilter } from "./genreFilter";
+import { BodySkeleton } from "@/components/skeletons/index/BodySkeleton";
 
 type BodyProps = {
   books: Book[] | undefined;
@@ -13,6 +14,11 @@ type BodyProps = {
 };
 export function Body(props: BodyProps) {
   const { t } = useI18n();
+
+  if (props.loading) {
+    return <BodySkeleton />;
+  }
+
   return (
     <section
       id="biblioteca"
