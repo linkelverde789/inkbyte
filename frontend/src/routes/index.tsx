@@ -3,11 +3,12 @@ import { useEffect, useState } from "react";
 
 import NavBar from "@/components/ui/Navbar";
 import { Header } from "@/components/book/index/indexHeader";
-import { api, API_ENDPOINTS } from "@/api";
+import { api, API_ENDPOINTS, ApiError } from "@/api";
 import { BookListResponse } from "@/types/api";
 import { Book } from "@/types/book";
 import { Body } from "@/components/book/index/indexBody";
 import { Footer } from "@/components/book/index/indexFooter";
+import { toast } from "sonner";
 
 function Index() {
   const [loading, setLoading] = useState(true);
@@ -26,8 +27,19 @@ function Index() {
         });
 
         setResults(res.results);
-      } catch (error) {
+      } catch (error: unknown) {
         console.error(error);
+
+        let message = "Error inesperado";
+
+        if (error instanceof ApiError) {
+          console.log(error.message);
+          message = error.message || `Error ${error.status}`;
+        } else if (error instanceof Error) {
+          message = error.message;
+        }
+
+        toast.error(message);
       } finally {
         setLoading(false);
       }

@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button";
 import { useI18n } from "@/i18n/i18nProvider";
 import { timeAgo } from "@/routes/utils";
 import { List, ListForm } from "@/types/list";
-import { Library, ListMusic, Pencil, Share2, Trash2 } from "lucide-react";
+import { Library, Pencil, Share2, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 type ListHeroProps = {
   list: List;
@@ -21,8 +22,14 @@ export function ListHero(props: ListHeroProps) {
   async function updateList(data: ListForm) {
     if (!data.id) return;
 
-    await api.patch<List>(API_DYNAMIC_ENDPOINTS.EDIT_LISTS(data.id), data);
-
+    try {
+      await api.patch<List>(API_DYNAMIC_ENDPOINTS.EDIT_LISTS(data.id), data);
+    } catch (error) {
+      console.error(error);
+      toast.error(t("Error updating list"));
+      return;
+    }
+    toast.success(t("List updated"));
     props.onUpdated();
   }
 

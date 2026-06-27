@@ -8,6 +8,7 @@ import { API_DYNAMIC_ENDPOINTS } from "@/api/endpoints";
 import { ListDialog } from "../dialogs/ListDialog";
 import { List, ListForm, ListResponse } from "@/types/list";
 import { UserListsSkeleton } from "../skeletons/profile/UserListSkeleton";
+import { toast } from "sonner";
 
 type ListDialogMode = "create" | "edit";
 export default function UserLists() {
@@ -37,24 +38,46 @@ export default function UserLists() {
   }, []);
 
   async function createList(data: ListForm) {
-    const res = await api.post<List>(API_ENDPOINTS.LISTS, data);
+    let res: List;
+    try {
+      res = await api.post<List>(API_ENDPOINTS.LISTS, data);
+    } catch (error) {
+      console.error(error);
+      toast.error(t("Error creating list"));
+      return;
+    }
     setLists((prev) => [...prev, res]);
+    toast.success(t("List created"));
   }
 
   async function updateList(data: ListForm) {
     if (!data.id) return;
-
-    const res = await api.patch<List>(
-      API_DYNAMIC_ENDPOINTS.EDIT_LISTS(data.id),
-      data,
-    );
+    let res: List;
+    try {
+      res = await api.patch<List>(
+        API_DYNAMIC_ENDPOINTS.EDIT_LISTS(data.id),
+        data,
+      );
+    } catch (error) {
+      console.error(error);
+      toast.error(t("Error updating list"));
+      return;
+    }
 
     setLists((prev) => prev.map((item) => (item.id === res.id ? res : item)));
+    toast.success(t("List updated"));
   }
 
   async function deleteList(listId: number | string) {
-    await api.delete(API_DYNAMIC_ENDPOINTS.EDIT_LISTS(listId));
+    try {
+      await api.delete(API_DYNAMIC_ENDPOINTS.EDIT_LISTS(listId));
+    } catch (error) {
+      console.error(error);
+      toast.error(t("Error deleting list"));
+      return;
+    }
     setLists((prev) => prev.filter((item) => item.id !== listId));
+    toast.success(t("List deleted"));
   }
 
   function openCreateDialog() {

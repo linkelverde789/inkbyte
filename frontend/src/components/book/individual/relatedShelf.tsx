@@ -5,6 +5,7 @@ import { useI18n } from "@/i18n/i18nProvider";
 import { Book } from "@/types/book";
 import { Link } from "@tanstack/react-router";
 import { ReactNode, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 type Props = {
   title: string;
@@ -32,6 +33,7 @@ export function RelatedShelf(props: Props) {
         setResult(response.results);
       } catch (error) {
         console.error("Error fetching data", error);
+        toast.error(t("Error fetching data"));
       } finally {
         setLoading(false);
       }

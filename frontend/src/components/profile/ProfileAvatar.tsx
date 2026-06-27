@@ -4,6 +4,10 @@ import { Camera } from "lucide-react";
 import { useI18n } from "@/i18n/i18nProvider";
 import { api, API_ENDPOINTS } from "@/api";
 
+import { useEffect, useState } from "react";
+import { User } from "@/auth/types";
+import { toast } from "sonner";
+
 type ProfileAvatarProps = {
   profile_picture: string | null;
 };
@@ -11,18 +15,34 @@ type ProfileAvatarProps = {
 export function ProfileAvatar({ profile_picture }: ProfileAvatarProps) {
   const { t } = useI18n();
 
-  const image = profile_picture ?? profile_picture_default;
+  const [image, setImage] = useState(
+    profile_picture ?? profile_picture_default,
+  );
+
+  useEffect(() => {
+    setImage(profile_picture ?? profile_picture_default);
+  }, [profile_picture]);
 
   async function handleSubmitImage(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    e.target.value = "";
+
     const formData = new FormData();
     formData.append("profile_picture", file);
 
-    const res = await api.patch(API_ENDPOINTS.PROFILE, formData);
+    try {
+      const res = await api.patch<User>(API_ENDPOINTS.PROFILE, formData);
 
-    return res;
+      setImage(res.profile_picture ?? profile_picture_default);
+
+      toast.success(t("Profile picture sucessfully updated!"));
+
+      return res;
+    } catch (err) {
+      console.error("Upload failed:", err);
+    }
   }
 
   return (

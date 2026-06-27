@@ -12,9 +12,9 @@ import { AddToListSection } from "@/components/book/individual/AddToList";
 import { List, ListResponse } from "@/types/list";
 import { useEffect, useState } from "react";
 import { BookPageSkeleton } from "@/components/skeletons/book/BookPageSkeleton";
-import { MainBookSkeleton } from "@/components/skeletons/book/MainBookSkeleton";
 import { AddToListSkeleton } from "@/components/skeletons/book/AddToListSkeleton";
-
+import { toast } from "sonner";
+import { Author } from "@/types/book";
 async function fetchBook(id: string): Promise<Book> {
   const res = await api.get<Book>(API_DYNAMIC_ENDPOINTS.BOOKS_DETAIL(id));
   return res;
@@ -22,7 +22,25 @@ async function fetchBook(id: string): Promise<Book> {
 
 export const Route = createFileRoute("/books/$id")({
   loader: async ({ params }) => {
-    return fetchBook(params.id);
+    try {
+      return await fetchBook(params.id);
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  },
+
+  onError: () => {
+    toast.error("Book not found");
+  },
+
+  errorComponent: () => {
+    return (
+      <div className="p-10 text-center">
+        <p>Book not found</p>
+        <Link to="/search">Go back</Link>
+      </div>
+    );
   },
 
   head: ({ loaderData }) => {
@@ -48,8 +66,6 @@ function BookPage() {
   const { t } = useI18n();
   const book = Route.useLoaderData();
 
-  const firstSeries = book.series?.[0] ?? null;
-
   const [loading, setLoading] = useState(false);
 
   const [lists, setLists] = useState<List[]>([]);
@@ -71,6 +87,8 @@ function BookPage() {
   }, [book.id]);
 
   if (!book) return <BookPageSkeleton />;
+
+  const firstSeries = book.series?.[0] ?? null;
 
   return (
     <div className="min-h-screen bg-background">
@@ -96,7 +114,7 @@ function BookPage() {
             />
           )
         )}
-        {book.authors?.map((author) => {
+        {book.authors?.map((author: Author) => {
           return (
             <RelatedShelf
               title={t(`More books from the author`)}

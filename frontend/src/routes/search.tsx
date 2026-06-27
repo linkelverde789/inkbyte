@@ -16,6 +16,7 @@ import SearchFilters from "@/components/book/list/bookSearchFilters";
 import { ResultsInfo } from "@/components/book/list/resultsInfo";
 import { ResultsDisplay } from "@/components/book/list/resultsDisplay";
 import { MainFooter } from "@/components/book/index/mainFooter";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/search")({
   head: () => ({
@@ -69,6 +70,7 @@ function SearchPage() {
         setTotalBooks(response.count);
       } catch (error) {
         console.error(error);
+        toast.error(t("Error fetching books"));
       } finally {
         setLoading(false);
       }

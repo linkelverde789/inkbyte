@@ -6,7 +6,7 @@ import {
 } from "@tanstack/react-router";
 import type { AuthContextValue } from "@/auth/AuthContext";
 import { useI18n } from "@/i18n/i18nProvider";
-
+import { Toaster } from "@/components/ui/sonner";
 export type RouterContext = {
   queryClient: QueryClient;
   auth: AuthContextValue;
@@ -48,6 +48,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <Outlet />
+      <Toaster />
     </QueryClientProvider>
   );
 }

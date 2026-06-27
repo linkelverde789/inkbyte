@@ -164,32 +164,40 @@ export class API {
     response: Response,
     { json }: { json: boolean },
   ): Promise<T> {
-    if (response.status === 204) {
-      return null as T;
-    }
+    const contentType = response.headers.get("content-type") || "";
+    const isJsonResponse = contentType.includes("application/json");
+
+    const text = await response.text();
 
     let data: unknown = null;
 
-    if (json) {
-      try {
-        data = await response.json();
-      } catch {
-        if (!response.ok) {
-          throw new ApiError("error", {
-            status: response.status,
-          });
+    if (text) {
+      if (isJsonResponse) {
+        try {
+          data = JSON.parse(text);
+        } catch {
+          data = text;
         }
+      } else {
+        data = text;
       }
     }
 
     if (!response.ok) {
-      throw ApiError.fromResponse(
-        data as {
-          detail?: string;
-          code?: string;
-        },
-        response.status,
-      );
+      const message =
+        typeof data === "object" &&
+        data &&
+        "detail" in data &&
+        typeof (data as any).detail === "string"
+          ? (data as any).detail
+          : typeof data === "string" && data.length > 0
+            ? data
+            : `HTTP ${response.status}`;
+
+      throw new ApiError(message, {
+        status: response.status,
+        data,
+      });
     }
 
     return data as T;
