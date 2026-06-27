@@ -18,8 +18,7 @@ class UserService:
         )
 
     def update_user(self, data: UpdateUserInput, user: User) -> User:
-        if data.profile_picture is not None:
-            user.profile_picture = data.profile_picture
+        old_picture = user.profile_picture
 
         if data.username is not None:
             user.username = data.username
@@ -33,5 +32,12 @@ class UserService:
         if data.email is not None:
             user.email = data.email
 
+        if data.profile_picture is not None:
+            user.profile_picture = data.profile_picture
+
         user.save()
+
+        if data.profile_picture is not None and old_picture:
+            old_picture.delete(save=False)
+
         return user
