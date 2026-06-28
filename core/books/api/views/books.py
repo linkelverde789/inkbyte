@@ -212,15 +212,35 @@ class BookRatingView(APIView):
         except RatingError as exc:
             return _book_error_response(exc)
 
+        if rating_output is None:
+            return Response({"rating": "None"})
+
         return Response(
             RatingResponseSerializer(rating_output, context={"request": request}).data
         )
 
     def put(self, request, book_id: int):
-        rate = int(request.data.get("rating", None))
+        rating_value = request.data.get("rating")
+
+        if rating_value is None:
+            return Response(
+                {"detail": "rating is required."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            rate = int(rating_value)
+        except (TypeError, ValueError):
+            return Response(
+                {"detail": "rating must be an integer."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         try:
             book_output = RateBookUseCase().execute(
-                user=request.user, book_id=book_id, rate=rate
+                user=request.user,
+                book_id=book_id,
+                rate=rate,
             )
 
         except BookError as exc:

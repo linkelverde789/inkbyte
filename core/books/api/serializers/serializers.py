@@ -4,7 +4,6 @@ from rest_framework import serializers
 from books.models import Rating
 from users.api.serializers import (
     BasicUserResponseSerializer,
-    UserResponseSerializer,
 )
 
 
@@ -88,7 +87,7 @@ class UpdateBookSerializer(serializers.Serializer):
     )
 
 
-class BasicBookResponseSerializer:
+class BasicBookResponseSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     title = serializers.CharField()
 
@@ -103,4 +102,4 @@ class SeriesInBookSerializer(serializers.Serializer):
 class RatingResponseSerializer(serializers.Serializer):
     user = BasicUserResponseSerializer()
     book = BasicBookResponseSerializer()
-    rate = serializers.IntegerField()
+    rate = serializers.IntegerField(allow_null=True)

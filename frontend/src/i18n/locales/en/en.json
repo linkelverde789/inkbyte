@@ -277,5 +277,7 @@
   "Error updating profile picture": "Error updating profile picture",
   "Book not found": "Book not found",
   "Go back": "Go back",
-  "Name can't be empty": "Name can't be empty"
+  "Name can't be empty": "Name can't be empty",
+  "Rating submited": "Rating submited",
+  "Error. Rating not saved": "Error. Rating not saved"
 }

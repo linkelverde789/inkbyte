@@ -32,3 +32,10 @@ class RatingBookInput:
             raise RatingError("Rating can't be higher than 5")
 
         return self
+
+
+@dataclass
+class RatingBookOutput:
+    user: User
+    book: Book
+    rate: int | None = None

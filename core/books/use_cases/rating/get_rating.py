@@ -3,6 +3,7 @@ from books.exceptions import BookError
 from books.models import Rating
 from books.selectors.book import BookSelector
 from books.selectors.rating import RatingSelector
+from books.dto.rating import RatingBookOutput
 
 User = get_user_model()
 
@@ -14,6 +15,12 @@ class GetRatingUseCase:
         if book_instance is None:
             raise BookError("Book not found", "not_found")
 
-        return RatingSelector().get_rating_by_user_and_book(
+        rating_instance = RatingSelector().get_rating_by_user_and_book(
             user=user, book=book_instance
+        )
+
+        return RatingBookOutput(
+            rate=rating_instance.rate if rating_instance else None,
+            book=book_instance,
+            user=user,
         )

@@ -81,6 +81,8 @@ function BookPage() {
   }, [book]);
 
   useEffect(() => {
+    if (!user) return;
+
     const fetchUserRating = async () => {
       try {
         const res = await api.get<{
@@ -90,7 +92,6 @@ function BookPage() {
           };
           rate: number | null;
         }>(API_DYNAMIC_ENDPOINTS.BOOKS_RATING(bookData.id));
-        console.log(res);
         setUserRating(res.rate ?? 0);
       } catch (error) {
         toast.error("Error");
@@ -139,10 +140,10 @@ function BookPage() {
 
       setUserRating(rating);
 
-      toast.success("Valoración guardada");
+      toast.success(t("Rating submited"));
     } catch (error) {
       setBookData(previousBook);
-      toast.error("No se pudo guardar la valoración");
+      toast.error(t("Error. Rating not saved"));
     } finally {
       setRatingLoading(false);
     }

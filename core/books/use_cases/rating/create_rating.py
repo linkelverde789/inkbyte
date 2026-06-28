@@ -21,5 +21,5 @@ class RateBookUseCase:
         ).validate()
         RatingService().rate_book(data=rating_dto)
 
-        book_instance.refresh_from_db
+        book_instance.refresh_from_db()
         return book_instance

@@ -1,5 +1,5 @@
 import { Stars } from "@/components/ui/Stars";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Props = {
   initialRating: number;
@@ -12,16 +12,17 @@ export function RateBook({
   loading = false,
   onRate,
 }: Props) {
-  console.log("initialRating", initialRating);
   const [hover, setHover] = useState<number | null>(null);
   const [rating, setRating] = useState(initialRating);
+
+  useEffect(() => {
+    setRating(initialRating);
+  }, [initialRating]);
 
   function handleClick(value: number) {
     setRating(value);
     onRate(value);
   }
-
-  console.log("rating ", rating);
 
   return (
     <div className="flex flex-col gap-1">
