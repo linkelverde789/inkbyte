@@ -4,7 +4,6 @@ from books.models import Author, Book, Genre
 from rest_framework.status import (
     HTTP_200_OK,
     HTTP_201_CREATED,
-    HTTP_400_BAD_REQUEST,
     HTTP_401_UNAUTHORIZED,
 )
 
