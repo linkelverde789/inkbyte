@@ -1,4 +1,3 @@
-import { useI18n } from "@/i18n/i18nProvider";
 import { Book } from "@/types/book";
 import { Cover } from "./cover";
 import { Genres } from "./genres";
@@ -8,10 +7,15 @@ import { Description } from "./description";
 import { BookFormats } from "./format";
 import { DownloadButton } from "./downloads";
 import BookRating from "../list/bookRating";
+import { RateBook } from "./RateBook";
 
 type Props = {
   book: Book;
   loading: boolean;
+  canRate: boolean;
+  ratingLoading: boolean;
+  userRating: number;
+  onRate: (rating: number) => void;
 };
 
 export function MainBook(props: Props) {
@@ -26,6 +30,9 @@ export function MainBook(props: Props) {
         <Authors authors={props.book.authors} />
 
         <BookRating rating={props.book.rating} />
+        {props.canRate && (
+          <RateBook onRate={props.onRate} initialRating={props.userRating} />
+        )}
 
         <Description description={props.book.description} />
         <BookFormats format={props.book.files} loading={props.loading} />

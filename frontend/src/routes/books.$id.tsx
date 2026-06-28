@@ -15,6 +15,7 @@ import { BookPageSkeleton } from "@/components/skeletons/book/BookPageSkeleton";
 import { AddToListSkeleton } from "@/components/skeletons/book/AddToListSkeleton";
 import { toast } from "sonner";
 import { Author } from "@/types/book";
+import { useAuth } from "@/auth/AuthContext";
 async function fetchBook(id: string): Promise<Book> {
   const res = await api.get<Book>(API_DYNAMIC_ENDPOINTS.BOOKS_DETAIL(id));
   return res;
@@ -60,31 +61,94 @@ export const Route = createFileRoute("/books/$id")({
 
 function BookPage() {
   const { t } = useI18n();
+  const { user, loading } = useAuth();
+
   const book = Route.useLoaderData();
-
-  const [loading, setLoading] = useState(false);
-
-  const [lists, setLists] = useState<List[]>([]);
-
-  useEffect(() => {
-    const fetchLists = async () => {
-      setLoading(true);
-      try {
-        const res = await api.get<ListResponse>(API_ENDPOINTS.MY_LISTS);
-        setLists(res.results);
-        console.log(res.results);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    void fetchLists();
-  }, [book.id]);
 
   if (!book) return <BookPageSkeleton />;
 
-  const firstSeries = book.series?.[0] ?? null;
+  const [bookData, setBookData] = useState(book);
+
+  const [lists, setLists] = useState<List[]>([]);
+  const [loadingState, setLoadingState] = useState(false);
+
+  const [ratingLoading, setRatingLoading] = useState(false);
+
+  const [userRating, setUserRating] = useState(0);
+
+  useEffect(() => {
+    setBookData(book);
+  }, [book]);
+
+  useEffect(() => {
+    const fetchUserRating = async () => {
+      try {
+        const res = await api.get<{
+          user: {
+            id: string | number;
+            username: string;
+          };
+          rate: number | null;
+        }>(API_DYNAMIC_ENDPOINTS.BOOKS_RATING(bookData.id));
+        console.log(res);
+        setUserRating(res.rate ?? 0);
+      } catch (error) {
+        toast.error("Error");
+        console.error(error);
+      }
+    };
+    void fetchUserRating();
+  }, [bookData]);
+
+  useEffect(() => {
+    const fetchLists = async () => {
+      setLoadingState(true);
+
+      try {
+        const res = await api.get<ListResponse>(API_ENDPOINTS.MY_LISTS);
+        setLists(res.results);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoadingState(false);
+      }
+    };
+
+    void fetchLists();
+  }, [bookData]);
+
+  async function handleRate(rating: number) {
+    const previousBook = bookData;
+
+    setRatingLoading(true);
+
+    try {
+      const res = await api.put<Book>(
+        API_DYNAMIC_ENDPOINTS.BOOKS_RATING(bookData.id),
+        { rating },
+      );
+
+      setBookData((prev) =>
+        prev
+          ? {
+              ...prev,
+              rating: res.rating,
+            }
+          : prev,
+      );
+
+      setUserRating(rating);
+
+      toast.success("Valoración guardada");
+    } catch (error) {
+      setBookData(previousBook);
+      toast.error("No se pudo guardar la valoración");
+    } finally {
+      setRatingLoading(false);
+    }
+  }
+
+  const firstSeries = bookData.series?.[0] ?? null;
 
   return (
     <div className="min-h-screen bg-background">
@@ -98,39 +162,47 @@ function BookPage() {
           <ArrowLeft className="size-4" />
           {t("Go back to results")}
         </Link>
-        <MainBook book={book} loading={loading} />
-        {loading ? (
+
+        <MainBook
+          book={bookData}
+          loading={loadingState}
+          canRate={!!user}
+          ratingLoading={ratingLoading}
+          onRate={handleRate}
+          userRating={userRating}
+        />
+
+        {loadingState ? (
           <AddToListSkeleton />
         ) : (
           lists.length > 0 && (
             <AddToListSection
-              bookId={book.id}
+              bookId={bookData.id}
               lists={lists}
               setLists={setLists}
             />
           )
         )}
-        {book.authors?.map((author: Author) => {
-          return (
-            <RelatedShelf
-              title={t(`More books from the author`)}
-              subtitle={author.name}
-              icon={<Users className="size-4" />}
-              endpoint={"author"}
-              id={author.id}
-            />
-          );
-        })}
-        {firstSeries ? (
+
+        {bookData.authors?.map((author: Author) => (
+          <RelatedShelf
+            key={author.id}
+            title={t("More books from the author")}
+            subtitle={author.name}
+            icon={<Users className="size-4" />}
+            endpoint="author"
+            id={author.id}
+          />
+        ))}
+
+        {firstSeries && (
           <RelatedShelf
             title={t("In the same series")}
-            subtitle={firstSeries?.name}
+            subtitle={firstSeries.name}
             icon={<BookMarked className="size-4" />}
-            endpoint={"series"}
+            endpoint="series"
             id={firstSeries.id}
           />
-        ) : (
-          ""
         )}
       </main>
     </div>

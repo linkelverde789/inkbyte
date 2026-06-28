@@ -1,13 +1,15 @@
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from books.api.serializers.serializers import (
     BookResponseSerializer,
     CreateBookSerializer,
+    RatingResponseSerializer,
     UpdateBookSerializer,
 )
-from books.exceptions import BookError
+from books.exceptions import BookError, RatingError
 from books.api.permissions import PublicReadPrivateWriteMixin
 from books.use_cases.book.create_book import CreateBookUseCase
 from books.use_cases.book.delete_book import DeleteBookUseCase
@@ -17,6 +19,8 @@ from books.use_cases.book.update_book import UpdateBookUseCase
 from books.dto.book import BookFilters
 from books.use_cases.book.get_books_from_series import GetBookFromSeriesUseCase
 from books.use_cases.book.get_books_from_author import GetBookFromAuthorUseCase
+from books.use_cases.rating.create_rating import RateBookUseCase
+from books.use_cases.rating.get_rating import GetRatingUseCase
 from events.use_cases.create_event import CreateEventUseCase
 from events.models import EventType
 
@@ -28,6 +32,17 @@ def _book_error_response(exc: BookError) -> Response:
         else status.HTTP_400_BAD_REQUEST
     )
     return Response({"detail": exc.message, "code": exc.code}, status=status_code)
+
+
+def _create_event(
+    event_type: EventType,
+    user,
+    metadata,
+    target=None,
+):
+    CreateEventUseCase().execute(
+        user=user, event_type=event_type, target=target, metadata=metadata
+    )
 
 
 class BookListView(PublicReadPrivateWriteMixin, APIView):
@@ -64,7 +79,7 @@ class BookListView(PublicReadPrivateWriteMixin, APIView):
                 }
             )
 
-        CreateEventUseCase().execute(
+        _create_event(
             event_type=event_type,
             user=request.user if request.user.is_authenticated else None,
             target=None,
@@ -145,7 +160,7 @@ class BookDetailView(PublicReadPrivateWriteMixin, APIView):
         except BookError as exc:
             return _book_error_response(exc)
 
-        CreateEventUseCase().execute(
+        _create_event(
             event_type=EventType.BOOK_VIEW,
             user=request.user if request.user.is_authenticated else None,
             target=book_output,
@@ -183,3 +198,47 @@ class BookDetailView(PublicReadPrivateWriteMixin, APIView):
             return _book_error_response(exc)
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class BookRatingView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, book_id: int):
+        try:
+            rating_output = GetRatingUseCase().execute(
+                user=request.user, book_id=book_id
+            )
+
+        except RatingError as exc:
+            return _book_error_response(exc)
+
+        return Response(
+            RatingResponseSerializer(rating_output, context={"request": request}).data
+        )
+
+    def put(self, request, book_id: int):
+        rate = int(request.data.get("rating", None))
+        try:
+            book_output = RateBookUseCase().execute(
+                user=request.user, book_id=book_id, rate=rate
+            )
+
+        except BookError as exc:
+            return _book_error_response(exc)
+        except RatingError as exc:
+            return _book_error_response(exc)
+
+        _create_event(
+            event_type=EventType.BOOK_RATED,
+            user=request.user,
+            target=book_output,
+            metadata={
+                "path": request.path,
+                "method": request.method,
+                "params": request.data,
+            },
+        )
+
+        return Response(
+            BookResponseSerializer(book_output, context={"request": request}).data
+        )
