@@ -1,7 +1,11 @@
 import pytest
 
 from books.models import Author, Book, Genre
-from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED
+from rest_framework.status import (
+    HTTP_200_OK,
+    HTTP_201_CREATED,
+    HTTP_401_UNAUTHORIZED,
+)
 
 
 @pytest.mark.django_db
@@ -169,3 +173,29 @@ def test_check_filters_from_book_list(auth_client):
         "/api/books/", data={"page_size": 100, "genre_id": genre.id}, format="json"
     )
     assert response.data["count"] == 50
+
+
+@pytest.mark.django_db
+def test_rate_book(auth_client):
+    book = Book.objects.create(title="Some title")
+
+    res = auth_client.put(f"/api/books/{book.id}/rating/", data={"rating": 5})
+
+    assert res.status_code == HTTP_200_OK
+
+    res = auth_client.get(f"/api/books/{book.id}/rating/")
+
+    assert res.data["rate"] == 5
+
+
+@pytest.mark.django_db
+def test_anonymous_user_cant_rate(api_client):
+    book = Book.objects.create(title="Some title")
+
+    res = api_client.put(f"/api/books/{book.id}/rating/", data={"rating": 5})
+
+    assert res.status_code == HTTP_401_UNAUTHORIZED
+
+    res = api_client.get(f"/api/books/{book.id}/rating/")
+
+    assert res.status_code == HTTP_401_UNAUTHORIZED

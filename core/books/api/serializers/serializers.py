@@ -2,6 +2,9 @@ from django.db.models import Avg
 from rest_framework import serializers
 
 from books.models import Rating
+from users.api.serializers import (
+    BasicUserResponseSerializer,
+)
 
 
 class AuthorResponseSerializer(serializers.Serializer):
@@ -84,8 +87,19 @@ class UpdateBookSerializer(serializers.Serializer):
     )
 
 
+class BasicBookResponseSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    title = serializers.CharField()
+
+
 class SeriesInBookSerializer(serializers.Serializer):
     id = serializers.IntegerField(source="series.id")
     name = serializers.CharField(source="series.name")
     description = serializers.CharField(source="series.description")
     index = serializers.IntegerField()
+
+
+class RatingResponseSerializer(serializers.Serializer):
+    user = BasicUserResponseSerializer()
+    book = BasicBookResponseSerializer()
+    rate = serializers.IntegerField(allow_null=True)

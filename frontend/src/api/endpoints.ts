@@ -21,6 +21,7 @@ export const API_DYNAMIC_ENDPOINTS = {
   BOOKS_DETAIL: (id: number | string) => `/books/${id}/`,
   BOOKS_FROM_SERIES: (id: number | string) => `/books/series/${id}/`,
   BOOKS_FROM_AUTHOR: (id: number | string) => `/books/author/${id}/`,
+  BOOKS_RATING: (id: number | string) => `/books/${id}/rating/`,
   EDIT_LISTS: (id: number | string) => `/lists/${id}/`,
 } as const;
 

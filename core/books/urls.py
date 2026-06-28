@@ -4,6 +4,7 @@ from books.api.views.authors import AuthorDetailView, AuthorListCreateView
 from books.api.views.books import (
     BookDetailView,
     BookListView,
+    BookRatingView,
     BooksFromAuthorView,
     BooksFromSeriesView,
 )
@@ -25,6 +26,7 @@ urlpatterns = [
         BooksFromAuthorView.as_view(),
         name="books-from-author",
     ),
+    path("books/<int:book_id>/rating/", BookRatingView.as_view()),
     path("data/genres/", GenreDataView.as_view()),
     path("data/authors/", AuthorDataView.as_view()),
 ]

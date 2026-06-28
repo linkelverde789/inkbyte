@@ -28,3 +28,8 @@ class UserResponseSerializer(serializers.Serializer):
 
 class AuthResponseSerializer(serializers.Serializer):
     user = UserResponseSerializer()
+
+
+class BasicUserResponseSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    username = serializers.CharField()

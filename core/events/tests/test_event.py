@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 import pytest
 from rest_framework.status import HTTP_201_CREATED
 
@@ -5,8 +6,10 @@ from books.models import Book
 from lists.models import List
 from events.models import Event, EventType
 
+User = get_user_model()
 
-def assert_event_incremented(event_type, action, user=None):
+
+def assert_event_incremented(event_type: EventType, action, user: User = None):
     filters = {"event_type": event_type}
     if user is not None:
         filters["user_id"] = user.id
@@ -196,5 +199,18 @@ def test_create_event_when_view_my_lists(user, api_client):
     assert_event_incremented(
         EventType.MINE_LIST_VIEW,
         lambda: api_client.get("/api/lists/mine/", data={"page": 1}, format="json"),
+        user=user,
+    )
+
+
+@pytest.mark.django_db
+def test_create_event_when_rated_book(user, api_client):
+    api_client.force_authenticate(user=user)
+    book = Book.objects.create(title="Some title")
+    assert_event_incremented(
+        EventType.BOOK_RATED,
+        lambda: api_client.put(
+            f"/api/books/{book.id}/rating/", data={"rating": 1}, format="json"
+        ),
         user=user,
     )

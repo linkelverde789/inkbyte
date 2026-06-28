@@ -277,5 +277,7 @@
   "Error updating profile picture": "Error al actualizar la imagen de perfil",
   "Book not found": "Libro no encontrado",
   "Go back": "Volver",
-  "Name can't be empty": "El nombre no puede estar vacío"
+  "Name can't be empty": "El nombre no puede estar vacío",
+  "Rating submited": "Valoración guardada",
+  "Error. Rating not saved": "Error. La valoración no se pudo guardar"
 }
