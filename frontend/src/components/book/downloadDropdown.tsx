@@ -17,9 +17,36 @@ type DownloadDropdownProps = {
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { getExtension } from "@/routes/utils";
+import { toast } from "sonner";
+import { api } from "@/api";
+import { API_DYNAMIC_ENDPOINTS } from "@/api/endpoints";
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
+}
+
+async function downloadFile(fileId: number) {
+  try {
+    const blob = await api.get<Blob>(
+      API_DYNAMIC_ENDPOINTS.BOOK_DOWNLOAD_FILE(fileId),
+      {
+        blob: true,
+        auth: true,
+      },
+    );
+
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "";
+    a.click();
+
+    URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error(error);
+    toast.error("Error downloading file");
+  }
 }
 
 export function DownloadDropdown(props: DownloadDropdownProps) {
@@ -27,7 +54,11 @@ export function DownloadDropdown(props: DownloadDropdownProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button className={cn("cursor-pointer", props.className)}>
+        <Button
+          variant="editorial"
+          size="editorial"
+          className={cn("cursor-pointer", props.className)}
+        >
           <Download /> {t("Download")}
         </Button>
       </DropdownMenuTrigger>
@@ -38,9 +69,16 @@ export function DownloadDropdown(props: DownloadDropdownProps) {
             onSelect={() => {}}
             className="cursor-pointer"
           >
-            <a href={item.file} download={true}>
+            <DropdownMenuItem
+              key={item.id}
+              onSelect={(e) => {
+                e.preventDefault();
+                downloadFile(item.id);
+              }}
+              className="cursor-pointer"
+            >
               {t("Download")} {getExtension(item.file)}
-            </a>
+            </DropdownMenuItem>
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

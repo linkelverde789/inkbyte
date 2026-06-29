@@ -1,3 +1,4 @@
+from django.http import FileResponse
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -21,8 +22,10 @@ from books.use_cases.book.get_books_from_series import GetBookFromSeriesUseCase
 from books.use_cases.book.get_books_from_author import GetBookFromAuthorUseCase
 from books.use_cases.rating.create_rating import RateBookUseCase
 from books.use_cases.rating.get_rating import GetRatingUseCase
+from books.models import Book, File
 from events.use_cases.create_event import CreateEventUseCase
 from events.models import EventType
+from django.shortcuts import get_object_or_404
 
 
 def _book_error_response(exc: BookError) -> Response:
@@ -261,4 +264,31 @@ class BookRatingView(APIView):
 
         return Response(
             BookResponseSerializer(book_output, context={"request": request}).data
+        )
+
+
+class DownloadBookFileView(PublicReadPrivateWriteMixin, APIView):
+
+    def get(self, request, file_id):
+        book_file = get_object_or_404(File, pk=file_id)
+
+        book_instance = Book.objects.filter(files=book_file).first()
+
+        user = request.user
+
+        user = user if user.is_authenticated else None
+
+        _create_event(
+            event_type=EventType.BOOK_DOWNLOAD,
+            user=user,
+            target=book_instance,
+            metadata={
+                "path": request.path,
+                "method": request.method,
+            },
+        )
+        return FileResponse(
+            book_file.file.open("rb"),
+            as_attachment=True,
+            filename=book_file.file.name.split("/")[-1],
         )

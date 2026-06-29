@@ -214,3 +214,6 @@ def test_create_event_when_rated_book(user, api_client):
         ),
         user=user,
     )
+
+
+# TODO: Add test event when downloading a book
