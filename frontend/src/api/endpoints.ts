@@ -23,6 +23,7 @@ export const API_DYNAMIC_ENDPOINTS = {
   BOOKS_FROM_AUTHOR: (id: number | string) => `/books/author/${id}/`,
   BOOKS_RATING: (id: number | string) => `/books/${id}/rating/`,
   EDIT_LISTS: (id: number | string) => `/lists/${id}/`,
+  BOOK_DOWNLOAD_FILE: (id: number | string) => `/books/files/${id}/download/`,
 } as const;
 
 export const API_BASE = "/api";

@@ -8,6 +8,7 @@ import { BookFormats } from "./format";
 import { DownloadButton } from "./downloads";
 import BookRating from "../list/bookRating";
 import { RateBook } from "./RateBook";
+import { DownloadDropdown } from "../downloadDropdown";
 
 type Props = {
   book: Book;
@@ -37,7 +38,12 @@ export function MainBook(props: Props) {
         <Description description={props.book.description} />
         <BookFormats format={props.book.files} loading={props.loading} />
 
-        <DownloadButton />
+        <div>
+          <DownloadDropdown
+            files={props.book.files}
+            className="mt-8 flex flex-wrap gap-3"
+          />
+        </div>
       </article>
     </div>
   );

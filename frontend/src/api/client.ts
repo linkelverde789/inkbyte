@@ -8,6 +8,7 @@ type RequestOptions = RequestInit & {
   auth?: boolean;
   skipRefresh?: boolean;
   json?: boolean;
+  blob?: boolean;
   headers?: Record<string, string>;
   params?: QueryParams;
 };
@@ -23,6 +24,7 @@ export class API {
       auth = true,
       skipRefresh = false,
       json = true,
+      blob = false,
       headers: extraHeaders,
       params,
       ...fetchOptions
@@ -59,7 +61,7 @@ export class API {
       });
     }
 
-    return this.#parseResponse<T>(response);
+    return this.#parseResponse<T>(response, blob);
   }
 
   get<T = unknown>(path: string, options?: RequestOptions) {
@@ -158,7 +160,19 @@ export class API {
     };
   }
 
-  async #parseResponse<T>(response: Response): Promise<T> {
+  async #parseResponse<T>(response: Response, blob = false): Promise<T> {
+    if (blob) {
+      if (!response.ok) {
+        const text = await response.text();
+        throw new ApiError(text || `HTTP ${response.status}`, {
+          status: response.status,
+          data: text,
+        });
+      }
+
+      return (await response.blob()) as T;
+    }
+
     const contentType = response.headers.get("content-type") || "";
     const isJsonResponse = contentType.includes("application/json");
 
