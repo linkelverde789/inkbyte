@@ -1,3 +1,4 @@
+from pathlib import Path
 from django.http import FileResponse
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
@@ -43,6 +44,7 @@ def _create_event(
     metadata,
     target=None,
 ):
+
     CreateEventUseCase().execute(
         user=user, event_type=event_type, target=target, metadata=metadata
     )
@@ -274,13 +276,9 @@ class DownloadBookFileView(PublicReadPrivateWriteMixin, APIView):
 
         book_instance = Book.objects.filter(files=book_file).first()
 
-        user = request.user
-
-        user = user if user.is_authenticated else None
-
         _create_event(
             event_type=EventType.BOOK_DOWNLOAD,
-            user=user,
+            user=request.user if request.user.is_authenticated else None,
             target=book_instance,
             metadata={
                 "path": request.path,
@@ -290,5 +288,5 @@ class DownloadBookFileView(PublicReadPrivateWriteMixin, APIView):
         return FileResponse(
             book_file.file.open("rb"),
             as_attachment=True,
-            filename=book_file.file.name.split("/")[-1],
+            filename=Path(book_file.file.name).name,
         )

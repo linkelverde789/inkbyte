@@ -1,8 +1,10 @@
+from pathlib import Path
 from django.contrib.auth import get_user_model
+from django.core.files.uploadedfile import SimpleUploadedFile
 import pytest
 from rest_framework.status import HTTP_201_CREATED
 
-from books.models import Book
+from books.models import Book, File
 from lists.models import List
 from events.models import Event, EventType
 
@@ -216,4 +218,27 @@ def test_create_event_when_rated_book(user, api_client):
     )
 
 
-# TODO: Add test event when downloading a book
+@pytest.mark.django_db
+def test_create_event_when_downloading_books(user, auth_client):
+    file_path = Path("fixtures/test_file.pdf")
+
+    with open(file_path, "rb") as f:
+        file = SimpleUploadedFile(
+            name="test_file.pdf",
+            content=f.read(),
+            content_type="application/pdf",
+        )
+
+    book = Book.objects.create(
+        title="Some title",
+    )
+
+    file_instance = File.objects.create(book=book, file=file)
+
+    assert_event_incremented(
+        event_type=EventType.BOOK_DOWNLOAD,
+        action=lambda: auth_client.get(
+            f"/api/books/files/{file_instance.id}/download/"
+        ),
+        user=user,
+    )

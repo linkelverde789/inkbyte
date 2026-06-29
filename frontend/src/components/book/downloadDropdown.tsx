@@ -39,7 +39,7 @@ async function downloadFile(fileId: number) {
 
     const a = document.createElement("a");
     a.href = url;
-    a.download = "";
+    a.download = url;
     a.click();
 
     URL.revokeObjectURL(url);
@@ -66,19 +66,13 @@ export function DownloadDropdown(props: DownloadDropdownProps) {
         {props.files.map((item) => (
           <DropdownMenuItem
             key={item.id}
-            onSelect={() => {}}
+            onSelect={(e) => {
+              e.preventDefault();
+              downloadFile(item.id);
+            }}
             className="cursor-pointer"
           >
-            <DropdownMenuItem
-              key={item.id}
-              onSelect={(e) => {
-                e.preventDefault();
-                downloadFile(item.id);
-              }}
-              className="cursor-pointer"
-            >
-              {t("Download")} {getExtension(item.file)}
-            </DropdownMenuItem>
+            {t("Download")} {getExtension(item.file)}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
