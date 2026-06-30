@@ -34,17 +34,14 @@ function Index() {
       const { startDate, endDate } = getStartAndEndDate();
       try {
         setLoading(true);
-        const res = await api.get<BookStatsItem[]>(
-          API_ENDPOINTS.BOOKS_STATS_VIEWS,
-          {
-            params: {
-              limit: 4,
-              start_date: startDate.toISOString().split("T")[0],
-              end_date: endDate.toISOString().split("T")[0],
-              type: "views",
-            },
+        const res = await api.get<BookStatsItem[]>(API_ENDPOINTS.BOOKS_STATS, {
+          params: {
+            limit: 4,
+            start_date: startDate.toISOString().split("T")[0],
+            end_date: endDate.toISOString().split("T")[0],
+            type: "views",
           },
-        );
+        });
 
         setResults(res);
       } catch (error: unknown) {
