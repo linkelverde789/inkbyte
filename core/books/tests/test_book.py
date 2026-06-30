@@ -9,7 +9,7 @@ from rest_framework.status import (
     HTTP_401_UNAUTHORIZED,
 )
 
-from events.models import Event, EventType, TargetType
+from events.models import Event, EventType
 
 
 @pytest.mark.django_db
