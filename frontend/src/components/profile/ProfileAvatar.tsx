@@ -35,8 +35,6 @@ export function ProfileAvatar({ profile_picture }: ProfileAvatarProps) {
     try {
       const res = await api.patch<User>(API_ENDPOINTS.PROFILE, formData);
 
-      console.log(res.profile_picture);
-
       setImage(res.profile_picture ?? profile_picture_default);
 
       toast.success(t("Profile picture successfully updated!"));

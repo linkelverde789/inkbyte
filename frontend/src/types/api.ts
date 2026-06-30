@@ -19,6 +19,11 @@ export interface BookListResponse extends BaseListResponse {
   results: Book[];
 }
 
+export interface BookStatsItem {
+  book: Book;
+  count: number;
+}
+
 export interface PaginationParams {
   page: number;
   page_size: number;

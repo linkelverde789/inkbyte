@@ -7,6 +7,7 @@ from books.api.views.books import (
     BookRatingView,
     BooksFromAuthorView,
     BooksFromSeriesView,
+    BooksStatsView,
     DownloadBookFileView,
 )
 from books.api.views.data import AuthorDataView, GenreDataView
@@ -34,4 +35,5 @@ urlpatterns = [
         "books/files/<int:file_id>/download/",
         DownloadBookFileView.as_view(),
     ),
+    path("books/stats/", BooksStatsView.as_view()),
 ]
