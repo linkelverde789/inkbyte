@@ -1,11 +1,15 @@
+from django.contrib.contenttypes.models import ContentType
 import pytest
 
 from books.models import Author, Book, Genre
 from rest_framework.status import (
     HTTP_200_OK,
     HTTP_201_CREATED,
+    HTTP_400_BAD_REQUEST,
     HTTP_401_UNAUTHORIZED,
 )
+
+from events.models import Event, EventType
 
 
 @pytest.mark.django_db
@@ -186,6 +190,59 @@ def test_rate_book(auth_client):
     res = auth_client.get(f"/api/books/{book.id}/rating/")
 
     assert res.data["rate"] == 5
+
+
+@pytest.mark.django_db
+def test_get_book_stats(api_client):
+    book_for_download = Book.objects.create(title="Some downloads")
+    book_for_views = Book.objects.create(title="Some views")
+    book_ct = ContentType.objects.get_for_model(Book)
+
+    events_for_download = [
+        Event(
+            event_type=EventType.BOOK_DOWNLOAD,
+            target=book_for_download,
+            content_type=book_ct,
+        )
+        for i in range(0, 100)
+    ]
+
+    events_for_views = [
+        Event(
+            event_type=EventType.BOOK_VIEW,
+            target=book_for_views,
+            content_type=book_ct,
+        )
+        for i in range(0, 100)
+    ]
+
+    Event.objects.bulk_create(events_for_download)
+    Event.objects.bulk_create(events_for_views)
+
+    res = api_client.get("/api/books/stats/", data={"type": "downloads"}, format="json")
+
+    assert res.data[0]["count"] == 100
+    assert res.data[0]["book"]["id"] == book_for_download.id
+
+    res = api_client.get("/api/books/stats/", data={"type": "views"}, format="json")
+
+    assert res.data[0]["count"] == 100
+    assert res.data[0]["book"]["id"] == book_for_views.id
+
+
+@pytest.mark.django_db
+def test_check_book_stats_filters(api_client):
+    res = api_client.get("/api/books/stats/", data={"type": "rating"}, format="json")
+
+    assert res.status_code == HTTP_400_BAD_REQUEST
+
+    res = api_client.get("/api/books/stats/", data={"type": "views"}, format="json")
+
+    assert res.status_code == HTTP_200_OK
+
+    res = api_client.get("/api/books/stats/", data={"type": "downloads"}, format="json")
+
+    assert res.status_code == HTTP_200_OK
 
 
 @pytest.mark.django_db

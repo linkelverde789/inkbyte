@@ -1,5 +1,7 @@
+from datetime import date
 from pathlib import Path
 from django.http import FileResponse
+from django.utils import timezone
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -7,6 +9,7 @@ from rest_framework.views import APIView
 
 from books.api.serializers.serializers import (
     BookResponseSerializer,
+    BookStatsSerializer,
     CreateBookSerializer,
     RatingResponseSerializer,
     UpdateBookSerializer,
@@ -24,6 +27,8 @@ from books.use_cases.book.get_books_from_author import GetBookFromAuthorUseCase
 from books.use_cases.rating.create_rating import RateBookUseCase
 from books.use_cases.rating.get_rating import GetRatingUseCase
 from books.models import Book, File
+
+from books.use_cases.book.get_books_stats import GetBookEventStatsUseCase
 from events.use_cases.create_event import CreateEventUseCase
 from events.models import EventType
 from django.shortcuts import get_object_or_404
@@ -289,4 +294,47 @@ class DownloadBookFileView(PublicReadPrivateWriteMixin, APIView):
             book_file.file.open("rb"),
             as_attachment=True,
             filename=Path(book_file.file.name).name,
+        )
+
+
+class BooksStatsView(PublicReadPrivateWriteMixin, APIView):
+    ALLOWED_TYPES = ["views", "downloads"]
+
+    def get(self, request):
+        start_date = date.fromisoformat(
+            request.query_params.get("start_date", str(date.min))
+        )
+
+        end_date = date.fromisoformat(
+            request.query_params.get("end_date", str(timezone.now().date()))
+        )
+        page_size = int(request.query_params.get("limit", 5))
+
+        event_qp = request.query_params.get("type", "views")
+
+        if event_qp not in self.ALLOWED_TYPES:
+            return Response(
+                {"detail": "Type not allowed"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if event_qp == "views":
+            event_type = EventType.BOOK_VIEW
+        else:
+            event_type = EventType.BOOK_DOWNLOAD
+
+        try:
+
+            books = GetBookEventStatsUseCase().execute(
+                start_date=start_date,
+                end_date=end_date,
+                page_size=page_size,
+                event_type=event_type,
+            )
+
+        except BookError as exc:
+            return _book_error_response(exc)
+
+        return Response(
+            BookStatsSerializer(books, many=True, context={"request": request}).data
         )

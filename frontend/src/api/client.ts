@@ -2,7 +2,10 @@ import { getLocale } from "@/i18n";
 import { ApiError } from "./ApiError";
 import { API_BASE, API_ENDPOINTS, AUTH_PUBLIC_PATHS } from "./endpoints";
 
-type QueryParams = Record<string, string | number | boolean | null | undefined>;
+type QueryParams = Record<
+  string,
+  string | number | boolean | Date | null | undefined
+>;
 
 type RequestOptions = RequestInit & {
   auth?: boolean;

@@ -1,5 +1,8 @@
+from datetime import timedelta
 from django.contrib.contenttypes.models import ContentType
-from events.models import Event
+from django.db.models import Count
+from books.models import Book
+from events.models import Event, EventType
 
 
 class EventSelector:
@@ -19,3 +22,16 @@ class EventSelector:
             object_id=object_id,
         )
         return queryset
+
+    def get_book_stats(self, start_date, end_date, event_type: EventType):
+        book_ct = ContentType.objects.get_for_model(Book)
+        return (
+            Event.objects.filter(
+                event_type=event_type,
+                content_type=book_ct,
+                created_at__range=(start_date, end_date + timedelta(days=1)),
+            )
+            .values("object_id")
+            .annotate(downloads=Count("id"))
+            .order_by("-downloads")
+        )

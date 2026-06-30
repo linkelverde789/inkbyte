@@ -103,3 +103,8 @@ class RatingResponseSerializer(serializers.Serializer):
     user = BasicUserResponseSerializer()
     book = BasicBookResponseSerializer()
     rate = serializers.IntegerField(allow_null=True)
+
+
+class BookStatsSerializer(serializers.Serializer):
+    book = BookResponseSerializer()
+    count = serializers.IntegerField()
