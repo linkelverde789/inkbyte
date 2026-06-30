@@ -15,8 +15,7 @@ export const API_ENDPOINTS = {
   MY_LISTS: "/lists/mine/",
   MY_LISTS_STATS: "/lists/mine/stats/",
   LISTS: "/lists/",
-  BOOKS_STATS_VIEWS: "/books/stats/views/",
-  BOOKS_STATS_DOWNLOAD: "/books/stats/downloads/",
+  BOOKS_STATS: "/books/stats/",
 } as const;
 
 export const API_DYNAMIC_ENDPOINTS = {
