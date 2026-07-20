@@ -34,11 +34,15 @@ if ENV_PATH.exists():
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG")
 
-ALLOWED_HOSTS = ALLOWED_HOSTS = os.getenv(
-    "ALLOWED_HOSTS", cast=lambda v: [s.strip() for s in v.split(",")]
-)
+DEBUG = os.getenv("DEBUG", "False").lower() == "true"
+
+ALLOWED_HOSTS = [
+    s.strip()
+    for s in os.getenv("ALLOWED_HOSTS", "").split(",")
+    if s.strip()
+]
+
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 
@@ -63,14 +67,20 @@ INSTALLED_APPS = [
 ]
 
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOWED_ORIGINS = os.getenv(
-    "CORS_ALLOWED_ORIGINS",
-    cast=lambda v: [s.strip() for s in v.split(",")],
-)
-CSRF_TRUSTED_ORIGINS = os.getenv(
-    "CSRF_TRUSTED_ORIGINS",
-    cast=lambda v: [s.strip() for s in v.split(",")],
-)
+
+CORS_ALLOWED_ORIGINS = [
+    s.strip()
+    for s in os.getenv("CORS_ALLOWED_ORIGINS", "").split(",")
+    if s.strip()
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    s.strip()
+    for s in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
+    if s.strip()
+]
+
+
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
@@ -144,7 +154,7 @@ DATABASES = {
         "USER": os.getenv("DB_USER"),
         "PASSWORD": os.getenv("DB_PASSWORD"),
         "HOST": os.getenv("DB_HOST"),
-        "PORT": os.getenv("DB_PORT", cast=int),
+        "PORT": os.getenv("DB_PORT"),
     }
 }
 
@@ -192,8 +202,13 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "users.User"
 
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,

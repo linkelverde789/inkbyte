@@ -6,3 +6,4 @@ djangorestframework-simplejwt>=5.3,<6
 psycopg2-binary>=2.9,<3
 Pillow>=10.0,<12
 beautifulsoup4>=4.12,<5
+gunicorn
