@@ -17,7 +17,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings.settings")
 import django
 
 django.setup()
-from books.api.serializers import CreateBookSerializer
+from books.api.serializers.serializers import CreateBookSerializer
 from books.models import Book
 from books.selectors.author import AuthorSelector
 from books.selectors.series import SeriesSelector
@@ -192,13 +192,14 @@ GROUP BY books.id;
         if series_name is not None:
             process_series(book, series_name, series_index)
 
-        process_file(
-            formats=formats,
-            file_names=file_names,
-            metadata=database_path,
-            path=path,
-            book_id=book.id,
-        )
+        if formats is not None:
+            process_file(
+                formats=formats,
+                file_names=file_names,
+                metadata=database_path,
+                path=path,
+                book_id=book.id,
+            )
 
     conn.close()
 
