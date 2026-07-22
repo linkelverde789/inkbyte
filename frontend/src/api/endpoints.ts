@@ -27,7 +27,7 @@ export const API_DYNAMIC_ENDPOINTS = {
   BOOK_DOWNLOAD_FILE: (id: number | string) => `/books/files/${id}/download/`,
 } as const;
 
-export const API_BASE = "/api";
+export const API_BASE = import.meta.env.VITE_API_URL;
 
 export const SELECT_DATA_ENDPOINTS = {
   authors: API_ENDPOINTS.DATA_AUTHORS,
