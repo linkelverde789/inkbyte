@@ -144,7 +144,7 @@ export class API {
       });
     }
 
-    return `${url.pathname}${url.search}`;
+    return url.toString();
   }
 
   #buildHeaders({
