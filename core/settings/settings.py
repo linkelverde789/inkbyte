@@ -35,12 +35,10 @@ if ENV_PATH.exists():
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECURITY WARNING: don't run with debug turned on in production!
 
-DEBUG = os.getenv("DEBUG", "False").lower() == "true"
+DEBUG = True
 
 ALLOWED_HOSTS = [
-    s.strip()
-    for s in os.getenv("ALLOWED_HOSTS", "").split(",")
-    if s.strip()
+    s.strip() for s in os.getenv("ALLOWED_HOSTS", "").split(",") if s.strip()
 ]
 
 SECRET_KEY = os.getenv("SECRET_KEY")
@@ -69,17 +67,12 @@ INSTALLED_APPS = [
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [
-    s.strip()
-    for s in os.getenv("CORS_ALLOWED_ORIGINS", "").split(",")
-    if s.strip()
+    s.strip() for s in os.getenv("CORS_ALLOWED_ORIGINS", "").split(",") if s.strip()
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    s.strip()
-    for s in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
-    if s.strip()
+    s.strip() for s in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",") if s.strip()
 ]
-
 
 
 REST_FRAMEWORK = {

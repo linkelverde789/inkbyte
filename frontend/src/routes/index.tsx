@@ -22,6 +22,23 @@ function getStartAndEndDate(date = new Date()) {
   return { startDate, endDate };
 }
 
+async function getBookStats(
+  limit: number,
+  startDate?: string,
+  endDate?: string,
+) {
+  const res = await api.get<BookStatsItem[]>(API_ENDPOINTS.BOOKS_STATS, {
+    params: {
+      limit: 4,
+      start_date: startDate,
+      end_date: endDate,
+      type: "views",
+    },
+  });
+
+  return res;
+}
+
 function Index() {
   const { t } = useI18n();
   const [loading, setLoading] = useState(true);
@@ -32,16 +49,18 @@ function Index() {
   useEffect(() => {
     const loadBooks = async () => {
       const { startDate, endDate } = getStartAndEndDate();
+      const limit = 4;
       try {
         setLoading(true);
-        const res = await api.get<BookStatsItem[]>(API_ENDPOINTS.BOOKS_STATS, {
-          params: {
-            limit: 4,
-            start_date: startDate.toISOString().split("T")[0],
-            end_date: endDate.toISOString().split("T")[0],
-            type: "views",
-          },
-        });
+        let res = await getBookStats(
+          limit,
+          startDate.toISOString().split("T")[0],
+          endDate.toISOString().split("T")[0],
+        );
+
+        if (res.length === 0) {
+          res = await getBookStats(limit);
+        }
 
         setResults(res);
       } catch (error: unknown) {

@@ -17,8 +17,8 @@ django.setup()
 
 from books.models import Book
 from books.selectors.genre import GenreSelector
-from books.use_cases.book.add_genre_to_book import AddGenreToBookUseCase
 from books.selectors.book import BookSelector
+from books.use_cases.book.update_book import UpdateBookUseCase
 
 
 def parse_args():
@@ -36,13 +36,16 @@ def parse_args():
 
 def process_add_genres_to_book(genres: str, book: Book):
     print(f"processing {book.title} with genres: {genres}")
+    genre_ids = []
     for genre in genres:
         genre = genre.strip()
         genre_data = GenreSelector().get_genre_by_name(genre)
         if genre_data is None:
             print(f"The genre {genre} do not exists. Skipping")
             continue
-        AddGenreToBookUseCase().execute(book_id=book.id, genre_id=genre_data.id)
+        genre_ids.append(genre_data.id)
+
+    UpdateBookUseCase().execute(book_id=book.id, genre_ids=genre_ids)
 
 
 def main(origin_csv: str) -> int:
